@@ -1,4 +1,5 @@
 import React from 'react';
+
 import AuthLayout from './components/AuthLayout/AuthLayout';
 import Pages from './Routes/Index';
 
