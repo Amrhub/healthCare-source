@@ -23,13 +23,19 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import GroupsIcon from '@mui/icons-material/Groups';
-import { AutoStories, HistoryToggleOff, SupportAgentRounded } from '@mui/icons-material';
+import {
+  AutoStories,
+  ExpandMore,
+  HistoryToggleOff,
+  SupportAgentRounded,
+} from '@mui/icons-material';
 import HomeSharpIcon from '@mui/icons-material/HomeSharp';
 import { BRAND_NAME } from '../../abstracts/common';
 import { userRoutes } from '../../Routes/Routes';
 import { ThemeProvider } from '@mui/system';
 import MyNavLink from '../../abstracts/NavLink';
 import PersonIcon from '@mui/icons-material/Person';
+import { Avatar, Container, Popover } from '@mui/material';
 
 const drawerWidth = 240;
 const drawerWidthClosedDesktop = 100 / 8;
@@ -140,21 +146,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
+    <Menu anchorEl={anchorEl} id={menuId} keepMounted open={isMenuOpen} onClose={handleMenuClose}>
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
@@ -164,16 +156,8 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
       id={mobileMenuId}
       keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
@@ -234,6 +218,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
             aria-label="open drawer"
             sx={{
               marginRight: '36px',
+              ml: '0px',
               ...(open && { display: 'none' }),
             }}
           >
@@ -254,6 +239,11 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
+            <Container sx={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <Avatar src="/src/assets/placeholder.svg" alt="avatar" />
+              <Typography>Mohamed Adel</Typography>
+            </Container>
+
             <IconButton
               size="large"
               edge="end"
@@ -263,7 +253,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle />
+              <ExpandMore />
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
@@ -283,7 +273,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
       {renderMobileMenu}
       {renderMenu}
       <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
+        <DrawerHeader sx={{ backgroundColor: '#f4f4f8' }}>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
