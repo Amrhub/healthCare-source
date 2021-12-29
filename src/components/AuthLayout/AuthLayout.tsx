@@ -1,41 +1,38 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MoreIcon from '@mui/icons-material/MoreVert';
-import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
-import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import GroupsIcon from '@mui/icons-material/Groups';
 import {
   AutoStories,
   ExpandMore,
   HistoryToggleOff,
   SupportAgentRounded,
 } from '@mui/icons-material';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import GroupsIcon from '@mui/icons-material/Groups';
 import HomeSharpIcon from '@mui/icons-material/HomeSharp';
-import { BRAND_NAME } from '../../abstracts/common';
-import { userRoutes } from '../../Routes/Routes';
-import { ThemeProvider } from '@mui/system';
-import MyNavLink from '../../abstracts/NavLink';
+import MailIcon from '@mui/icons-material/Mail';
+import MenuIcon from '@mui/icons-material/Menu';
+import MoreIcon from '@mui/icons-material/MoreVert';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import PersonIcon from '@mui/icons-material/Person';
-import { Avatar, Container, Popover } from '@mui/material';
+import { Avatar, Container, IconButton, ListItem, List, Menu } from '@mui/material';
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import Badge from '@mui/material/Badge';
+import Box from '@mui/material/Box';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import MuiDrawer from '@mui/material/Drawer';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import MenuItem from '@mui/material/MenuItem';
+import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import { ThemeProvider } from '@mui/system';
+import * as React from 'react';
+
+import { BRAND_NAME } from '../../abstracts/common';
+import MyNavLink from '../../abstracts/NavLink';
+import { userRoutes } from '../../Routes/Routes';
 
 const drawerWidth = 240;
 const drawerWidthClosedDesktop = 100 / 8;
@@ -107,7 +104,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
       ...closedMixin(theme),
       '& .MuiDrawer-paper': closedMixin(theme),
     }),
-  })
+  }),
 );
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
@@ -122,7 +119,9 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     setOpen(false);
   };
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(
+    null,
+  );
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -146,7 +145,13 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
-    <Menu anchorEl={anchorEl} id={menuId} keepMounted open={isMenuOpen} onClose={handleMenuClose}>
+    <Menu
+      anchorEl={anchorEl}
+      id={menuId}
+      keepMounted
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
@@ -208,8 +213,13 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} sx={{ backgroundColor: '#F4F4F8' }} color="default">
-        <Toolbar>
+      <AppBar
+        position="fixed"
+        open={open}
+        sx={{ backgroundColor: '#F4F4F8' }}
+        color="default"
+      >
+        <Toolbar sx={{ pl: { xs: '4px', md: '24px' } }}>
           <IconButton
             size="large"
             edge="start"
@@ -234,7 +244,11 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
                 <MailIcon />
               </Badge>
             </IconButton>
-            <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
+            <IconButton
+              size="large"
+              aria-label="show 17 new notifications"
+              color="inherit"
+            >
               <Badge badgeContent={17} color="error">
                 <NotificationsIcon />
               </Badge>
@@ -288,11 +302,11 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
                   sx={{
                     display: 'flex',
                     paddingInline: `calc((${theme.spacing(
-                      drawerWidthClosedMobile
+                      drawerWidthClosedMobile,
                     )} + +1px - 50px) / 2)`,
                     [theme.breakpoints.up('sm')]: {
                       paddingInline: `calc((${theme.spacing(
-                        drawerWidthClosedDesktop
+                        drawerWidthClosedDesktop,
                       )} + +1px - 70px) / 2)`,
                     },
                   }}
