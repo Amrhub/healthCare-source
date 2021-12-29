@@ -167,7 +167,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+        <IconButton size="large" aria-label="show 4 new mails" sx={{ color: 'grey.900' }}>
           <Badge badgeContent={4} color="error">
             <MailIcon />
           </Badge>
@@ -175,7 +175,11 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
         <p>Messages</p>
       </MenuItem>
       <MenuItem>
-        <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
+        <IconButton
+          size="large"
+          aria-label="show 17 new notifications"
+          sx={{ color: 'grey.900' }}
+        >
           <Badge badgeContent={17} color="error">
             <NotificationsIcon />
           </Badge>
@@ -239,7 +243,11 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+            <IconButton
+              size="large"
+              aria-label="show 4 new mails"
+              sx={{ color: 'grey.900' }}
+            >
               <Badge badgeContent={4} color="error">
                 <MailIcon />
               </Badge>
@@ -247,7 +255,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
-              color="inherit"
+              sx={{ color: 'grey.900' }}
             >
               <Badge badgeContent={17} color="error">
                 <NotificationsIcon />
@@ -265,7 +273,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
               aria-controls={menuId}
               aria-haspopup="true"
               onClick={handleProfileMenuOpen}
-              color="inherit"
+              sx={{ color: 'grey.900' }}
             >
               <ExpandMore />
             </IconButton>
@@ -277,7 +285,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
               aria-controls={mobileMenuId}
               aria-haspopup="true"
               onClick={handleMobileMenuOpen}
-              color="inherit"
+              sx={{ color: 'grey.900' }}
             >
               <MoreIcon />
             </IconButton>
