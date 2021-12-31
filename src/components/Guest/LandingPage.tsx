@@ -5,12 +5,10 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { Box, styled } from '@mui/system';
 import React from 'react';
 
-
 const LandingPageContainer = styled(Grid)`
-  background-image: url('/src/assets/landingPage/right-side-bg.svg');
+  background-image: url('/src/assets/landingPage/landing-page-bg.svg');
   background-repeat: no-repeat;
-  background-size: 1163px 2000px;
-  background-position: 960px 0;
+  background-position: right top;
 `;
 
 const LandingPageItem = styled(Grid)`
@@ -35,16 +33,25 @@ const FormContainer = styled(Box)`
 
 const LandingPage = () => {
   return (
-    <LandingPageContainer container sx={{ minHeight: 'calc(200vh - 160px)' }}>
+    <LandingPageContainer
+      container
+      sx={{ minHeight: 'calc(200vh - 160px)', scrollBehavior: 'smooth' }}
+    >
       <LandingPageItem
         item
         xs={6}
-        sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          pl: 3,
+          pr: 2,
+        }}
       >
         <Typography variant="h1" color="primary" sx={{ fontWeight: '700' }}>
           We Provide Total Health Care
         </Typography>
-        <Typography variant="body1">
+        <Typography variant="body1" sx={{ fontSize: '24px', color: 'grey.500' }}>
           mauris vitae ultricies leo integer malesuada nunc vel risus commodo viverra
           maecenas accumsan lacus vel facilisis volutpat est velit egestas dui id ornare
           arcu odio ut sem nulla pharetra diam sit amet nisl suscipit adipiscing bibendum
@@ -52,21 +59,30 @@ const LandingPage = () => {
         </Typography>
       </LandingPageItem>
 
-      <Grid item xs={6} />
+      <Grid
+        item
+        xs={6}
+        sx={{
+          backgroundImage: 'url("/src/assets/landingPage/DoctorImage.svg")',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+          backgroundSize: 'contain',
+        }}
+      />
 
-      <LandingPageItem item xs={6}>
+      <LandingPageItem item xs={6} id="sign-in-form">
         <Typography
-          variant="h1"
+          variant="h2"
           component="p"
           color="primary"
-          sx={{ fontFamily: '"Pacifico", cursive' }}
+          sx={{ textAlign: 'center' }}
         >
           Sign in to your account
         </Typography>
         <form>
           <FormContainer>
             <TextField
-              type={'email'}
+              label="Email address"
               placeholder="example@mail.com"
               sx={{ width: '100%' }}
               InputProps={{
@@ -78,7 +94,7 @@ const LandingPage = () => {
               }}
             />
             <TextField
-              type={'password'}
+              label="Password"
               placeholder="*************"
               sx={{ width: '100%' }}
               InputProps={{
@@ -97,6 +113,31 @@ const LandingPage = () => {
             </Button>
           </FormContainer>
         </form>
+      </LandingPageItem>
+
+      <LandingPageItem item xs={6}>
+        <Box
+          sx={{
+            maxHeight: { md: '430px' },
+            height: { md: '100%' },
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 10,
+            color: 'white',
+          }}
+        >
+          <Typography variant="h2" component="p" sx={{ textAlign: 'center' }}>
+            Hello, Friend!
+          </Typography>
+          <Box sx={{ maxWidth: { md: '540px' }, marginX: 'auto', textAlign: 'center' }}>
+            <Typography variant="h4" component="p">
+              Fill up personal information and Improve Your health with us.
+            </Typography>
+          </Box>
+          <Button variant="outlined" color="inherit" sx={{ alignSelf: 'center' }}>
+            Sign up
+          </Button>
+        </Box>
       </LandingPageItem>
     </LandingPageContainer>
   );

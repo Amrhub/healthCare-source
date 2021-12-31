@@ -55,7 +55,7 @@ const theme = createTheme({
 });
 
 const App = () => {
-  const isAuthenticated = true;
+  const isAuthenticated = false;
 
   return (
     <ThemeProvider theme={theme}>
