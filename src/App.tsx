@@ -9,7 +9,7 @@ const theme = createTheme({
   palette: {
     primary: {
       main: '#4264D0',
-      dark: '#2B3C8A',
+      dark: '#2c4baf',
     },
     secondary: {
       main: '#23B59C',
@@ -21,7 +21,7 @@ const theme = createTheme({
     },
   },
   shape: {
-    borderRadius: '10px',
+    borderRadius: 10,
   },
 
   typography: {
