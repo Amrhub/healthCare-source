@@ -32,6 +32,7 @@ const GuestLayout = ({ children }: { children: React.ReactNode }) => {
                 display: { xs: 'none', md: 'inline-flex' },
               }}
               variant="contained"
+              href="#sign-up"
             >
               Sign up
             </Button>
