@@ -6,3 +6,7 @@ export const userRoutes = {
   stories: '/user/stories',
   support: '/user/support',
 };
+
+export const guestRoutes = {
+  home: '/',
+};

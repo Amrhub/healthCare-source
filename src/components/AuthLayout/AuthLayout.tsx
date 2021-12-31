@@ -322,14 +322,15 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
                   <ThemeProvider theme={theme}>
                     <ListItemIcon
                       sx={{
-                        borderRadius: '50%',
-                        backgroundColor: isActive ? '#4264D0' : '#FFFFFF',
-                        color: !isActive ? '#4264d0' : '#fff',
+                        borderRadius: '10px',
+                        backgroundColor: isActive ? 'primary.main' : '#FFFFFF',
+                        color: !isActive ? 'grey.500' : '#fff',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         minWidth: '50px',
                         aspectRatio: '1/1',
+                        boxShadow: isActive ? '0px 4px 4px rgba(0, 0, 0, 0.25)' : 'none',
                         [theme.breakpoints.up('sm')]: {
                           width: '70px',
                         },
@@ -340,7 +341,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
                     <ListItemText
                       primary={text}
                       sx={{
-                        color: isActive ? '#4264d0' : '#262B32',
+                        color: isActive ? 'primary.dark' : 'grey.900',
                         ml: 1,
                         [theme.breakpoints.up('sm')]: {
                           ml: 2,
