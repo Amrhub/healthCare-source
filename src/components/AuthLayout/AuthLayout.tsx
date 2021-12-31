@@ -330,7 +330,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
                         justifyContent: 'center',
                         minWidth: '50px',
                         aspectRatio: '1/1',
-                        boxShadow: '0px 0px 1px 0px #747b8d',
+                        boxShadow: isActive ? '0px 4px 4px rgba(0, 0, 0, 0.25)' : 'none',
                         [theme.breakpoints.up('sm')]: {
                           width: '70px',
                         },

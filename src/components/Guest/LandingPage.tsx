@@ -5,7 +5,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { Box, styled } from '@mui/system';
 import React from 'react';
 
-
 const LandingPageContainer = styled(Grid)`
   background-image: url('/src/assets/landingPage/right-side-bg.svg');
   background-repeat: no-repeat;
@@ -66,6 +65,7 @@ const LandingPage = () => {
         <form>
           <FormContainer>
             <TextField
+              label="Email address"
               type={'email'}
               placeholder="example@mail.com"
               sx={{ width: '100%' }}
@@ -78,6 +78,7 @@ const LandingPage = () => {
               }}
             />
             <TextField
+              label="Password"
               type={'password'}
               placeholder="*************"
               sx={{ width: '100%' }}
