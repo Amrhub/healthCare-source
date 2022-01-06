@@ -24,6 +24,10 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { Box, styled } from '@mui/system';
 import React, { useState } from 'react';
 
+import doctorImageBG from '/src/assets/landingPage/DoctorImage.svg';
+import landingPageBG from '/src/assets/landingPage/landing-page-bg.svg';
+import placeholderPP from '/src/assets/defaultProfilePic.svg';
+
 import { dfCenterCenter } from '../../abstracts/common.styles';
 
 interface State {
@@ -38,7 +42,7 @@ interface State {
 }
 
 const LandingPageContainer = styled(Grid)`
-  background-image: url('/src/assets/landingPage/landing-page-bg.svg');
+  background-image: url(${landingPageBG});
   background-repeat: no-repeat;
   background-position: right top;
 `;
@@ -150,7 +154,7 @@ const LandingPage = () => {
         item
         xs={6}
         sx={{
-          backgroundImage: 'url("/src/assets/landingPage/DoctorImage.svg")',
+          backgroundImage: `url(${doctorImageBG})`,
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
           backgroundSize: 'contain',
@@ -254,7 +258,7 @@ const LandingPage = () => {
           <form style={{ position: 'relative' }}>
             <label htmlFor="icon-button-file" style={{ position: 'relative' }}>
               <img
-                src="/src/assets/defaultProfilePic.svg"
+                src={placeholderPP}
                 alt="person circle icon"
                 width={'150'}
                 height={'150'}
