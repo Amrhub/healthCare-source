@@ -269,7 +269,7 @@ const LandingPage = () => {
                 <PhotoCamera />
               </IconButton>
             </label>
-            <Grid container rowSpacing={4} sx={{ mt: 4 }}>
+            <Grid container sx={{ mt: 4 }}>
               <Grid container columnSpacing={35.5} rowSpacing={4}>
                 <Grid item xs={6}>
                   <FormControl fullWidth>
