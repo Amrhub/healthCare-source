@@ -21,6 +21,7 @@ const GuestLayout = ({ children }: { children: React.ReactNode }) => {
               startIcon={<PersonOutlineOutlinedIcon />}
               sx={{ color: '#fff' }}
               variant="contained"
+              href="#sign-in-form"
             >
               Sign in
             </Button>
@@ -31,6 +32,7 @@ const GuestLayout = ({ children }: { children: React.ReactNode }) => {
                 display: { xs: 'none', md: 'inline-flex' },
               }}
               variant="contained"
+              href="#sign-up"
             >
               Sign up
             </Button>

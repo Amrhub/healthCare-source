@@ -1,4 +1,5 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useLocation } from 'react-router-dom';
 
 import AuthLayout from './components/AuthLayout/AuthLayout';
 import GuestLayout from './components/GuestLayout/GuestLayout';
@@ -55,7 +56,8 @@ const theme = createTheme({
 });
 
 const App = () => {
-  const isAuthenticated = true;
+  const location = useLocation();
+  const isAuthenticated = location.pathname.includes('user');
 
   return (
     <ThemeProvider theme={theme}>

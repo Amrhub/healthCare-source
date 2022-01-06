@@ -34,6 +34,8 @@ import { BRAND_NAME } from '../../abstracts/common';
 import MyNavLink from '../../abstracts/NavLink';
 import { userRoutes } from '../../Routes/Routes';
 
+import userAvatarImage from '/src/assets/placeholder.svg';
+
 const drawerWidth = 240;
 const drawerWidthClosedDesktop = 100 / 8;
 const drawerWidthClosedMobile = 60 / 8;
@@ -262,7 +264,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
               </Badge>
             </IconButton>
             <Container sx={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <Avatar src="/src/assets/placeholder.svg" alt="avatar" />
+              <Avatar src={userAvatarImage} alt="avatar" />
               <Typography>Mohamed Adel</Typography>
             </Container>
 
