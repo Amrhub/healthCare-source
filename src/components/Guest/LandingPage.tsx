@@ -25,6 +25,7 @@ import { Box, styled } from '@mui/system';
 import React, { useState } from 'react';
 
 import { dfCenterCenter } from '../../abstracts/common.styles';
+import bgImageUrl from '../../assets/landingPage/landing-page-bg.svg';
 
 interface State {
   password: 'string';
@@ -38,7 +39,7 @@ interface State {
 }
 
 const LandingPageContainer = styled(Grid)`
-  background-image: url('/src/assets/landingPage/landing-page-bg.svg');
+  background-image: url(${bgImageUrl});
   background-repeat: no-repeat;
   background-position: right top;
 `;
