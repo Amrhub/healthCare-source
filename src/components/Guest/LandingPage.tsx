@@ -27,6 +27,7 @@ import React, { useState } from 'react';
 import doctorImageBG from '/src/assets/landingPage/DoctorImage.svg';
 import landingPageBG from '/src/assets/landingPage/landing-page-bg.svg';
 import placeholderPP from '/src/assets/defaultProfilePic.svg';
+import signUpModalBG from '/src/assets/signUpModal/sign-up-bg.svg';
 
 import { dfCenterCenter } from '../../abstracts/common.styles';
 
@@ -238,7 +239,7 @@ const LandingPage = () => {
       <Modal
         sx={{
           ...dfCenterCenter,
-          background: 'url("/src/assets/signUpModal/sign-up-bg.svg")',
+          background: `url(${signUpModalBG})`,
           backgroundRepeat: 'no-repeat',
         }}
         BackdropProps={{ invisible: true }}
