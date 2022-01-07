@@ -27,7 +27,6 @@ import MenuItem from '@mui/material/MenuItem';
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { ThemeProvider } from '@mui/system';
 import * as React from 'react';
 
 import { BRAND_NAME } from '../../abstracts/common';
@@ -220,6 +219,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
       <CssBaseline />
       <AppBar
+        elevation={0}
         position="fixed"
         open={open}
         sx={{ backgroundColor: '#F4F4F8' }}
@@ -321,45 +321,47 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
                     },
                   }}
                 >
-                  <ThemeProvider theme={theme}>
-                    <ListItemIcon
-                      sx={{
-                        borderRadius: '10px',
-                        backgroundColor: isActive ? 'primary.main' : '#FFFFFF',
-                        color: !isActive ? 'grey.500' : '#fff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        minWidth: '50px',
-                        aspectRatio: '1/1',
-                        boxShadow: isActive ? '0px 4px 4px rgba(0, 0, 0, 0.25)' : 'none',
-                        [theme.breakpoints.up('sm')]: {
-                          width: '70px',
-                        },
-                      }}
-                    >
-                      {component}
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={text}
-                      sx={{
-                        color: isActive ? 'primary.dark' : 'grey.900',
-                        ml: 1,
-                        [theme.breakpoints.up('sm')]: {
-                          ml: 2,
-                        },
-                      }}
-                    />
-                  </ThemeProvider>
+                  <ListItemIcon
+                    sx={{
+                      borderRadius: '10px',
+                      backgroundColor: isActive ? 'primary.main' : '#FFFFFF',
+                      color: !isActive ? 'grey.500' : '#fff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      minWidth: '50px',
+                      aspectRatio: '1/1',
+                      boxShadow: isActive ? '0px 4px 4px rgba(0, 0, 0, 0.25)' : 'none',
+                      [theme.breakpoints.up('sm')]: {
+                        width: '70px',
+                      },
+                    }}
+                  >
+                    {component}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={text}
+                    sx={{
+                      color: isActive ? 'primary.dark' : 'grey.900',
+                      ml: 1,
+                      [theme.breakpoints.up('sm')]: {
+                        ml: 2,
+                      },
+                    }}
+                  />
                 </ListItem>
               )}
             </MyNavLink>
           ))}
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box
+        sx={{ display: 'flex', flexDirection: 'column', height: '100vh', width: '100%' }}
+      >
         <DrawerHeader />
-        {children}
+        <Box component="main" sx={{ flexGrow: 1, height: '100%' }}>
+          {children}
+        </Box>
       </Box>
     </Box>
   );
