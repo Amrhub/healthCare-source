@@ -28,12 +28,13 @@ import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import { BRAND_NAME } from '../../abstracts/common';
 import MyNavLink from '../../abstracts/NavLink';
+import { logoutUser } from '../../redux/users/users.js';
 import { userRoutes } from '../../Routes/Routes';
-
-import userAvatarImage from '/src/assets/placeholder.svg';
 
 const drawerWidth = 240;
 const drawerWidthClosedDesktop = 100 / 8;
@@ -111,6 +112,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const user = useSelector((state: any) => state.users.authUserInfo);
+  const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -140,6 +143,11 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     handleMobileMenuClose();
   };
 
+  const handleLogOut = () => {
+    logoutUser();
+    navigate('/');
+  };
+
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
@@ -155,6 +163,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleLogOut}>Log out</MenuItem>
     </Menu>
   );
 
@@ -264,8 +273,8 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
               </Badge>
             </IconButton>
             <Container sx={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <Avatar src={userAvatarImage} alt="avatar" />
-              <Typography>Mohamed Adel</Typography>
+              <Avatar src={user.avatar} alt="avatar" />
+              <Typography>{user.name}</Typography>
             </Container>
 
             <IconButton
