@@ -33,7 +33,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { dfCenterCenter } from '../../abstracts/common.styles';
-import { loginUserSuccess } from '../../redux/users/users.js';
+import { loginUserSuccess } from '../../redux/users/users';
 
 interface State {
   password: 'string';

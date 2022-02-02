@@ -38,7 +38,7 @@ const initialState = {
   authUserInfo: {},
 };
 
-export const loginUserSuccess = (payload) => ({
+export const loginUserSuccess = (payload: any) => ({
   type: LOGIN_USER_SUCCESS,
   payload,
 });
@@ -47,7 +47,10 @@ export const logoutUser = () => ({
   type: LOGOUT_USER,
 });
 
-const reducer = (state = initialState, { type, payload }) => {
+const reducer = (
+  state = initialState,
+  { type, payload }: { type: any; payload: any },
+) => {
   switch (type) {
     case LOGIN_USER_SUCCESS:
       return {
