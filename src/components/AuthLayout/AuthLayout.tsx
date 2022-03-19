@@ -27,14 +27,14 @@ import MenuItem from '@mui/material/MenuItem';
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { ThemeProvider } from '@mui/system';
 import * as React from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import { BRAND_NAME } from '../../abstracts/common';
 import MyNavLink from '../../abstracts/NavLink';
+import { logoutUser } from '../../redux/users/users';
 import { userRoutes } from '../../Routes/Routes';
-
-import userAvatarImage from '/src/assets/placeholder.svg';
 
 const drawerWidth = 240;
 const drawerWidthClosedDesktop = 100 / 8;
@@ -112,6 +112,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const user = useSelector((state: any) => state.users.authUserInfo);
+  const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -141,6 +143,11 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     handleMobileMenuClose();
   };
 
+  const handleLogOut = () => {
+    logoutUser();
+    navigate('/');
+  };
+
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
@@ -156,6 +163,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleLogOut}>Log out</MenuItem>
     </Menu>
   );
 
@@ -220,6 +228,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
       <CssBaseline />
       <AppBar
+        elevation={0}
         position="fixed"
         open={open}
         sx={{ backgroundColor: '#F4F4F8' }}
@@ -264,8 +273,8 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
               </Badge>
             </IconButton>
             <Container sx={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <Avatar src={userAvatarImage} alt="avatar" />
-              <Typography>Mohamed Adel</Typography>
+              <Avatar src={user.avatar} alt="avatar" />
+              <Typography>{user.name}</Typography>
             </Container>
 
             <IconButton
@@ -321,45 +330,47 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
                     },
                   }}
                 >
-                  <ThemeProvider theme={theme}>
-                    <ListItemIcon
-                      sx={{
-                        borderRadius: '10px',
-                        backgroundColor: isActive ? 'primary.main' : '#FFFFFF',
-                        color: !isActive ? 'grey.500' : '#fff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        minWidth: '50px',
-                        aspectRatio: '1/1',
-                        boxShadow: isActive ? '0px 4px 4px rgba(0, 0, 0, 0.25)' : 'none',
-                        [theme.breakpoints.up('sm')]: {
-                          width: '70px',
-                        },
-                      }}
-                    >
-                      {component}
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={text}
-                      sx={{
-                        color: isActive ? 'primary.dark' : 'grey.900',
-                        ml: 1,
-                        [theme.breakpoints.up('sm')]: {
-                          ml: 2,
-                        },
-                      }}
-                    />
-                  </ThemeProvider>
+                  <ListItemIcon
+                    sx={{
+                      borderRadius: '10px',
+                      backgroundColor: isActive ? 'primary.main' : '#FFFFFF',
+                      color: !isActive ? 'grey.500' : '#fff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      minWidth: '50px',
+                      aspectRatio: '1/1',
+                      boxShadow: isActive ? '0px 4px 4px rgba(0, 0, 0, 0.25)' : 'none',
+                      [theme.breakpoints.up('sm')]: {
+                        width: '70px',
+                      },
+                    }}
+                  >
+                    {component}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={text}
+                    sx={{
+                      color: isActive ? 'primary.dark' : 'grey.900',
+                      ml: 1,
+                      [theme.breakpoints.up('sm')]: {
+                        ml: 2,
+                      },
+                    }}
+                  />
                 </ListItem>
               )}
             </MyNavLink>
           ))}
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box
+        sx={{ display: 'flex', flexDirection: 'column', height: '100vh', width: '100%' }}
+      >
         <DrawerHeader />
-        {children}
+        <Box component="main" sx={{ flexGrow: 1, height: '100%' }}>
+          {children}
+        </Box>
       </Box>
     </Box>
   );

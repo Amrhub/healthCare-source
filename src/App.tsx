@@ -20,6 +20,12 @@ const theme = createTheme({
       500: '#747B8D',
       900: '#262B32',
     },
+    success: {
+      main: '#44b700',
+    },
+    info: {
+      main: '#919191',
+    },
   },
   shape: {
     borderRadius: 10,

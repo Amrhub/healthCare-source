@@ -29,7 +29,11 @@ import landingPageBG from '/src/assets/landingPage/landing-page-bg.svg';
 import placeholderPP from '/src/assets/defaultProfilePic.svg';
 import signUpModalBG from '/src/assets/signUpModal/sign-up-bg.svg';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
 import { dfCenterCenter } from '../../abstracts/common.styles';
+import { loginUserSuccess } from '../../redux/users/users';
 
 interface State {
   password: 'string';
@@ -85,6 +89,9 @@ const Input = styled('input')({
 });
 
 const LandingPage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { users } = useSelector((state: any) => state.users);
   const [signUpModal, setSignUpModal] = useState(false);
   const handleModalOpen = () => setSignUpModal(true);
   const handleModalClose = () => setSignUpModal(false);
@@ -98,7 +105,6 @@ const LandingPage = () => {
     year: '1998',
     gender: '',
   });
-
   const signUpFormChangeHandler =
     (key: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
       const newState = {
@@ -116,12 +122,24 @@ const LandingPage = () => {
     setSignUpForm(newState);
   };
 
+  const signInHandler = (event: any): void => {
+    event.preventDefault();
+    const form = event.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    const user = users.find((user: any) => user.email === email);
+    if (user?.password === password) {
+      dispatch(loginUserSuccess(user));
+      navigate('/user');
+    }
+  };
+
   const passwordVisibilityHandler = (key: keyof State) => {
     setSignUpForm((prev) => ({
       ...prev,
       [key]: !prev[key],
     }));
-    console.log(signUpForm.passwordVisibility);
   };
 
   return (
@@ -171,10 +189,11 @@ const LandingPage = () => {
         >
           Sign in to your account
         </Typography>
-        <form>
+        <form onSubmit={signInHandler}>
           <FormContainer>
             <TextField
               label="Email address"
+              name="email"
               placeholder="example@mail.com"
               sx={{ width: '100%' }}
               InputProps={{
@@ -184,9 +203,12 @@ const LandingPage = () => {
                   </InputAdornment>
                 ),
               }}
+              required
             />
             <TextField
+              type="password"
               label="Password"
+              name="password"
               placeholder="*************"
               sx={{ width: '100%' }}
               InputProps={{
@@ -196,6 +218,7 @@ const LandingPage = () => {
                   </InputAdornment>
                 ),
               }}
+              required
             />
             <Button type="submit" variant="contained" color="primary">
               Sign in
