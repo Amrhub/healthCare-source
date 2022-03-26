@@ -1,9 +1,4 @@
-import {
-  AutoStories,
-  ExpandMore,
-  HistoryToggleOff,
-  SupportAgentRounded,
-} from '@mui/icons-material';
+import { AutoStories, ExpandMore, HistoryToggleOff } from '@mui/icons-material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -14,12 +9,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PersonIcon from '@mui/icons-material/Person';
+import StoreIcon from '@mui/icons-material/Store';
 import { Avatar, Container, IconButton, ListItem, List, Menu } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
 import MuiDrawer from '@mui/material/Drawer';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -218,8 +213,8 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     { text: 'Community', component: <GroupsIcon />, path: userRoutes.community },
     { text: 'Stories', component: <AutoStories />, path: userRoutes.stories },
     {
-      text: 'Support',
-      component: <SupportAgentRounded />,
+      text: 'Membership',
+      component: <StoreIcon />,
       path: userRoutes.membership,
     },
   ];
@@ -231,7 +226,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
         elevation={0}
         position="fixed"
         open={open}
-        sx={{ backgroundColor: '#F4F4F8' }}
+        sx={{ backgroundColor: 'white' }}
         color="default"
       >
         <Toolbar sx={{ pl: { xs: '4px', md: '24px' } }}>
@@ -306,13 +301,13 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
       {renderMobileMenu}
       {renderMenu}
       <Drawer variant="permanent" open={open}>
-        <DrawerHeader sx={{ backgroundColor: '#f4f4f8' }}>
+        <DrawerHeader sx={{ backgroundColor: 'white' }}>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </DrawerHeader>
-        <Divider />
-        <List sx={{ backgroundColor: '#F4F4F8', height: '100%' }}>
+
+        <List sx={{ backgroundColor: 'white', height: '100%' }}>
           {userSideBar.map(({ text, component, path }) => (
             <MyNavLink to={path} key={text}>
               {({ isActive }) => (
@@ -333,7 +328,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
                   <ListItemIcon
                     sx={{
                       borderRadius: '10px',
-                      backgroundColor: isActive ? 'primary.main' : '#FFFFFF',
+                      backgroundColor: isActive ? 'primary.main' : 'grey.100',
                       color: !isActive ? 'grey.500' : '#fff',
                       display: 'flex',
                       alignItems: 'center',

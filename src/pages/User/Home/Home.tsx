@@ -14,7 +14,6 @@ const Home = () => {
     >
       <Box
         sx={{
-          border: '1px solid green',
           height: { lg: '250px' },
           background: `url(${HomePageBG})`,
           backgroundSize: 'cover',

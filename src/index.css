@@ -27,3 +27,7 @@ code {
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
+.MuiDrawer-root .css-1clz20c-MuiPaper-root-MuiDrawer-paper {
+  border: none;
+}

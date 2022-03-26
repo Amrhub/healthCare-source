@@ -33,6 +33,11 @@ const HealthCardHeaderTitle = styled(Typography)`
 const HealthCardBody = styled(Typography)`
   text-align: center;
   margin-top: 20px;
+  font-size: 24px;
+  font-weight: 700;
+  & > span {
+    font-size: 16px;
+  }
 `;
 
 const reportTime = 'Today, 12:13 PM';
@@ -57,8 +62,8 @@ const HealthCards = () => {
             />
           </HealthCardHeader>
         </Box>
-        <HealthCardBody variant="h4" component="p">
-          84 BPM
+        <HealthCardBody variant="h4">
+          84 <span>BPM</span>
         </HealthCardBody>
       </HealthCard>
       <HealthCard>
@@ -71,8 +76,8 @@ const HealthCards = () => {
             <DeviceThermostatTwoToneIcon sx={{ width: '35px', height: '35px' }} />
           </HealthCardHeader>
         </Box>
-        <HealthCardBody variant="h4" component="p">
-          36.2 °c
+        <HealthCardBody variant="h4">
+          36.2 <span>°C</span>
         </HealthCardBody>
       </HealthCard>
       <HealthCard>
@@ -85,8 +90,8 @@ const HealthCards = () => {
             <BloodtypeOutlinedIcon sx={{ width: '35px', height: '35px' }} />
           </HealthCardHeader>
         </Box>
-        <HealthCardBody variant="h4" component="p">
-          93%
+        <HealthCardBody variant="h4">
+          93 <span>%</span>
         </HealthCardBody>
       </HealthCard>
     </>
