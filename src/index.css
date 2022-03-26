@@ -28,6 +28,6 @@ code {
   border: 0;
 }
 
-.MuiDrawer-root .css-1clz20c-MuiPaper-root-MuiDrawer-paper {
+.MuiDrawer-root .MuiPaper-root {
   border: none;
 }
