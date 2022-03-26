@@ -1,7 +1,7 @@
 import { Avatar, Box, Grid, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 
-import { dfCenterCenter, dfColSpaceBetween } from '../../../abstracts/common.styles';
+import { dfCenterCenter } from '../../../abstracts/common.styles';
 import HomePageBG from '../../../assets/homePage/home_header-bg.svg';
 
 import ECGChart from './ECGChart';
@@ -40,7 +40,15 @@ const Home = () => {
         px={10}
         sx={{ height: '70%', m: 'auto', justifyContent: 'space-between' }}
       >
-        <Grid item xs={3} sx={{ ...dfColSpaceBetween }}>
+        <Grid
+          item
+          xs={3}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
+        >
           <HealthCards />
         </Grid>
         <Grid item xs={8}>
