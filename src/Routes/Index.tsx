@@ -1,13 +1,12 @@
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import Community from '../components/Community/Community';
-import LandingPage from '../components/Guest/LandingPage';
-import Profile from '../components/Profile/Profile';
-import Stories from '../components/Stories/Stories';
-import Support from '../components/Support/Support';
-import Home from '../components/User/Home/Home';
-import ReportHistory from '../components/User/ReportHistory/ReportHistory';
+import Community from '../pages/Community/Community';
+import LandingPage from '../pages/Guest/LandingPage';
+import Profile from '../pages/Profile/Profile';
+import Stories from '../pages/Stories/Stories';
+import Support from '../pages/Support/Support';
+import Home from '../pages/User/Home/Home';
+import ReportHistory from '../pages/User/ReportHistory/ReportHistory';
 
 import { guestRoutes, userRoutes } from './Routes';
 
@@ -19,7 +18,7 @@ const index = () => {
       <Route path={userRoutes.reportHistory} element={<ReportHistory />} />
       <Route path={userRoutes.community} element={<Community />} />
       <Route path={userRoutes.stories} element={<Stories />} />
-      <Route path={userRoutes.support} element={<Support />} />
+      <Route path={userRoutes.membership} element={<Support />} />
       <Route path={guestRoutes.home} element={<LandingPage />} />
     </Routes>
   );

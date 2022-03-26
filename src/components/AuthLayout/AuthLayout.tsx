@@ -220,7 +220,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     {
       text: 'Support',
       component: <SupportAgentRounded />,
-      path: userRoutes.support,
+      path: userRoutes.membership,
     },
   ];
 
@@ -368,7 +368,10 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
         sx={{ display: 'flex', flexDirection: 'column', height: '100vh', width: '100%' }}
       >
         <DrawerHeader />
-        <Box component="main" sx={{ flexGrow: 1, height: '100%' }}>
+        <Box
+          component="main"
+          sx={{ flexGrow: 1, height: '100%', backgroundColor: 'grey.100' }}
+        >
           {children}
         </Box>
       </Box>

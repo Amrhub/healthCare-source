@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 
-import LandingPage from '../components/Guest/LandingPage';
+import LandingPage from '../pages/Guest/LandingPage';
 
 import { guestRoutes } from './Routes';
 
