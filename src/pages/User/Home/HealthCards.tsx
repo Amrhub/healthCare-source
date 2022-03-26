@@ -10,7 +10,6 @@ const HealthCard = styled(Box)(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
   backgroundColor: 'white',
   color: theme.palette.grey[900],
-  marginInline: 'auto',
   padding: '21px',
   [theme.breakpoints.up('sm')]: {
     height: '150px',

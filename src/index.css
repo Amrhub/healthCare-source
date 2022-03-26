@@ -31,3 +31,7 @@ code {
 .MuiDrawer-root .MuiPaper-root {
   border: none;
 }
+
+.Target-root {
+  height: 100% !important;
+}

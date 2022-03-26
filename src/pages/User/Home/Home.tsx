@@ -42,7 +42,7 @@ const Home = () => {
       >
         <Grid
           item
-          xs={3}
+          xs={2}
           sx={{
             display: 'flex',
             flexDirection: 'column',
@@ -51,7 +51,7 @@ const Home = () => {
         >
           <HealthCards />
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={9.6}>
           <ECGChart />
         </Grid>
       </Grid>

@@ -22,7 +22,7 @@ const data = [
 
 const ECGChart = () => {
   return (
-    <Paper sx={{ p: '15px' }}>
+    <Paper sx={{ height: '100%' }}>
       <Chart data={data}>
         <ArgumentAxis />
         <ValueAxis />
