@@ -4,7 +4,7 @@ export const userRoutes = {
   reportHistory: '/user/report-history',
   community: '/user/community',
   stories: '/user/stories',
-  support: '/user/support',
+  membership: '/user/membership',
 };
 
 export const guestRoutes = {

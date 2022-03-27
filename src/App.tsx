@@ -26,6 +26,9 @@ const theme = createTheme({
     info: {
       main: '#919191',
     },
+    text: {
+      primary: '#262B32',
+    },
   },
   shape: {
     borderRadius: 10,
