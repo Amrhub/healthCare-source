@@ -162,6 +162,19 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     </Menu>
   );
 
+  const userSideBar = [
+    { text: 'Home', component: <HomeSharpIcon />, path: userRoutes.home },
+    { text: 'Profile', component: <PersonIcon />, path: userRoutes.profile },
+    { text: 'History', component: <HistoryToggleOff />, path: userRoutes.reportHistory },
+    { text: 'Community', component: <GroupsIcon />, path: userRoutes.community.index },
+    { text: 'Stories', component: <AutoStories />, path: userRoutes.stories },
+    {
+      text: 'Membership',
+      component: <StoreIcon />,
+      path: userRoutes.membership,
+    },
+  ];
+
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
     <Menu
@@ -172,11 +185,17 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" sx={{ color: 'grey.900' }}>
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
+        <MyNavLink to={userRoutes.chat}>
+          <IconButton
+            size="large"
+            aria-label="show 4 new mails"
+            sx={{ color: 'grey.900' }}
+          >
+            <Badge badgeContent={4} color="error">
+              <MailIcon />
+            </Badge>
+          </IconButton>
+        </MyNavLink>
         <p>Messages</p>
       </MenuItem>
       <MenuItem>
@@ -205,20 +224,6 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
       </MenuItem>
     </Menu>
   );
-
-  const userSideBar = [
-    { text: 'Home', component: <HomeSharpIcon />, path: userRoutes.home },
-    { text: 'Profile', component: <PersonIcon />, path: userRoutes.profile },
-    { text: 'History', component: <HistoryToggleOff />, path: userRoutes.reportHistory },
-    { text: 'Community', component: <GroupsIcon />, path: userRoutes.community },
-    { text: 'Stories', component: <AutoStories />, path: userRoutes.stories },
-    {
-      text: 'Membership',
-      component: <StoreIcon />,
-      path: userRoutes.membership,
-    },
-  ];
-
   return (
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
       <CssBaseline />
@@ -249,15 +254,17 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton
-              size="large"
-              aria-label="show 4 new mails"
-              sx={{ color: 'grey.900' }}
-            >
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
+            <MyNavLink to={userRoutes.chat} sx={{ height: '24px' }}>
+              <IconButton
+                size="large"
+                aria-label="show 4 new mails"
+                sx={{ color: 'grey.900' }}
+              >
+                <Badge badgeContent={4} color="error">
+                  <MailIcon />
+                </Badge>
+              </IconButton>
+            </MyNavLink>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
