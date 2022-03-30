@@ -1,6 +1,6 @@
-import { Box, Divider } from '@mui/material';
-import Container from '@mui/material/Container';
+import { Divider } from '@mui/material';
 
+import ContainerBox from '../../layouts/ContainerBox';
 import { userRoutes } from '../../Routes/Routes';
 
 import AddFriend from './AddFriend';
@@ -18,32 +18,17 @@ const Community = () => {
     if (pathName === communityRoutes.addFriend) return <AddFriend />;
   };
   return (
-    <Box sx={{ display: 'flex', height: '100%' }}>
-      <Container
+    <ContainerBox>
+      <CommunityNav />
+      <Divider
         sx={{
-          bgcolor: 'background.paper',
-          maxWidth: { md: '1032px' },
-          height: '90%',
-          my: 'auto',
-          boxShadow: 4,
-          borderRadius: '10px',
-          color: 'grey.900',
-          p: '38px 60px',
+          bgcolor: 'grey.900',
+          boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+          mb: 3,
         }}
-        fixed
-        disableGutters
-      >
-        <CommunityNav />
-        <Divider
-          sx={{
-            bgcolor: 'grey.900',
-            boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-            mb: 3,
-          }}
-        />
-        {renderCommunityPages()}
-      </Container>
-    </Box>
+      />
+      {renderCommunityPages()}
+    </ContainerBox>
   );
 };
 
