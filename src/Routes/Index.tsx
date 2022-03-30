@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 
+import Chat from '../pages/Chat/Chat';
 import Community from '../pages/Community/Community';
 import LandingPage from '../pages/Guest/LandingPage';
 import Membership from '../pages/Membership/Membership';
@@ -16,9 +17,12 @@ const index = () => {
       <Route path={userRoutes.home} element={<Home />} />
       <Route path={userRoutes.profile} element={<Profile />} />
       <Route path={userRoutes.reportHistory} element={<ReportHistory />} />
-      <Route path={userRoutes.community} element={<Community />} />
+      <Route path={userRoutes.chat} element={<Chat />} />
       <Route path={userRoutes.stories} element={<Stories />} />
       <Route path={userRoutes.membership} element={<Membership />} />
+      <Route path={userRoutes.community.index} element={<Community />} />
+      <Route path={userRoutes.community.friendRequest} element={<Community />} />
+      <Route path={userRoutes.community.addFriend} element={<Community />} />
       <Route path={guestRoutes.home} element={<LandingPage />} />
     </Routes>
   );
