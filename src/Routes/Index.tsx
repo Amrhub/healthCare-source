@@ -18,7 +18,7 @@ const index = () => {
       <Route path={userRoutes.profile} element={<Profile />} />
       <Route path={userRoutes.reportHistory} element={<ReportHistory />} />
       <Route path={userRoutes.chat} element={<Chat />} />
-      <Route path={userRoutes.stories} element={<Stories />} />
+      <Route path={userRoutes.stories.index} element={<Stories />} />
       <Route path={userRoutes.membership} element={<Membership />} />
       <Route path={userRoutes.community.index} element={<Community />} />
       <Route path={userRoutes.community.friendRequest} element={<Community />} />

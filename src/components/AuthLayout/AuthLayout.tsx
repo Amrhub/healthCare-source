@@ -167,7 +167,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     { text: 'Profile', component: <PersonIcon />, path: userRoutes.profile },
     { text: 'History', component: <HistoryToggleOff />, path: userRoutes.reportHistory },
     { text: 'Community', component: <GroupsIcon />, path: userRoutes.community.index },
-    { text: 'Stories', component: <AutoStories />, path: userRoutes.stories },
+    { text: 'Stories', component: <AutoStories />, path: userRoutes.stories.index },
     {
       text: 'Membership',
       component: <StoreIcon />,
