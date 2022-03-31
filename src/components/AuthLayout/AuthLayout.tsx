@@ -315,8 +315,8 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
         </DrawerHeader>
 
         <List sx={{ backgroundColor: 'white', height: '100%' }}>
-          {userSideBar.map(({ text, component, path }) => (
-            <MyNavLink to={path} key={text}>
+          {userSideBar.map(({ text, component, path }, index) => (
+            <MyNavLink to={path} key={text} end={index == 0 ? true : false}>
               {({ isActive }) => (
                 <ListItem
                   button
