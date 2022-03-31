@@ -7,14 +7,19 @@ import { Avatar, Button, Divider, Menu, MenuItem, Typography } from '@mui/materi
 import IconButton from '@mui/material/IconButton';
 import { Box, styled } from '@mui/system';
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
+
+import { userRoutes } from '../../Routes/Routes';
 
 const StoryHeader = styled(Box)``;
 const Footer = styled(Box)``;
 
 const Story = ({ story }: { story: any }) => {
+  const location = useLocation();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const user = story.user;
+  const isEditable = location.pathname === userRoutes.stories.myStories;
 
   const handleClick = (e: any) => {
     setOpen((prev) => !prev);
@@ -46,7 +51,9 @@ const Story = ({ story }: { story: any }) => {
             {story.category}
           </Typography>
         </Box>
-        <IconButton sx={{ ml: 'auto', color: 'grey.900' }}>
+        <IconButton
+          sx={{ ml: 'auto', color: 'grey.900', display: isEditable ? 'block' : 'none' }}
+        >
           <ExpandMoreIcon onClick={handleClick} fontSize="large" />
         </IconButton>
         <Menu open={open} onClose={handleClick} anchorEl={anchorEl}>

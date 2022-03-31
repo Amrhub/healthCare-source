@@ -22,12 +22,7 @@ const Community = () => {
   return (
     <ContainerBox>
       <ContainerBoxNav>
-        <ContainerBoxNavLink
-          to={userRoutes.community.index}
-          className={
-            window.location.pathname == userRoutes.community.index ? 'active' : 'inActive'
-          }
-        >
+        <ContainerBoxNavLink to={userRoutes.community.index} end>
           Friends
         </ContainerBoxNavLink>
         <ContainerBoxNavLink to={userRoutes.community.friendRequest}>
