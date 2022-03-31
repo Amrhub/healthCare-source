@@ -1,10 +1,12 @@
 import { Divider } from '@mui/material';
 
-import ContainerBox from '../../layouts/ContainerBox';
+import ContainerBox from '../../layouts/ContainerBox/ContainerBox';
+import ContainerBoxNav, {
+  ContainerBoxNavLink,
+} from '../../layouts/ContainerBox/ContainerBoxNav';
 import { userRoutes } from '../../Routes/Routes';
 
 import AddFriend from './AddFriend';
-import CommunityNav from './CommunityNav';
 import FriendRequests from './FriendRequests';
 import Friends from './Friends';
 
@@ -19,7 +21,22 @@ const Community = () => {
   };
   return (
     <ContainerBox>
-      <CommunityNav />
+      <ContainerBoxNav>
+        <ContainerBoxNavLink
+          to={userRoutes.community.index}
+          className={
+            window.location.pathname == userRoutes.community.index ? 'active' : 'inActive'
+          }
+        >
+          Friends
+        </ContainerBoxNavLink>
+        <ContainerBoxNavLink to={userRoutes.community.friendRequest}>
+          Friend Requests
+        </ContainerBoxNavLink>
+        <ContainerBoxNavLink to={userRoutes.community.addFriend}>
+          Add Friend
+        </ContainerBoxNavLink>
+      </ContainerBoxNav>
       <Divider
         sx={{
           bgcolor: 'grey.900',

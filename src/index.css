@@ -41,16 +41,16 @@ code {
   height: 100% !important;
 }
 
-.communityNav .active {
+.boxContainerNav .active {
   color: var(--primary-main);
   position: relative;
 }
 
-.communityNav .inActive {
+.boxContainerNav .inActive {
   color: var(--text-color);
 }
 
-.communityNav .active::after {
+.boxContainerNav .active::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -61,6 +61,6 @@ code {
   border-radius: 10px;
 }
 
-.communityNav .inActive::after {
+.boxContainerNav .inActive::after {
   content: none;
 }

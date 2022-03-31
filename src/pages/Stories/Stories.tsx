@@ -1,9 +1,13 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Box, IconButton } from '@mui/material';
+import { Box, Divider, IconButton } from '@mui/material';
 import { useSelector } from 'react-redux';
 
 import Story from '../../components/Story/Story';
-import ContainerBox from '../../layouts/ContainerBox';
+import ContainerBox from '../../layouts/ContainerBox/ContainerBox';
+import ContainerBoxNav, {
+  ContainerBoxNavLink,
+} from '../../layouts/ContainerBox/ContainerBoxNav';
+import { userRoutes } from '../../Routes/Routes';
 
 const Stories = () => {
   const [userOne, userTwo] = useSelector((state: any) => state.users.users);
@@ -31,7 +35,19 @@ const Stories = () => {
   return (
     <ContainerBox>
       <Box sx={{ position: 'relative', height: '100%', width: '100%' }}>
-        <h1>Hello World</h1>
+        <ContainerBoxNav>
+          <ContainerBoxNavLink to={userRoutes.stories.index}>Stories</ContainerBoxNavLink>
+          <ContainerBoxNavLink to={userRoutes.stories.myStories}>
+            My Stories
+          </ContainerBoxNavLink>
+        </ContainerBoxNav>
+        <Divider
+          sx={{
+            bgcolor: 'grey.900',
+            boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+            mb: 3,
+          }}
+        />
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
           {stories?.map((story: any) => (
             <Story key={story.id} story={story} />
