@@ -52,11 +52,24 @@ const Story = ({ story }: { story: any }) => {
           </Typography>
         </Box>
         <IconButton
-          sx={{ ml: 'auto', color: 'grey.900', display: isEditable ? 'block' : 'none' }}
+          sx={{
+            ml: 'auto',
+            color: 'grey.900',
+            display: isEditable ? 'flex' : 'none',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          onClick={handleClick}
         >
-          <ExpandMoreIcon onClick={handleClick} fontSize="large" />
+          <ExpandMoreIcon fontSize="large" />
         </IconButton>
-        <Menu open={open} onClose={handleClick} anchorEl={anchorEl}>
+        <Menu
+          open={open}
+          onClose={handleClick}
+          anchorEl={anchorEl}
+          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        >
           <MenuItem onClick={handleClick}>
             <ModeEditIcon sx={{ mr: 1 }} />
             Edit Story
