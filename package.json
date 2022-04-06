@@ -2,7 +2,7 @@
   "name": "healthcaresource",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "start": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "eslint": "eslint . --ext .js,.jsx,.ts,.tsx"

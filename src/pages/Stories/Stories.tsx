@@ -1,8 +1,10 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Box, Divider, IconButton } from '@mui/material';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
+import StoryModal from '../../components/StoryModal/StoryModal';
 import ContainerBox from '../../layouts/ContainerBox/ContainerBox';
 import ContainerBoxNav, {
   ContainerBoxNavLink,
@@ -14,7 +16,22 @@ import MyStories from './MyStories';
 
 const Stories = () => {
   const [userOne, userTwo] = useSelector((state: any) => state.users.users);
+  const [openModal, setOpenModal] = useState(false);
+  const [storyContent, setStoryContent] = useState('');
+  const [storyCategory, setStoryCategory] = useState('');
   const location = useLocation();
+
+  const handleEditStory = (content: string, category: string) => {
+    setStoryContent(content);
+    setStoryCategory(category);
+    setOpenModal(true);
+  };
+
+  const addStoryClickHandler = () => {
+    setStoryContent('');
+    setStoryCategory('');
+    setOpenModal(true);
+  };
 
   const stories = [
     {
@@ -44,11 +61,12 @@ const Stories = () => {
       case userRoutes.stories.index:
         return <AllStories stories={stories} />;
       case userRoutes.stories.myStories:
-        return <MyStories stories={stories} />;
+        return <MyStories stories={stories} handleEditStory={handleEditStory} />;
       default:
         return null;
     }
   };
+
   return (
     <ContainerBox>
       <Box sx={{ position: 'relative', height: '100%', width: '100%' }}>
@@ -80,6 +98,15 @@ const Stories = () => {
             bottom: '1rem',
             right: '-1rem',
           }}
+          onClick={() => {
+            addStoryClickHandler();
+          }}
+        />
+        <StoryModal
+          open={openModal}
+          setOpen={setOpenModal}
+          content={storyContent}
+          category={storyCategory}
         />
       </Box>
     </ContainerBox>

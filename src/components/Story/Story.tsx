@@ -14,7 +14,13 @@ import { userRoutes } from '../../Routes/Routes';
 const StoryHeader = styled(Box)``;
 const Footer = styled(Box)``;
 
-const Story = ({ story }: { story: any }) => {
+const Story = ({
+  story,
+  handleEditStory,
+}: {
+  story: any;
+  handleEditStory: (content: string, category: string) => void;
+}) => {
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -24,6 +30,11 @@ const Story = ({ story }: { story: any }) => {
   const handleClick = (e: any) => {
     setOpen((prev) => !prev);
     setAnchorEl(e.currentTarget);
+  };
+
+  const handleEditClick = (e: any) => {
+    handleClick(e);
+    handleEditStory(story.content, story.category);
   };
   return (
     <Box
@@ -70,7 +81,7 @@ const Story = ({ story }: { story: any }) => {
           transformOrigin={{ vertical: 'top', horizontal: 'right' }}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         >
-          <MenuItem onClick={handleClick}>
+          <MenuItem onClick={handleEditClick}>
             <ModeEditIcon sx={{ mr: 1 }} />
             Edit Story
           </MenuItem>
