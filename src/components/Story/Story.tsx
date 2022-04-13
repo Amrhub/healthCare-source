@@ -19,7 +19,7 @@ const Story = ({
   handleEditStory,
 }: {
   story: any;
-  handleEditStory: (content: string, category: string) => void;
+  handleEditStory: (content: string, category: string) => void | undefined;
 }) => {
   const location = useLocation();
   const [open, setOpen] = useState(false);
