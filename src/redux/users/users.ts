@@ -33,9 +33,28 @@ const initialState = {
       createdAt: '2019-01-01',
       updatedAt: '2019-01-01',
     },
+    {
+      id: 4,
+      name: 'Jane Doe',
+      avatar: 'https://i.pravatar.cc/300?img=5',
+      email: 'test@test.com',
+      password: 'test',
+      role: 'patient',
+      createdAt: '2019-01-01',
+      updatedAt: '2019-01-01',
+    },
   ],
   authUser: false,
-  authUserInfo: {},
+  authUserInfo: {
+    id: 4,
+    name: 'Jane Doe',
+    avatar: 'https://i.pravatar.cc/300?img=5',
+    email: 'test@test.com',
+    password: 'test',
+    role: 'patient',
+    createdAt: '2019-01-01',
+    updatedAt: '2019-01-01',
+  },
 };
 
 export const loginUserSuccess = (payload: any) => ({

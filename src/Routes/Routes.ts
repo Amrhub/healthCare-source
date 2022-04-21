@@ -1,5 +1,5 @@
 export const userRoutes = {
-  home: '/user/',
+  home: '/user',
   profile: '/user/profile',
   reportHistory: '/user/report-history',
   community: {
@@ -8,7 +8,13 @@ export const userRoutes = {
     addFriend: '/user/community/add-friend',
   },
   chat: '/user/chat',
-  stories: '/user/stories',
+  stories: {
+    index: '/user/stories',
+    myStories: '/user/stories/my-stories',
+    addStory: '/user/stories/add-story',
+    show: '/user/stories/show',
+    edit: '/user/stories/edit',
+  },
   membership: '/user/membership',
 };
 
