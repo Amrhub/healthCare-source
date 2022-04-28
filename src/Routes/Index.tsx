@@ -4,7 +4,8 @@ import Chat from '../pages/Chat/Chat';
 import Community from '../pages/Community/Community';
 import LandingPage from '../pages/Guest/LandingPage';
 import Membership from '../pages/Membership/Membership';
-import Profile from '../pages/Profile/Profile';
+import ProfileCommunityUser from '../pages/Profile/ProfileCommunityUser';
+import ProfileMainUser from '../pages/Profile/ProfileMainUser';
 import Stories from '../pages/Stories/Stories';
 import Home from '../pages/User/Home/Home';
 import ReportHistory from '../pages/User/ReportHistory/ReportHistory';
@@ -15,7 +16,8 @@ const index = () => {
   return (
     <Routes>
       <Route path={userRoutes.home} element={<Home />} />
-      <Route path={userRoutes.profile} element={<Profile />} />
+      <Route path={userRoutes.profile.main} element={<ProfileMainUser />} />
+      <Route path={userRoutes.profile.community} element={<ProfileCommunityUser />} />    
       <Route path={userRoutes.reportHistory} element={<ReportHistory />} />
       <Route path={userRoutes.chat} element={<Chat />} />
       <Route path={userRoutes.stories.index + '/*'} element={<Stories />} />

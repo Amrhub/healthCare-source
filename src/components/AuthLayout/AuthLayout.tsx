@@ -164,7 +164,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
 
   const userSideBar = [
     { text: 'Home', component: <HomeSharpIcon />, path: userRoutes.home },
-    { text: 'Profile', component: <PersonIcon />, path: userRoutes.profile },
+    { text: 'Profile', component: <PersonIcon />, path: userRoutes.profile.main },
     { text: 'History', component: <HistoryToggleOff />, path: userRoutes.reportHistory },
     { text: 'Community', component: <GroupsIcon />, path: userRoutes.community.index },
     { text: 'Stories', component: <AutoStories />, path: userRoutes.stories.index },
