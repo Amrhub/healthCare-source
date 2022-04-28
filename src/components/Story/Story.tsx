@@ -24,9 +24,9 @@ const Story = ({
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const user = story.user;
-  const isEditable = location.pathname === userRoutes.stories.myStories;
-
+  const user = story;
+  const isEditable = location.pathname === userRoutes.stories.myStories; // TODO: check if user is logged in
+  
   const handleClick = (e: any) => {
     setOpen((prev) => !prev);
     setAnchorEl(e.currentTarget);
