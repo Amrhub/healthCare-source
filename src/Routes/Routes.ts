@@ -1,6 +1,9 @@
 export const userRoutes = {
   home: '/user',
-  profile: '/user/profile',
+  profile: {
+    main: '/user/profile/main',
+    community: '/user/profile/id:',
+  },
   reportHistory: '/user/report-history',
   community: {
     index: '/user/community',
