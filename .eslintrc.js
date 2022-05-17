@@ -7,6 +7,7 @@ module.exports = {
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
+      tsx: true,
     },
     ecmaVersion: 2021,
     sourceType: 'module',
@@ -14,12 +15,7 @@ module.exports = {
     // but slows down linting considerably. could consider adding as a CI/prepush step
     // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/README.md
   },
-  plugins: [
-    '@typescript-eslint',
-    'import',
-    'unused-imports',
-    'jest',
-  ],
+  plugins: ['@typescript-eslint', 'import', 'unused-imports', 'jest'],
   env: {
     node: true,
   },
@@ -94,13 +90,7 @@ module.exports = {
           order: 'asc',
           caseInsensitive: true,
         },
-        groups: [
-          ['builtin', 'external'],
-          'internal',
-          'parent',
-          'sibling',
-          'index',
-        ],
+        groups: [['builtin', 'external'], 'internal', 'parent', 'sibling', 'index'],
         'newlines-between': 'always',
       },
     ],
@@ -119,5 +109,7 @@ module.exports = {
     'no-throw-literal': 'error',
     'no-duplicate-imports': 'error',
     'object-shorthand': ['error', 'always'],
+    // require semi colon after all statements
+    semi: ['error', 'always'],
   },
-}
+};
