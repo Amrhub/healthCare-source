@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight, PhotoCamera, Visibility, VisibilityOff } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
-import { Button, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, InputLabel, Modal, OutlinedInput, Radio, RadioGroup, Stack, TextField, Typography } from '@mui/material'
+import { Button, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, InputLabel, Modal, OutlinedInput, Radio, RadioGroup, Stack, TextField, Typography } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import { Box, styled } from '@mui/system';
 
@@ -9,9 +9,9 @@ import placeholderPP from '/src/assets/defaultProfilePic.svg';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
-import { dfCenterCenter, dfUnsetCenter } from '../abstracts/common.styles'
+import { dfCenterCenter, dfUnsetCenter } from '../abstracts/common.styles';
 import { DATEFORMAT, formatDate } from '../utils/helpers/helpers';
 
 const ModalContainer = styled(Box)(({ theme }) => ({
@@ -35,7 +35,6 @@ interface IProps {
 
 
 const SignUpModal = ({
-  handleModalOpen,
   handleModalClose,
   open
 }: IProps) => {
@@ -438,7 +437,7 @@ const SignUpModal = ({
         </Grid>
       </Grid>
     </>
-  )
+  );
 
   const ProfilePictureInput = styled('input')({
     display: 'none',
@@ -498,7 +497,7 @@ const SignUpModal = ({
         </IconButton>
       </ModalContainer>
     </Modal >
-  )
-}
+  );
+};
 
-export default SignUpModal
+export default SignUpModal;
