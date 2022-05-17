@@ -28,7 +28,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { BRAND_NAME } from '../../abstracts/common';
 import MyNavLink from '../../abstracts/NavLink';
-import { logoutUser } from '../../redux/users/users';
+// import { logoutUser } from '../../redux/users/users';
 import { userRoutes } from '../../Routes/Routes';
 
 const drawerWidth = 240;
@@ -139,7 +139,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   };
 
   const handleLogOut = () => {
-    logoutUser();
+    // logoutUser();
     navigate('/');
   };
 
