@@ -110,6 +110,5 @@ module.exports = {
     'no-duplicate-imports': 'error',
     'object-shorthand': ['error', 'always'],
     // require semi colon after all statements
-    semi: ['error', 'always'],
   },
 };
