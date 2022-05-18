@@ -66,7 +66,7 @@ const SignUpModal = ({
   const [phoneNumber, setPhoneNumber] = useState({ value: '', error: false, errorMessage: '' });
   const [password, setPassword] = useState({ value: '', error: false, errorMessage: '' });
   const [confirmPassword, setConfirmPassword] = useState({ value: '', error: false, errorMessage: '' });
-  const [birthDate, setBirthDate] = useState('1988-01-01');
+  const [birthDate, setBirthDate] = useState({ value: '', error: false, errorMessage: '' });
   const [address, setAddress] = useState({ value: '', error: false, errorMessage: '' });
   const [gender, setGender] = useState('female');
   const [role, setRole] = useState('patient');
@@ -92,7 +92,6 @@ const SignUpModal = ({
     imageList: ImageListType,
     addUpdateIndex: number[] | undefined
   ) => {
-    console.log(imageList, addUpdateIndex);
     setCertificates(imageList as never[]);
   };
 
@@ -103,13 +102,183 @@ const SignUpModal = ({
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isFormValid()) // TODO: call the api and return 
-      console.log("submit");
+    { console.log("submit"); }
+    else {
+      console.log("invalid");
+    }
+
     // return
   };
 
   const isFormValid = () => {
-    const isValid = true;
-    // TODO: validate the form
+    let isValid = true;
+    // First step validation
+    if (!firstName.value) {
+      setFirstName(prev => ({ ...prev, error: true, errorMessage: 'First name is required' }));
+      isValid = false;
+      !isFirstStep && setIsFirstStep(true)
+    } else if (/^[A-Za-z]+$/.test(firstName.value) === false) {
+      setFirstName(prev => ({ ...prev, error: true, errorMessage: 'First name can ONLY contain letters' }));
+      isValid = false;
+      !isFirstStep && setIsFirstStep(true)
+    } else if (firstName.value.length < 3) {
+      setFirstName(prev => ({ ...prev, error: true, errorMessage: 'First name must be at least 3 characters long' }));
+      isValid = false;
+      !isFirstStep && setIsFirstStep(true)
+    } else if (firstName.value.length > 20) {
+      setFirstName(prev => ({ ...prev, error: true, errorMessage: 'First name must be less than 20 characters long' }));
+      isValid = false;
+      !isFirstStep && setIsFirstStep(true)
+    } else {
+      setFirstName(prev => ({ ...prev, error: false, errorMessage: '' }));
+    }
+    if (!lastName.value) {
+      setLastName(prev => ({ ...prev, error: true, errorMessage: 'Last name is required' }));
+      isValid = false;
+      !isFirstStep && setIsFirstStep(true)
+    } else if (/^[A-Za-z]+$/.test(lastName.value) === false) {
+      setLastName(prev => ({ ...prev, error: true, errorMessage: 'Last name can ONLY contain letters' }));
+      isValid = false;
+      !isFirstStep && setIsFirstStep(true)
+    } else if (lastName.value.length < 3) {
+      setLastName(prev => ({ ...prev, error: true, errorMessage: 'Last name must be at least 3 characters long' }));
+      isValid = false;
+      !isFirstStep && setIsFirstStep(true)
+    } else if (lastName.value.length > 20) {
+      setLastName(prev => ({ ...prev, error: true, errorMessage: 'Last name must be less than 20 characters long' }));
+      isValid = false;
+      !isFirstStep && setIsFirstStep(true)
+    } else {
+      setLastName(prev => ({ ...prev, error: false, errorMessage: '' }));
+    }
+
+    if (!email.value) {
+      setEmail(prev => ({ ...prev, error: true, errorMessage: 'Email is required' }));
+      isValid = false;
+      !isFirstStep && setIsFirstStep(true)
+    } else if (/^[\dA-Za-z]+@[\dA-Za-z]+\.[\dA-Za-z]+$/.test(email.value) === false) {
+      setEmail(prev => ({ ...prev, error: true, errorMessage: 'Email is invalid' }));
+      isValid = false;
+      !isFirstStep && setIsFirstStep(true)
+    } else {
+      setEmail(prev => ({ ...prev, error: false, errorMessage: '' }));
+    }
+
+    if (!phoneNumber.value) {
+      setPhoneNumber(prev => ({ ...prev, error: true, errorMessage: 'Phone number is required' }));
+      isValid = false;
+      !isFirstStep && setIsFirstStep(true)
+    } if (/^\+[1-9]\d{3,14}$/.test(phoneNumber.value) === false) {
+      setPhoneNumber(prev => ({ ...prev, error: true, errorMessage: 'Phone number can ONLY contain numbers and country code' }));
+      isValid = false;
+      !isFirstStep && setIsFirstStep(true)
+    } else {
+      setPhoneNumber(prev => ({ ...prev, error: false, errorMessage: '' }));
+    }
+
+    if (!password.value) {
+      setPassword(prev => ({ ...prev, error: true, errorMessage: 'Password is required' }));
+      isValid = false;
+      !isFirstStep && setIsFirstStep(true)
+    } else if (password.value.length < 6) {
+      setPassword(prev => ({ ...prev, error: true, errorMessage: 'Password must be at least 6 characters long' }));
+      isValid = false;
+      !isFirstStep && setIsFirstStep(true)
+    } else {
+      setPassword(prev => ({ ...prev, error: false, errorMessage: '' }));
+    }
+
+    if (confirmPassword.value !== password.value) {
+      setConfirmPassword(prev => ({ ...prev, error: true, errorMessage: 'Passwords do not match' }));
+      isValid = false;
+      !isFirstStep && setIsFirstStep(true)
+    } else {
+      setConfirmPassword(prev => ({ ...prev, error: false, errorMessage: '' }));
+    }
+
+    if (!address.value) {
+      setAddress(prev => ({ ...prev, error: true, errorMessage: 'Address is required' }));
+      isValid = false;
+      !isFirstStep && setIsFirstStep(true)
+    } else {
+      setAddress(prev => ({ ...prev, error: false, errorMessage: '' }));
+    }
+
+    if (!birthDate.value) {
+      setBirthDate(prev => ({ ...prev, error: true, errorMessage: 'Birth date is required' }));
+      isValid = false;
+      !isFirstStep && setIsFirstStep(true)
+    } else if (/^\d{4}(?:\/\d{2}){2}$/.test(birthDate.value) === false) {
+      setBirthDate(prev => ({ ...prev, error: true, errorMessage: 'Birth date should follow this format yyyy/mm/dd' }));
+      isValid = false;
+      !isFirstStep && setIsFirstStep(true)
+    } else {
+      setBirthDate(prev => ({ ...prev, error: false, errorMessage: '' }));
+    }
+
+    // Second step validation
+    if (role === 'patient') {
+      // patient validation
+      if (!weight.value) {
+        setWeight(prev => ({ ...prev, error: true, errorMessage: 'Weight is required' }));
+        isValid = false;
+      } else if (weight.value <= 0) {
+        setWeight(prev => ({ ...prev, error: true, errorMessage: 'Weight must be greater than 0' }));
+        isValid = false;
+      } else {
+        setWeight(prev => ({ ...prev, error: false, errorMessage: '' }));
+      }
+
+      if (!height.value) {
+        setHeight(prev => ({ ...prev, error: true, errorMessage: 'Height is required' }));
+        isValid = false;
+      } else if (height.value <= 0) {
+        setHeight(prev => ({ ...prev, error: true, errorMessage: 'Height must be greater than 0' }));
+        isValid = false;
+      } else {
+        setHeight(prev => ({ ...prev, error: false, errorMessage: '' }));
+      }
+
+      if (otherDiseases && otherDiseasesDetails.value) {
+        setOtherDiseasesDetails(prev => ({ ...prev, error: true, errorMessage: 'Other diseases details is required' }));
+        isValid = false;
+      } else {
+        setOtherDiseasesDetails(prev => ({ ...prev, error: false, errorMessage: '' }));
+      }
+    }
+
+    // doctor validation
+    if (role === 'doctor') {
+      if (!specialization.value) {
+        setSpecialization(prev => ({ ...prev, error: true, errorMessage: 'Specialization is required' }));
+        isValid = false;
+      } else if (specialization.value.length < 3) {
+        setSpecialization(prev => ({ ...prev, error: true, errorMessage: 'Specialization must be at least 3 characters long' }));
+        isValid = false;
+      } else {
+        setSpecialization(prev => ({ ...prev, error: false, errorMessage: '' }));
+      }
+
+      if (!yearsOfExperience.value) {
+        setYearsOfExperience(prev => ({ ...prev, error: true, errorMessage: 'Years of experience is required' }));
+        isValid = false;
+      } else if (yearsOfExperience.value < 0) {
+        setYearsOfExperience(prev => ({ ...prev, error: true, errorMessage: 'Years of experience must be greater than 0' }));
+        isValid = false;
+      } else {
+        setYearsOfExperience(prev => ({ ...prev, error: false, errorMessage: '' }));
+      }
+
+      if (!expectedSalary.value) {
+        setExpectedSalary(prev => ({ ...prev, error: true, errorMessage: 'Expected salary is required' }));
+        isValid = false;
+      } else if (expectedSalary.value < 0) {
+        setExpectedSalary(prev => ({ ...prev, error: true, errorMessage: 'Expected salary must be greater than 0' }));
+        isValid = false;
+      } else {
+        setExpectedSalary(prev => ({ ...prev, error: false, errorMessage: '' }));
+      }
+    }
     return isValid;
   }
 
@@ -158,236 +327,207 @@ const SignUpModal = ({
                   </IconButton>
                 </label>
                 <Grid container sx={{ mt: 4 }}>
-                  <Grid container columnSpacing={35.5} rowSpacing={4}>
-                    <Grid item xs={6}>
-                      <TextField
-                        id="firstName"
-                        label="First Name"
-                        placeholder='Joe'
-                        variant="outlined"
-                        value={firstName.value}
-                        onChange={(e) => setFirstName((prev) => ({ ...prev, value: e.target.value }))}
-                        error={firstName.error}
-                        helperText={firstName.error ? firstName.errorMessage : ''}
-                        fullWidth
-                      />
+                  <Grid container rowSpacing={4}>
+                    <Grid item container columnGap={35.5} rowSpacing={4} wrap="nowrap">
+                      <Grid item xs={6}>
+                        <TextField
+                          id="firstName"
+                          label="First Name"
+                          placeholder='Joe'
+                          variant="outlined"
+                          value={firstName.value}
+                          onChange={(e) => setFirstName((prev) => ({ ...prev, value: e.target.value }))}
+                          error={firstName.error}
+                          helperText={firstName.error ? firstName.errorMessage : ''}
+                          fullWidth
+                          required
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <TextField
+                          id="lastName"
+                          label="Last Name"
+                          placeholder='Doe'
+                          variant="outlined"
+                          value={lastName.value}
+                          onChange={(e) => setLastName((prev) => ({ ...prev, value: e.target.value }))}
+                          error={lastName.error}
+                          helperText={lastName.error ? lastName.errorMessage : ''}
+                          fullWidth
+                          required
+                        />
+                      </Grid>
                     </Grid>
 
-                    <Grid item xs={6}>
-                      <TextField
-                        id="lastName"
-                        label="Last Name"
-                        placeholder='Doe'
-                        variant="outlined"
-                        value={lastName.value}
-                        onChange={(e) => setLastName((prev) => ({ ...prev, value: e.target.value }))}
-                        error={lastName.error}
-                        helperText={lastName.error ? lastName.errorMessage : ''}
-                        fullWidth
-                      />
+                    <Grid item container columnGap={35.5} rowSpacing={4} wrap="nowrap">
+                      <Grid item xs={6}>
+                        <TextField
+                          label="Email"
+                          placeholder='example@email.com'
+                          variant="outlined"
+                          value={email.value}
+                          onChange={(e) => setEmail((prev) => ({ ...prev, value: e.target.value }))}
+                          error={email.error}
+                          helperText={email.error ? email.errorMessage : ''}
+                          fullWidth
+                          required
+                          autoComplete='email'
+                          inputProps={{
+                            type: 'email',
+                          }}
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <TextField
+                          id="phoneNumber"
+                          label="Phone Number"
+                          placeholder='+2 (123) 456-7890'
+                          variant="outlined"
+                          value={phoneNumber.value}
+                          onChange={(e) => setPhoneNumber((prev) => ({ ...prev, value: e.target.value }))}
+                          error={phoneNumber.error}
+                          helperText={phoneNumber.error ? phoneNumber.errorMessage : ''}
+                          fullWidth
+                          required
+                          autoComplete='tel-country-code phone mobile'
+                        />
+                      </Grid>
                     </Grid>
 
-                    <Grid item xs={6}>
-                      <TextField
-                        id="email"
-                        label="Email"
-                        placeholder='example@email.com'
-                        variant="outlined"
-                        value={email.value}
-                        onChange={(e) => setEmail((prev) => ({ ...prev, value: e.target.value }))}
-                        error={email.error}
-                        helperText={email.error ? email.errorMessage : ''}
-                        fullWidth
-                      />
-                    </Grid>
-
-                    <Grid item xs={6}>
-                      <TextField
-                        id="phoneNumber"
-                        label="Phone Number"
-                        placeholder='+2 (123) 456-7890'
-                        variant="outlined"
-                        value={phoneNumber.value}
-                        onChange={(e) => setPhoneNumber((prev) => ({ ...prev, value: e.target.value }))}
-                        error={phoneNumber.error}
-                        helperText={phoneNumber.error ? phoneNumber.errorMessage : ''}
-                        fullWidth
-                      />
-                    </Grid>
-
-                    <Grid item xs={6}>
-                      <TextField
-                        id="password"
-                        label="Password"
-                        placeholder='********'
-                        variant="outlined"
-                        value={password.value}
-                        onChange={(e) => setPassword((prev) => ({ ...prev, value: e.target.value }))}
-                        error={password.error}
-                        helperText={password.error ? password.errorMessage : 'Password should be at least 6 characters long'}
-                        fullWidth
-                        InputProps={{
-                          endAdornment: <InputAdornment position="end">
-                            <IconButton onClick={() => setPasswordVisibility((prev) => !prev)}>
-                              {passwordVisibility ? <Visibility /> : <VisibilityOff />}
-                            </IconButton>
-                          </InputAdornment>,
-                        }}
-                      />
-
-                      {/* <FormControl fullWidth>
-                        <InputLabel htmlFor="password">Password</InputLabel>
-                        <OutlinedInput
+                    <Grid item container columnGap={35.5} rowSpacing={4} wrap="nowrap">
+                      <Grid item xs={6}>
+                        <TextField
                           id="password"
                           label="Password"
-                          placeholder="*************"
+                          placeholder='********'
+                          variant="outlined"
+                          value={password.value}
+                          onChange={(e) => setPassword((prev) => ({ ...prev, value: e.target.value }))}
+                          error={password.error}
+                          helperText={password.error ? password.errorMessage : 'Password should be at least 6 characters long'}
+                          fullWidth
                           type={passwordVisibility ? 'text' : 'password'}
-                          name="password"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          endAdornment={
-                            <InputAdornment position="end">
-                              <IconButton
-                                onClick={() =>
-                                  setPasswordVisibility((prev) => !prev)
-                                }
-                              >
-                                {passwordVisibility ? (
-                                  <Visibility />
-                                ) : (
-                                  <VisibilityOff />
-                                )}
+                          InputProps={{
+                            endAdornment: <InputAdornment position="end">
+                              <IconButton onClick={() => setPasswordVisibility((prev) => !prev)}>
+                                {passwordVisibility ? <Visibility /> : <VisibilityOff />}
                               </IconButton>
-                            </InputAdornment>
-                          }
+                            </InputAdornment>,
+                          }}
+                          required
+                          autoComplete='new-password'
                         />
-                      </FormControl> */}
-
-                    </Grid>
-
-                    <Grid item xs={6}>
-                      <TextField
-                        id="passwordConfirmation"
-                        label="Confirm Password"
-                        placeholder='********'
-                        variant="outlined"
-                        value={confirmPassword.value}
-                        onChange={(e) => setConfirmPassword((prev) => ({ ...prev, value: e.target.value }))}
-                        error={confirmPassword.error}
-                        helperText={confirmPassword.error ? confirmPassword.errorMessage : ''}
-                        fullWidth
-                        InputProps={{
-                          endAdornment: <InputAdornment position="end">
-                            <IconButton onClick={() => setPasswordVisibility((prev) => !prev)}>
-                              {passwordVisibility ? <Visibility /> : <VisibilityOff />}
-                            </IconButton>
-                          </InputAdornment>,
-                        }}
-                      />
-                      {/* <FormControl fullWidth>
-                        <InputLabel htmlFor="confirmPassword">Confirm Password</InputLabel>
-                        <OutlinedInput
-                          id="confirmPassword"
+                      </Grid>
+                      <Grid item xs={6}>
+                        <TextField
+                          id="passwordConfirmation"
                           label="Confirm Password"
-                          placeholder="*************"
+                          placeholder='********'
+                          variant="outlined"
+                          value={confirmPassword.value}
                           type={passwordVisibility ? 'text' : 'password'}
-                          name="confirmPassword"
-                          value={confirmPassword}
-                          onChange={(e) => setConfirmPassword(e.target.value)}
-                          endAdornment={
-                            <InputAdornment position="end">
-                              <IconButton
-                                onClick={() =>
-                                  setPasswordVisibility((prev) => !prev)
-                                }
-                              >
-                                {passwordVisibility ? (
-                                  <Visibility />
-                                ) : (
-                                  <VisibilityOff />
-                                )}
+                          onChange={(e) => setConfirmPassword((prev) => ({ ...prev, value: e.target.value }))}
+                          error={confirmPassword.error}
+                          helperText={confirmPassword.error ? confirmPassword.errorMessage : ''}
+                          fullWidth
+                          InputProps={{
+                            endAdornment: <InputAdornment position="end">
+                              <IconButton onClick={() => setPasswordVisibility((prev) => !prev)}>
+                                {passwordVisibility ? <Visibility /> : <VisibilityOff />}
                               </IconButton>
-                            </InputAdornment>
-                          }
+                            </InputAdornment>,
+                          }}
+                          required
+                          autoComplete='new-password'
                         />
-                      </FormControl> */}
+                      </Grid>
                     </Grid>
 
-                    <Grid item xs={6}>
-                      <FormControl fullWidth>
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                          <DatePicker
-                            disableFuture
-                            label="Date of Birth"
-                            openTo="day"
-                            views={['year', 'month', 'day']}
-                            value={birthDate}
-                            onChange={(e: Date | null) => setBirthDate(formatDate(e))}
-                            inputFormat={DATEFORMAT}
-                            renderInput={(params: any) => <TextField {...params} />}
-                          />
-                        </LocalizationProvider>
-                      </FormControl>
+                    <Grid item container columnGap={35.5} rowSpacing={4} wrap="nowrap">
+                      <Grid item xs={6}>
+                        <FormControl fullWidth>
+                          <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DatePicker
+                              disableFuture
+                              label="Date of Birth"
+                              openTo="day"
+                              views={['day', 'month', 'year']}
+                              value={birthDate.value}
+                              onChange={(e: Date | null) => setBirthDate(prev => ({ ...prev, value: formatDate(e) }))}
+                              inputFormat={DATEFORMAT}
+                              mask="____/__/__"
+                              renderInput={(params: any) =>
+                                <TextField {...params} error={birthDate.error}
+                                  helperText={birthDate.error ? birthDate.errorMessage : ''}
+                                  onChange={(e) => setBirthDate((prev) => ({ ...prev, value: e.target.value }))}
+                                  autoComplete='bday'
+                                  sx={{ '& .MuiIconButton-root': { marginRight: 0 } }}
+                                />}
+                            />
+                          </LocalizationProvider>
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <TextField
+                          id="address"
+                          label="Address"
+                          placeholder="Block No.1, Street No.1, 5th Settlement, Cairo"
+                          variant="outlined"
+                          value={address.value}
+                          onChange={(e) => setAddress((prev) => ({ ...prev, value: e.target.value }))}
+                          error={address.error}
+                          helperText={address.error ? address.errorMessage : ''}
+                          fullWidth
+                          required
+                        />
+                      </Grid>
                     </Grid>
 
-                    <Grid item xs={6}>
-                      <TextField
-                        id="address"
-                        label="Address"
-                        placeholder="Block No.1, Street No.1, 5th Settlement, Cairo"
-                        variant="outlined"
-                        value={address.value}
-                        onChange={(e) => setAddress((prev) => ({ ...prev, value: e.target.value }))}
-                        error={address.error}
-                        helperText={address.error ? address.errorMessage : ''}
-                        fullWidth
-                      />
-                    </Grid>
-
-                    <Grid item xs={6} sx={{ display: 'flex' }}>
-                      <FormControl component="fieldset" sx={{ flexDirection: 'row' }}>
-                        <FormLabel component="p" sx={{ mr: 8 }}>
-                          Gender
-                        </FormLabel>
-                        <RadioGroup
-                          aria-label="role"
-                          name="controlled-radio-buttons-group"
-                          value={gender}
-                          onChange={(e) => setGender(e.target.value)}
-                          row
-                        >
-                          <FormControlLabel
-                            value="female"
-                            control={<Radio />}
-                            label="Female"
-                            sx={{ mr: 8 }}
-                          />
-                          <FormControlLabel value="male" control={<Radio />} label="Male" />
-                        </RadioGroup>
-                      </FormControl>
-                    </Grid>
-
-                    <Grid item sx={{ display: 'flex' }} xs={6}>
-                      <FormControl component="fieldset" sx={{ flexDirection: 'row' }}>
-                        <FormLabel component="p" sx={{ mr: 8 }}>
-                          Role
-                        </FormLabel>
-                        <RadioGroup
-                          aria-label="gender"
-                          name="controlled-radio-buttons-group"
-                          value={role}
-                          onChange={(e) => setRole(e.target.value)}
-                          row
-                        >
-                          <FormControlLabel
-                            value="patient"
-                            control={<Radio />}
-                            label="Patient"
-                            sx={{ mr: 8 }}
-                          />
-                          <FormControlLabel value="doctor" control={<Radio />} label="Doctor" />
-                        </RadioGroup>
-                      </FormControl>
+                    <Grid item container columnGap={35.5} rowSpacing={4} wrap="nowrap">
+                      <Grid item xs={6} sx={{ display: 'flex' }}>
+                        <FormControl component="fieldset" sx={{ flexDirection: 'row' }}>
+                          <FormLabel component="p" sx={{ mr: 8 }}>
+                            Gender
+                          </FormLabel>
+                          <RadioGroup
+                            aria-label="role"
+                            name="controlled-radio-buttons-group"
+                            value={gender}
+                            onChange={(e) => setGender(e.target.value)}
+                            row
+                          >
+                            <FormControlLabel
+                              value="female"
+                              control={<Radio />}
+                              label="Female"
+                              sx={{ mr: 8 }}
+                            />
+                            <FormControlLabel value="male" control={<Radio />} label="Male" />
+                          </RadioGroup>
+                        </FormControl>
+                      </Grid>
+                      <Grid item sx={{ display: 'flex' }} xs={6}>
+                        <FormControl component="fieldset" sx={{ flexDirection: 'row' }}>
+                          <FormLabel component="p" sx={{ mr: 8 }}>
+                            Role
+                          </FormLabel>
+                          <RadioGroup
+                            aria-label="gender"
+                            name="controlled-radio-buttons-group"
+                            value={role}
+                            onChange={(e) => setRole(e.target.value)}
+                            row
+                          >
+                            <FormControlLabel
+                              value="patient"
+                              control={<Radio />}
+                              label="Patient"
+                              sx={{ mr: 8 }}
+                            />
+                            <FormControlLabel value="doctor" control={<Radio />} label="Doctor" />
+                          </RadioGroup>
+                        </FormControl>
+                      </Grid>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -420,10 +560,7 @@ const SignUpModal = ({
                                 label="Weight"
                                 value={weight.value}
                                 placeholder="Weight (kg)"
-                                onChange={(e) => {
-                                  setWeight(prev => ({ ...prev, value: parseFloat(e.target.value) }))
-                                  console.log(weight.value)
-                                }}
+                                onChange={(e) => setWeight(prev => ({ ...prev, value: parseFloat(e.target.value) }))}
                                 fullWidth
                                 InputProps={{
                                   endAdornment: <InputAdornment position="end">kg</InputAdornment>,
@@ -433,6 +570,9 @@ const SignUpModal = ({
                                   min: 0,
                                   step: 1,
                                 }}
+                                error={weight.error}
+                                helperText={weight.error ? weight.errorMessage : ''}
+                                required
                               />
                             </Grid>
                             <Grid item xs={6}>
@@ -451,6 +591,9 @@ const SignUpModal = ({
                                   min: 0,
                                   step: 1,
                                 }}
+                                error={height.error}
+                                helperText={height.error ? height.errorMessage : ''}
+                                required
                               />
                             </Grid>
                           </Grid>
@@ -524,7 +667,7 @@ const SignUpModal = ({
                               <TextField
                                 id="otherDiseases"
                                 label="Other Diseases"
-                                value={otherDiseasesDetails}
+                                value={otherDiseasesDetails.value}
                                 placeholder="Please provide details for our doctors"
                                 onChange={(e) => setOtherDiseasesDetails(prev => ({ ...prev, value: e.target.value }))}
                                 error={otherDiseasesDetails.error}
@@ -532,6 +675,7 @@ const SignUpModal = ({
                                 fullWidth
                                 multiline
                                 rows={2}
+                                required
                               />
                             </Grid>
                           )}
@@ -549,6 +693,7 @@ const SignUpModal = ({
                                 error={specialization.error}
                                 helperText={specialization.error ? specialization.errorMessage : ''}
                                 fullWidth
+                                required
                               />
                             </Grid>
 
@@ -562,10 +707,7 @@ const SignUpModal = ({
                                 {({
                                   imageList,
                                   onImageUpload,
-                                  onImageRemoveAll,
-                                  onImageUpdate,
                                   onImageRemove,
-                                  isDragging,
                                   dragProps
                                 }) => (
                                   <>
@@ -637,6 +779,7 @@ const SignUpModal = ({
                                   placeholder="5,000"
                                   onChange={(e) => setExpectedSalary(prev => ({ ...prev, value: parseFloat(e.target.value) }))}
                                   fullWidth
+                                  required
                                   InputProps={{
                                     startAdornment: <InputAdornment position="start">$</InputAdornment>,
                                     endAdornment: <InputAdornment position="end">/month</InputAdornment>,
