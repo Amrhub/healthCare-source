@@ -1,8 +1,11 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useLocation } from 'react-router-dom';
 
+import { DisplayAlert } from './components/Alert/DisplayAlert';
 import AuthLayout from './components/AuthLayout/AuthLayout';
 import GuestLayout from './components/GuestLayout/GuestLayout';
+import { setAlert } from './redux/alert/alertSlice';
+import { useAppDispatch } from './redux/configureStore';
 import GuestPages from './Routes/GuestRoutes';
 import UserAuthPages from './Routes/Index';
 
@@ -66,20 +69,22 @@ const theme = createTheme({
 
 const App = () => {
   const location = useLocation();
+  const dispatch = useAppDispatch();
   const isAuthenticated = location.pathname.includes('user');
+  dispatch(setAlert({ message: 'This is a test danger alert', type: 'warning' }))
 
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
         {isAuthenticated ? (
           <AuthLayout>
-            {' '}
-            <UserAuthPages />{' '}
+            <DisplayAlert />
+            <UserAuthPages />
           </AuthLayout>
         ) : (
           <GuestLayout>
-            {' '}
-            <GuestPages />{' '}
+            <DisplayAlert />
+            <GuestPages />
           </GuestLayout>
         )}
       </div>
