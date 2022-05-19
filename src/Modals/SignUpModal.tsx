@@ -19,7 +19,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { dfCenterCenter, dfUnsetCenter } from '../abstracts/common.styles';
 import { setAlert } from '../redux/alert/alertSlice';
 import { useAppDispatch, useAppSelector } from '../redux/configureStore';
-import { createDoctor, createUser } from '../redux/users/users';
+import { createDoctor, createPatient, createUser } from '../redux/users/users';
 import { DATEFORMAT, formatDate } from '../utils/helpers/helpers';
 const ModalContainer = styled(Box)(({ theme }) => ({
   marginX: 'auto',
@@ -137,6 +137,7 @@ const SignUpModal = ({
         patientFormData.append('diabetes', diabetes.toString());
         if (otherDiseases)
           userFormData.append('other_diseases_detail', otherDiseasesDetails.value);
+        dispatch(createPatient(patientFormData));
       }
 
       if (role === 'doctor') {
@@ -212,7 +213,7 @@ const SignUpModal = ({
       setEmail(prev => ({ ...prev, error: true, errorMessage: 'Email is required' }));
       isValid = false;
       !isFirstStep && setIsFirstStep(true)
-    } else if (/^[\dA-Za-z]+@[\dA-Za-z]+\.[\dA-Za-z]+$/.test(email.value) === false) {
+    } else if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email.value) === false) {
       setEmail(prev => ({ ...prev, error: true, errorMessage: 'Email is invalid' }));
       isValid = false;
       !isFirstStep && setIsFirstStep(true)
@@ -295,7 +296,7 @@ const SignUpModal = ({
         setHeight(prev => ({ ...prev, error: false, errorMessage: '' }));
       }
 
-      if (otherDiseases && otherDiseasesDetails.value) {
+      if (otherDiseases && !otherDiseasesDetails.value) {
         setOtherDiseasesDetails(prev => ({ ...prev, error: true, errorMessage: 'Other diseases details is required' }));
         isValid = false;
       } else {

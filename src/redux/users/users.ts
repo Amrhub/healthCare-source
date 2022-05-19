@@ -10,8 +10,20 @@ export const createDoctor = createAsyncThunk(
       body: doctorFormData,
     });
 
-    console.log(response);
+    return await response.json();
+  },
+);
+
+export const createPatient = createAsyncThunk(
+  'users/createPatient',
+  async (patientFormData: FormData) => {
+    const response = await fetch(`${baseUrl}${apiVersion}patients`, {
+      method: 'POST',
+      body: patientFormData,
+    });
+
     const data = await response.json();
+    console.log(data);
     return data;
   },
 );
@@ -32,7 +44,9 @@ export const createUser = createAsyncThunk(
         },
       };
     } else {
-      return { data, authorization: response.headers.get('authorization') };
+      const authorization = response.headers.get('Authorization');
+      if (authorization) localStorage.setItem('authorization', authorization);
+      return { data, authorization };
     }
   },
 );
@@ -87,14 +101,14 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(createDoctor.fulfilled, (state, { payload }) => {
-      state.isReferenceCreated = true;
-      state.userInfo.referenceId = payload.id;
       state.userInfo.roleInfo = {
         specialization: payload.specialization,
         experience: payload.years_experience,
         salary: payload.salary,
         certificates: payload.certificates,
       };
+      state.isReferenceCreated = true;
+      state.userInfo.referenceId = payload.id;
     });
 
     builder.addCase(createDoctor.pending, (state, action) => {
@@ -125,7 +139,7 @@ const userSlice = createSlice({
         state.userInfo.profilePic = payload.data.user.profile_pic;
         state.userInfo.id = payload.data.user.id;
         state.auth.token = payload.authorization?.split(' ')[1] as string;
-        state.auth.isAuthenticated = false; // TODO: check if this is correct
+        state.auth.isAuthenticated = true;
         state.loading = 'idle';
       }
     });
@@ -135,6 +149,28 @@ const userSlice = createSlice({
     });
 
     builder.addCase(createUser.rejected, (state, action) => {
+      state.loading = 'rejected';
+    });
+
+    builder.addCase(createPatient.fulfilled, (state, { payload }) => {
+      state.userInfo.roleInfo = {
+        weight: parseFloat(payload.weight),
+        height: parseFloat(payload.height),
+        covid: payload.covid,
+        hypertension: payload.hypertension,
+        diabetes: payload.diabetes,
+        otherDiseases: payload.other_diseases_detail,
+      };
+      state.userInfo.referenceId = payload.id;
+      state.isReferenceCreated = true;
+      state.loading = 'pending';
+    });
+
+    builder.addCase(createPatient.pending, (state) => {
+      state.loading = 'pending';
+    });
+
+    builder.addCase(createPatient.rejected, (state) => {
       state.loading = 'rejected';
     });
   },
