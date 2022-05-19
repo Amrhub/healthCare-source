@@ -11,10 +11,11 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import React, { useState } from 'react';
 import ImageUploading, { ImageListType } from "react-images-uploading";
+import { v4 as uuidv4 } from 'uuid';
 
 import { dfCenterCenter, dfUnsetCenter } from '../abstracts/common.styles';
-import { useAppDispatch } from '../redux/configureStore';
-import { createDoctor } from '../redux/users/users';
+import { useAppDispatch, useAppSelector } from '../redux/configureStore';
+import { createDoctor, createUser } from '../redux/users/users';
 import { DATEFORMAT, formatDate } from '../utils/helpers/helpers';
 const ModalContainer = styled(Box)(({ theme }) => ({
   marginX: 'auto',
@@ -53,7 +54,7 @@ const SignUpModal = ({
   open
 }: IProps) => {
   const dispatch = useAppDispatch();
-  // const {} = useAppSelector(state => )
+  const user = useAppSelector(state => state.user);
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const [isFirstStep, setIsFirstStep] = useState(true);
   /* 
@@ -93,22 +94,19 @@ const SignUpModal = ({
 
   const handleCertificatesChange = (
     imageList: ImageListType,
-    addUpdateIndex: number[] | undefined
   ) => {
     setCertificates(imageList as never[]);
   };
 
   const handleProfilePictureChange = (
     imageList: ImageListType,
-    addUpdateIndex: number[] | undefined
   ) => {
     setProfilePicture(imageList);
   };
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (isFormValid()) // TODO: call the api and return 
-    {
+    if (isFormValid()) {
       const userFormData = new FormData();
       // user formData
       if (profilePicture.length > 0 && profilePicture[0].file)
@@ -123,6 +121,7 @@ const SignUpModal = ({
       userFormData.append('address', address.value);
       userFormData.append('gender', gender);
       userFormData.append('role', role);
+      userFormData.append('bio', bio);
 
 
 
@@ -155,6 +154,10 @@ const SignUpModal = ({
         //   body: doctorFormData
         // });
         // const doctor = await response.json();
+        if (user.userInfo.referenceId) {
+          userFormData.append('reference_id', user.userInfo.referenceId);
+          dispatch(createUser(userFormData));
+        }
 
         // if (response.status === 201) {
         // userFormData.append('reference_id', doctor.id);
@@ -383,7 +386,7 @@ const SignUpModal = ({
                           <>
                             {/* When image is uploaded */}
                             <Avatar
-                              key={index}
+                              key={uuidv4()}
                               src={image.dataURL}
                               alt="avatar"
                               sx={{
@@ -843,7 +846,7 @@ const SignUpModal = ({
                                           Certificates
                                         </Typography>
                                         {imageList.map((image, index) => (
-                                          <Stack key={index} direction="row" spacing={2} sx={{ alignItems: 'center', px: 2 }}>
+                                          <Stack key={uuidv4()} direction="row" spacing={2} sx={{ alignItems: 'center', px: 2 }}>
                                             <img src={image.dataURL} alt="image preview" width="25" />
                                             <Typography sx={{ flexGrow: 2 }} textAlign="start">
                                               {image?.file?.name}
@@ -924,9 +927,9 @@ const SignUpModal = ({
                   >Back</Button>
 
 
-                  <Button type="submit" variant="contained" sx={{ px: 5 }}>
+                  <LoadingButton type="submit" variant="contained" sx={{ px: 5 }}>
                     Sign Up
-                  </Button>
+                  </LoadingButton>
                 </>
               )}
           </Box>

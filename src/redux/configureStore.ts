@@ -9,7 +9,7 @@ export const apiVersion = 'api/v1/';
 
 export const store = configureStore({
   reducer: {
-    users: userReducer,
+    user: userReducer,
     alert: alertReducer,
   },
 });
