@@ -3,17 +3,21 @@ import { ChevronLeft, ChevronRight, PhotoCamera, Visibility, VisibilityOff } fro
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import SaveIcon from '@mui/icons-material/Save'
+import { LoadingButton } from '@mui/lab';
 import { Avatar, Button, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, Modal, Radio, RadioGroup, Stack, TextField, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
-import { Box, styled } from '@mui/system';
+import { styled } from '@mui/material/styles';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import { v4 as uuidv4 } from 'uuid';
 
 import { dfCenterCenter, dfUnsetCenter } from '../abstracts/common.styles';
+import { setAlert } from '../redux/alert/alertSlice';
 import { useAppDispatch, useAppSelector } from '../redux/configureStore';
 import { createDoctor, createUser } from '../redux/users/users';
 import { DATEFORMAT, formatDate } from '../utils/helpers/helpers';
@@ -48,6 +52,7 @@ interface IProps {
   open: boolean;
 }
 
+const userFormData = new FormData();
 
 const SignUpModal = ({
   handleModalClose,
@@ -57,11 +62,6 @@ const SignUpModal = ({
   const user = useAppSelector(state => state.user);
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const [isFirstStep, setIsFirstStep] = useState(true);
-  /* 
-    TODO: Validate the form by using the following method >>
-    TODO: each state is object with value, error, and errorMessage
-    TODO: const firstName = { value: '', error: false, errorMessage: '' }
-  */
   // users fields
   const [profilePicture, setProfilePicture] = useState<ImageListType>([]);
   const [firstName, setFirstName] = useState({ value: '', error: false, errorMessage: '' });
@@ -89,7 +89,7 @@ const SignUpModal = ({
   const [yearsOfExperience, setYearsOfExperience] = useState({ value: 0, error: false, errorMessage: '' });
   const [expectedSalary, setExpectedSalary] = useState({ value: 0, error: false, errorMessage: '' });
   const [certificates, setCertificates] = useState<ImageListType>([]);
-  const maxNumber = 5;
+  const maxCertificatesNumber = 5;
 
 
   const handleCertificatesChange = (
@@ -104,10 +104,11 @@ const SignUpModal = ({
     setProfilePicture(imageList);
   };
 
+
+
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isFormValid()) {
-      const userFormData = new FormData();
       // user formData
       if (profilePicture.length > 0 && profilePicture[0].file)
         userFormData.append('profile_pic', profilePicture[0].file as Blob);
@@ -149,26 +150,21 @@ const SignUpModal = ({
             doctorFormData.append('certificates[]', certificate.file as Blob);
           });
         dispatch(createDoctor(doctorFormData));
-        // const response = await fetch('http://localhost:3000/api/v1/doctors', {
-        //   method: 'POST',
-        //   body: doctorFormData
-        // });
-        // const doctor = await response.json();
-        if (user.userInfo.referenceId) {
-          userFormData.append('reference_id', user.userInfo.referenceId);
-          dispatch(createUser(userFormData));
-        }
-
-        // if (response.status === 201) {
-        // userFormData.append('reference_id', doctor.id);
-        // const response = await fetch('http://localhost:3000/users', {
-        //   method: 'POST',
-        //   body: userFormData
-        // });
-        // }
       }
     }
   };
+
+  useEffect(() => {
+    if (user.isReferenceCreated) {
+      userFormData.append('reference_id', user.userInfo.referenceId);
+      dispatch(createUser(userFormData));
+    }
+  }, [dispatch, user.isReferenceCreated, user.userInfo.referenceId]);
+
+  useEffect(() => {
+    if (user.errors)
+      dispatch(setAlert({ message: user.errors, type: 'error' }));
+  }, [dispatch, user.errors])
 
   const isFormValid = () => {
     let isValid = true;
@@ -367,7 +363,6 @@ const SignUpModal = ({
           {
             isFirstStep ? (
               // <FirstStep/>
-              // ! This to be refactored to a separate component for simplicity the issue was when we type something in a field it's laggy and keeps losing focus
               <>
                 <Box position="relative" sx={{ width: 'max-content', mx: 'auto' }}>
                   <ImageUploading
@@ -383,10 +378,9 @@ const SignUpModal = ({
                     }) => (
                       imageList.length > 0 ? (
                         imageList.map((image, index) => (
-                          <>
+                          <div key={uuidv4()}>
                             {/* When image is uploaded */}
                             <Avatar
-                              key={uuidv4()}
                               src={image.dataURL}
                               alt="avatar"
                               sx={{
@@ -406,7 +400,7 @@ const SignUpModal = ({
                             >
                               <PhotoCamera />
                             </IconButton>
-                          </>
+                          </div>
                         ))) : (
                         <>
                           {/* When no image is uploaded */}
@@ -809,7 +803,7 @@ const SignUpModal = ({
                                 multiple
                                 value={certificates}
                                 onChange={handleCertificatesChange}
-                                maxNumber={maxNumber}
+                                maxNumber={maxCertificatesNumber}
                                 acceptType={['png', 'jpg', 'jpeg']}
                               >
                                 {({
@@ -837,7 +831,7 @@ const SignUpModal = ({
                                           Supported files: jpeg, jpg, png
                                         </Typography>
                                         <Typography variant="subtitle2" color="textSecondary">
-                                          Maximum number of images: {maxNumber}
+                                          Maximum number of images: {maxCertificatesNumber}
                                         </Typography>
                                       </UploaderContainer>
 
@@ -859,7 +853,7 @@ const SignUpModal = ({
                                         {
                                           errors &&
                                           <Box sx={{ color: 'error.main' }}>
-                                            {errors?.maxNumber && <span>Number of selected images exceed maxNumber</span>}
+                                            {errors?.maxNumber && <span>Number of selected images exceed {maxCertificatesNumber}</span>}
                                             {errors?.acceptType && <span>Your selected file type is not allow</span>}
                                             {errors?.maxFileSize && <span>Selected file size exceed maxFileSize</span>}
                                             {errors?.resolution && <span>Selected file is not match your desired resolution</span>}
@@ -927,7 +921,9 @@ const SignUpModal = ({
                   >Back</Button>
 
 
-                  <LoadingButton type="submit" variant="contained" sx={{ px: 5 }}>
+                  <LoadingButton type="submit" variant="contained" sx={{ px: 5 }}
+                    endIcon={<SaveIcon />} loading={user.loading === "pending"} loadingPosition="end"
+                  >
                     Sign Up
                   </LoadingButton>
                 </>

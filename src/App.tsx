@@ -3,7 +3,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { DisplayAlert } from './components/Alert/DisplayAlert';
 import AuthLayout from './components/AuthLayout/AuthLayout';
 import GuestLayout from './components/GuestLayout/GuestLayout';
-import { useAppDispatch, useAppSelector } from './redux/configureStore';
+import { useAppSelector } from './redux/configureStore';
 import GuestPages from './Routes/GuestRoutes';
 import UserAuthPages from './Routes/Index';
 
@@ -66,7 +66,6 @@ const theme = createTheme({
 });
 
 const App = () => {
-  const dispatch = useAppDispatch();
   const { isAuthenticated } = useAppSelector(state => state.user.auth)
 
   return (

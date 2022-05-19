@@ -11,6 +11,7 @@ export const DisplayAlert = () => {
   return (
     <Fade in={open}>
       <Alert
+        elevation={1}
         severity={type}
         action={
           <IconButton

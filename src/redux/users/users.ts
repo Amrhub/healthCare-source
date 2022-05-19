@@ -10,8 +10,8 @@ export const createDoctor = createAsyncThunk(
       body: doctorFormData,
     });
 
+    console.log(response);
     const data = await response.json();
-
     return data;
   },
 );
@@ -23,9 +23,17 @@ export const createUser = createAsyncThunk(
       method: 'POST',
       body: userFormData,
     });
+    console.log(response);
     const data = await response.json();
-    console.log({ data, authorization: response.headers.get('authorization') });
-    return { data, authorization: response.headers.get('authorization') };
+    if (response.status === 422) {
+      return {
+        data: {
+          errors: data.errors,
+        },
+      };
+    } else {
+      return { data, authorization: response.headers.get('authorization') };
+    }
   },
 );
 
@@ -44,6 +52,8 @@ interface RolePatientInfo {
   diabetes: boolean;
   otherDiseases: string;
 }
+
+export type Loading = 'pending' | 'rejected' | 'idle';
 
 type RoleInfo = RoleDoctorInfo | RolePatientInfo;
 
@@ -66,7 +76,9 @@ const userSlice = createSlice({
       age: 0,
       roleInfo: {} as RoleInfo,
     },
-    loading: 'idle',
+    loading: 'idle' as Loading,
+    errors: '',
+    isReferenceCreated: false,
     auth: {
       token: '',
       isAuthenticated: false,
@@ -75,6 +87,7 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(createDoctor.fulfilled, (state, { payload }) => {
+      state.isReferenceCreated = true;
       state.userInfo.referenceId = payload.id;
       state.userInfo.roleInfo = {
         specialization: payload.specialization,
@@ -85,26 +98,36 @@ const userSlice = createSlice({
     });
 
     builder.addCase(createDoctor.pending, (state, action) => {
+      state.isReferenceCreated = false;
       state.loading = 'pending';
     });
 
     builder.addCase(createDoctor.rejected, (state, action) => {
+      state.isReferenceCreated = false;
       state.loading = 'rejected';
     });
 
     builder.addCase(createUser.fulfilled, (state, { payload }) => {
-      state.userInfo.id = payload.data.id;
-      state.userInfo.address = payload.data.user.address;
-      state.userInfo.bio = payload.data.user.bio;
-      state.userInfo.birthDate = payload.data.user.birth_date;
-      state.userInfo.email = payload.data.user.email;
-      state.userInfo.firstName = payload.data.user.first_name;
-      state.userInfo.lastName = payload.data.user.last_name;
-      state.userInfo.role = payload.data.user.role;
-      state.userInfo.phone = payload.data.user.phone;
-      state.userInfo.profilePic = payload.data.user.profile_pic;
-      state.userInfo.id = payload.data.user.id;
-      state.loading = 'idle';
+      console.log({ errors: payload.data.errors });
+      if ('errors' in payload.data) {
+        state.loading = 'rejected';
+        state.errors = payload.data.errors[0];
+      } else {
+        state.userInfo.id = payload.data.id;
+        state.userInfo.address = payload.data.user.address;
+        state.userInfo.bio = payload.data.user.bio;
+        state.userInfo.birthDate = payload.data.user.birth_date;
+        state.userInfo.email = payload.data.user.email;
+        state.userInfo.firstName = payload.data.user.first_name;
+        state.userInfo.lastName = payload.data.user.last_name;
+        state.userInfo.role = payload.data.user.role;
+        state.userInfo.phone = payload.data.user.phone;
+        state.userInfo.profilePic = payload.data.user.profile_pic;
+        state.userInfo.id = payload.data.user.id;
+        state.auth.token = payload.authorization?.split(' ')[1] as string;
+        state.auth.isAuthenticated = false; // TODO: check if this is correct
+        state.loading = 'idle';
+      }
     });
 
     builder.addCase(createUser.pending, (state, action) => {
