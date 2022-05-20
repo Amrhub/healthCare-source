@@ -183,6 +183,7 @@ const userSlice = createSlice({
 
     builder.addCase(createUser.pending, (state) => {
       state.loading = 'pending';
+      state.errors = '';
     });
 
     builder.addCase(createUser.rejected, (state) => {
@@ -228,6 +229,7 @@ const userSlice = createSlice({
 
     builder.addCase(login.pending, (state) => {
       state.loading = 'pending';
+      state.errors = '';
     });
 
     builder.addCase(login.rejected, (state) => {
