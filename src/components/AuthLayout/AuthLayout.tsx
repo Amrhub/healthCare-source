@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/consistent-function-scoping */
 import { AutoStories, ExpandMore, HistoryToggleOff } from '@mui/icons-material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -23,12 +24,11 @@ import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { BRAND_NAME } from '../../abstracts/common';
 import MyNavLink from '../../abstracts/NavLink';
-import { useAppSelector } from '../../redux/configureStore';
-// import { logoutUser } from '../../redux/users/users';
+import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
+import { logout } from '../../redux/users/users';
 import { userRoutes } from '../../Routes/Routes';
 
 const drawerWidth = 240;
@@ -108,7 +108,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const { user } = useAppSelector((state) => state);
-  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -139,8 +139,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   };
 
   const handleLogOut = () => {
-    // logoutUser();
-    navigate('/');
+    dispatch(logout());
   };
 
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -275,8 +274,8 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
               </Badge>
             </IconButton>
             <Container sx={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <Avatar src={user.avatar} alt="avatar" />
-              <Typography>{user.name}</Typography>
+              <Avatar src={user.userInfo.profilePic} alt="avatar" />
+              <Typography>{user.userInfo.firstName} {user.userInfo.lastName}</Typography>
             </Container>
 
             <IconButton

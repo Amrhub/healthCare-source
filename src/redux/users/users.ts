@@ -80,6 +80,12 @@ export const userFromToken = createAsyncThunk(
   },
 );
 
+export const logout = createAsyncThunk('users/logout', async () => {
+  const response = await fetch(`${baseUrl}users/sign_out`, {
+    method: 'DELETE',
+  });
+});
+
 interface RoleDoctorInfo {
   specialization: string;
   experience: number;
@@ -245,6 +251,12 @@ const userSlice = createSlice({
 
     builder.addCase(userFromToken.rejected, (state) => {
       state.loading = 'rejected';
+    });
+
+    builder.addCase(logout.fulfilled, (state) => {
+      state.auth.token = '';
+      state.auth.isAuthenticated = false;
+      localStorage.removeItem('authorization');
     });
   },
 });
