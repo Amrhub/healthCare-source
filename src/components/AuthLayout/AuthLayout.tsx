@@ -23,11 +23,11 @@ import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { BRAND_NAME } from '../../abstracts/common';
 import MyNavLink from '../../abstracts/NavLink';
+import { useAppSelector } from '../../redux/configureStore';
 // import { logoutUser } from '../../redux/users/users';
 import { userRoutes } from '../../Routes/Routes';
 
@@ -107,7 +107,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const user = useSelector((state: any) => state.users.authUserInfo);
+  const { user } = useAppSelector((state) => state);
   const navigate = useNavigate();
 
   const handleDrawerOpen = () => {

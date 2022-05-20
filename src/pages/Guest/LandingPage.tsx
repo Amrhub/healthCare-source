@@ -14,10 +14,10 @@ import React, { useState } from 'react';
 import doctorImageBG from '/src/assets/landingPage/DoctorImage.svg';
 import landingPageBG from '/src/assets/landingPage/landing-page-bg.svg';
 
-import { useNavigate } from 'react-router-dom';
 
 import SignUpModal from '../../Modals/SignUpModal';
-// import { loginUserSuccess } from '../../redux/users/users';
+import { useAppDispatch } from '../../redux/configureStore';
+import { login } from '../../redux/users/users';
 
 const LandingPageContainer = styled(Grid)`
   background-image: url(${landingPageBG});
@@ -46,22 +46,17 @@ const FormContainer = styled(Box)`
 `;
 
 const LandingPage = () => {
-  const navigate = useNavigate();
   const [signUpModal, setSignUpModal] = useState(false);
   const handleModalOpen = () => setSignUpModal(true);
   const handleModalClose = () => setSignUpModal(false);
+  const dispatch = useAppDispatch();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const signInHandler = (event: any): void => {
+  // eslint-disable-next-line unicorn/consistent-function-scoping
+  const signInHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const form = event.target;
-    const email = form.email.value;
-    const password = form.password.value;
-
-    const user = users.find((user: any) => user.email === email);
-    if (user?.password === password) {
-      // dispatch(loginUserSuccess(user));
-      navigate('/user');
-    }
+    dispatch(login({ email, password }));
   };
 
   return (
@@ -116,12 +111,14 @@ const LandingPage = () => {
             <TextField
               label="Email address"
               name="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
               placeholder="example@mail.com"
               sx={{ width: '100%' }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <MailOutlineIcon />{' '}
+                    <MailOutlineIcon />
                   </InputAdornment>
                 ),
               }}
@@ -131,12 +128,14 @@ const LandingPage = () => {
               type="password"
               label="Password"
               name="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
               placeholder="*************"
               sx={{ width: '100%' }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <LockOutlinedIcon />{' '}
+                    <LockOutlinedIcon />
                   </InputAdornment>
                 ),
               }}

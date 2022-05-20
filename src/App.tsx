@@ -1,9 +1,11 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useEffect } from 'react';
 
 import { DisplayAlert } from './components/Alert/DisplayAlert';
 import AuthLayout from './components/AuthLayout/AuthLayout';
 import GuestLayout from './components/GuestLayout/GuestLayout';
-import { useAppSelector } from './redux/configureStore';
+import { useAppDispatch, useAppSelector } from './redux/configureStore';
+import { userFromToken } from './redux/users/users';
 import GuestPages from './Routes/GuestRoutes';
 import UserAuthPages from './Routes/Index';
 
@@ -66,7 +68,15 @@ const theme = createTheme({
 });
 
 const App = () => {
-  const { isAuthenticated } = useAppSelector(state => state.user.auth)
+  const { isAuthenticated } = useAppSelector(state => state.user.auth);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const token = localStorage.getItem('authorization');
+    if (token && !isAuthenticated) {
+      dispatch(userFromToken(token));
+    }
+  }, [])
 
   return (
     <ThemeProvider theme={theme}>

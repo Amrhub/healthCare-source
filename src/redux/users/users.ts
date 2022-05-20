@@ -22,9 +22,7 @@ export const createPatient = createAsyncThunk(
       body: patientFormData,
     });
 
-    const data = await response.json();
-    console.log(data);
-    return data;
+    return await response.json();
   },
 );
 
@@ -35,7 +33,6 @@ export const createUser = createAsyncThunk(
       method: 'POST',
       body: userFormData,
     });
-    console.log(response);
     const data = await response.json();
     if (response.status === 422) {
       return {
@@ -51,6 +48,38 @@ export const createUser = createAsyncThunk(
   },
 );
 
+export const login = createAsyncThunk(
+  'users/login',
+  async ({ email, password }: { email: string; password: string }) => {
+    const response = await fetch(`${baseUrl}users/sign_in`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const authorization = response.headers.get('Authorization');
+    if (authorization) localStorage.setItem('authorization', authorization);
+    const data = await response.json();
+    return { ...data, authorization };
+  },
+);
+
+export const userFromToken = createAsyncThunk(
+  'users/userFromToken',
+  async (token: string) => {
+    const response = await fetch(`${baseUrl}member-data`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${token}`,
+      },
+    });
+
+    return await response.json();
+  },
+);
+
 interface RoleDoctorInfo {
   specialization: string;
   experience: number;
@@ -62,10 +91,13 @@ interface RolePatientInfo {
   weight: number;
   height: number;
   covid: boolean;
+  smoking: boolean;
   hypertension: boolean;
   diabetes: boolean;
   otherDiseases: string;
 }
+
+type AuthToken = string | null | undefined;
 
 export type Loading = 'pending' | 'rejected' | 'idle';
 
@@ -94,7 +126,7 @@ const userSlice = createSlice({
     errors: '',
     isReferenceCreated: false,
     auth: {
-      token: '',
+      token: '' as AuthToken,
       isAuthenticated: false,
     },
   },
@@ -122,7 +154,6 @@ const userSlice = createSlice({
     });
 
     builder.addCase(createUser.fulfilled, (state, { payload }) => {
-      console.log({ errors: payload.data.errors });
       if ('errors' in payload.data) {
         state.loading = 'rejected';
         state.errors = payload.data.errors[0];
@@ -138,17 +169,17 @@ const userSlice = createSlice({
         state.userInfo.phone = payload.data.user.phone;
         state.userInfo.profilePic = payload.data.user.profile_pic;
         state.userInfo.id = payload.data.user.id;
-        state.auth.token = payload.authorization?.split(' ')[1] as string;
+        state.auth.token = payload.authorization;
         state.auth.isAuthenticated = true;
         state.loading = 'idle';
       }
     });
 
-    builder.addCase(createUser.pending, (state, action) => {
+    builder.addCase(createUser.pending, (state) => {
       state.loading = 'pending';
     });
 
-    builder.addCase(createUser.rejected, (state, action) => {
+    builder.addCase(createUser.rejected, (state) => {
       state.loading = 'rejected';
     });
 
@@ -160,6 +191,7 @@ const userSlice = createSlice({
         hypertension: payload.hypertension,
         diabetes: payload.diabetes,
         otherDiseases: payload.other_diseases_detail,
+        smoking: payload.smoking,
       };
       state.userInfo.referenceId = payload.id;
       state.isReferenceCreated = true;
@@ -171,6 +203,47 @@ const userSlice = createSlice({
     });
 
     builder.addCase(createPatient.rejected, (state) => {
+      state.loading = 'rejected';
+    });
+
+    builder.addCase(login.fulfilled, (state, { payload }) => {
+      if ('error' in payload) {
+        state.errors = payload.error;
+      } else {
+        state.userInfo = {
+          ...payload.userInfo,
+          roleInfo: payload.roleInfo,
+        };
+        state.auth.token = payload.authorization;
+        state.auth.isAuthenticated = true;
+      }
+      state.loading = 'idle';
+    });
+
+    builder.addCase(login.pending, (state) => {
+      state.loading = 'pending';
+    });
+
+    builder.addCase(login.rejected, (state) => {
+      state.loading = 'rejected';
+    });
+
+    builder.addCase(userFromToken.fulfilled, (state, { payload }) => {
+      state.userInfo = {
+        ...payload.userInfo,
+        roleInfo: payload.roleInfo,
+      };
+      state.auth.token = localStorage.getItem('authorization');
+      state.auth.isAuthenticated = true;
+      state.loading = 'idle';
+      console.log('🚀 ~ file: users.ts ~ line 240 ~ builder.addCase ~ payload', payload);
+    });
+
+    builder.addCase(userFromToken.pending, (state) => {
+      state.loading = 'pending';
+    });
+
+    builder.addCase(userFromToken.rejected, (state) => {
       state.loading = 'rejected';
     });
   },
