@@ -244,7 +244,6 @@ const userSlice = createSlice({
       state.auth.token = localStorage.getItem('authorization');
       state.auth.isAuthenticated = true;
       state.loading = 'idle';
-      console.log('🚀 ~ file: users.ts ~ line 240 ~ builder.addCase ~ payload', payload);
     });
 
     builder.addCase(userFromToken.pending, (state) => {

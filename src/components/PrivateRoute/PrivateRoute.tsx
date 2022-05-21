@@ -7,8 +7,6 @@ import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
 const PrivateRoute = ({ children }: { children: React.ReactElement }) => {
   const dispatch = useAppDispatch();
   const { isAuthenticated } = useAppSelector((state) => state.user.auth);
-  console.log("Hey I'm in PrivateRoute");
-
   useEffect(() => {
     if (isAuthenticated) {
       dispatch(clearAlert());

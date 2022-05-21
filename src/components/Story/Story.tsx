@@ -21,7 +21,6 @@ const Story = ({
   story: any;
   handleEditStory: (content: string, category: string) => void | undefined;
 }) => {
-  console.log({ story })
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);

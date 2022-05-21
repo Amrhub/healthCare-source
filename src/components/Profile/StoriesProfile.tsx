@@ -13,8 +13,6 @@ interface IProps {
 
 const StoriesProfile = ({ mainUser, stories }: IProps) => {
   const lastThreeStories = stories.slice(0, 3);
-  console.log('🚀 ~ file: StoriesProfile.tsx ~ line 16 ~ StoriesProfile ~ lastThreeStories', lastThreeStories)
-
 
   const [openModal, setOpenModal] = useState(false);
   const [storyContent, setStoryContent] = useState('');
