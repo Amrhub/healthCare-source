@@ -21,12 +21,12 @@ const Story = ({
   story: any;
   handleEditStory: (content: string, category: string) => void | undefined;
 }) => {
+  console.log({ story })
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const user = story;
   const isEditable = location.pathname === userRoutes.stories.myStories; // TODO: check if user is logged in
-  
+
   const handleClick = (e: any) => {
     setOpen((prev) => !prev);
     setAnchorEl(e.currentTarget);
@@ -51,12 +51,12 @@ const Story = ({
       <StoryHeader sx={{ display: 'flex', gap: 3 }}>
         <Avatar
           alt="profile pic"
-          src={user.avatar}
+          src={story.user.profilePic}
           sx={{ width: '40px', height: '40px' }}
         />
         <Box>
           <Typography variant="body1" sx={{ fontWeight: 700 }}>
-            {user.name}
+            {story.user.firstName} {story.user.lastName}
           </Typography>
           <Typography variant="body2" sx={{ color: 'grey.500' }}>
             {story.category}

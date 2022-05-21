@@ -4,9 +4,9 @@ import { Avatar, Box, Button, IconButton, TextField } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { dfCenterCenter } from '../../abstracts/common.styles';
+import { useAppSelector } from '../../redux/configureStore';
 
 interface StoryModalProps {
   open: boolean;
@@ -23,7 +23,7 @@ const ModalHeader = styled(Box)`
 
 const StoryModal = ({ content = '', category = '', open, setOpen }: StoryModalProps) => {
   const isEdit = content.length > 0;
-  const currentUser = useSelector((state: any) => state.users.authUserInfo);
+  const { profilePic, firstName, lastName } = useAppSelector((state) => state.user.userInfo);
   const [storyContent, setStoryContent] = useState(content);
   const [storyCategory, setStoryCategory] = useState(category);
 
@@ -62,9 +62,9 @@ const StoryModal = ({ content = '', category = '', open, setOpen }: StoryModalPr
         }}
       >
         <ModalHeader>
-          <Avatar src={currentUser.avatar} />
+          <Avatar src={profilePic} />
           <Typography variant="body1" sx={{ fontWeight: 700 }}>
-            {currentUser.name}
+            {firstName} {lastName}
           </Typography>
           <IconButton
             onClick={() => setOpen(false)}

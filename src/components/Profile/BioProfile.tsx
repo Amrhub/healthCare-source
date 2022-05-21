@@ -1,33 +1,13 @@
 import { Avatar, Button, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 
-interface IProps {  
-  name: string;
-  image: string;
-  description: string;
-  email: string;
-  phone: any;
-  address: string;
-  birthdate: string;
-  gender: string;
-  mainUser: boolean;
-  friend?: boolean;
-  friendRequest?: boolean;
-};
 
 const BioProfile = ({
-  name,
-  image,
-  description,
-  email,
-  phone,
-  address,
-  birthdate,
-  gender,
+  user,
   mainUser,
   friend,
   friendRequest,
-}: IProps) => {
+}: any) => {
   return (
     <>
       <Box
@@ -48,17 +28,17 @@ const BioProfile = ({
       >
         <Avatar
           alt="profile pic"
-          src={image}
+          src={user.profilePic}
           sx={{ width: '100px', height: '100px', mt: '20px' }}
         />
         <Box>
           <Typography variant="body1" sx={{ fontWeight: 700, mt: '10px' }}>
-            {name}
+            {user.firstName} {user.lastName}
           </Typography>
         </Box>
         <Box>
           <Typography variant="body1" sx={{ my: '25px' }}>
-            {description}
+            {user.bio}
           </Typography>
         </Box>
         <Grid container spacing={2}>
@@ -66,31 +46,31 @@ const BioProfile = ({
             <Typography>Email</Typography>
           </Grid>
           <Grid item xs={9}>
-            <Typography>{email}</Typography>
+            <Typography>{user.email}</Typography>
           </Grid>
           <Grid item xs={3}>
             <Typography>Phone</Typography>
           </Grid>
           <Grid item xs={9}>
-            <Typography>{phone}</Typography>
+            <Typography>{user.phone}</Typography>
           </Grid>
           <Grid item xs={3}>
             <Typography>Address</Typography>
           </Grid>
           <Grid item xs={9}>
-            <Typography>{address}</Typography>
+            <Typography>{user.address}</Typography>
           </Grid>
           <Grid item xs={3}>
             <Typography>Birthdate</Typography>
           </Grid>
           <Grid item xs={9}>
-            <Typography>{birthdate}</Typography>
+            <Typography>{user.birthDate}</Typography>
           </Grid>
           <Grid item xs={3}>
             <Typography>Gender</Typography>
           </Grid>
           <Grid item xs={9}>
-            <Typography>{gender}</Typography>
+            <Typography>{user.gender}</Typography>
           </Grid>
         </Grid>
         {mainUser ? (

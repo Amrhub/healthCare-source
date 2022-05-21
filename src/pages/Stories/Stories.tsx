@@ -1,7 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Box, Divider, IconButton } from '@mui/material';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
 import StoryModal from '../../components/StoryModal/StoryModal';
@@ -9,13 +8,14 @@ import ContainerBox from '../../layouts/ContainerBox/ContainerBox';
 import ContainerBoxNav, {
   ContainerBoxNavLink,
 } from '../../layouts/ContainerBox/ContainerBoxNav';
+import { useAppSelector } from '../../redux/configureStore';
 import { userRoutes } from '../../Routes/Routes';
 
 import AllStories from './AllStories';
 import MyStories from './MyStories';
 
 const Stories = () => {
-  const [userOne, userTwo] = useSelector((state: any) => state.users.users);
+  const user = useAppSelector((state) => state.user.userInfo);
   const [openModal, setOpenModal] = useState(false);
   const [storyContent, setStoryContent] = useState('');
   const [storyCategory, setStoryCategory] = useState('');
@@ -39,13 +39,13 @@ const Stories = () => {
       category: 'covid-19',
       content:
         'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Delectus corporis dolores laudantium quis. Eveniet, molestias? Dolorem, nisi iste! Pariatur, officiis?...',
-      user: userOne,
+      user,
       commentsCounter: 2,
       likesCounter: 3,
     },
     {
       id: 2,
-      user: userTwo,
+      user,
       category: 'cancer',
       content:
         'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Delectus corporis dolores laudantium quis. Eveniet, molestias? Dolorem, nisi iste! Pariatur, officiis?...',
