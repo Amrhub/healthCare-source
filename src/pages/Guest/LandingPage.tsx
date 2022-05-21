@@ -8,16 +8,19 @@ import {
 } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Box, styled } from '@mui/system';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 
 import doctorImageBG from '/src/assets/landingPage/DoctorImage.svg';
 import landingPageBG from '/src/assets/landingPage/landing-page-bg.svg';
 
 
+import { useNavigate } from 'react-router-dom';
+
 import SignUpModal from '../../Modals/SignUpModal';
-import { useAppDispatch } from '../../redux/configureStore';
+import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
 import { login } from '../../redux/users/users';
+import { userRoutes } from '../../Routes/Routes';
 
 const LandingPageContainer = styled(Grid)`
   background-image: url(${landingPageBG});
@@ -52,12 +55,21 @@ const LandingPage = () => {
   const dispatch = useAppDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { isAuthenticated } = useAppSelector(state => state.user.auth);
+  const navigate = useNavigate();
+
 
   // eslint-disable-next-line unicorn/consistent-function-scoping
   const signInHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     dispatch(login({ email, password }));
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(userRoutes.home);
+    }
+  }, [isAuthenticated]);
 
   return (
     <LandingPageContainer
