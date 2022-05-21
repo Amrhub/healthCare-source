@@ -1,26 +1,44 @@
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import {
-  Button,
-  Grid,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Button, Grid, TextField, Typography } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Box, styled } from '@mui/system';
-import React, { useEffect, useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 import doctorImageBG from '/src/assets/landingPage/DoctorImage.svg';
 import landingPageBG from '/src/assets/landingPage/landing-page-bg.svg';
 
-
-import { useNavigate } from 'react-router-dom';
-
+import landingPageTopBG from '../../assets/landingPage/landing-page-image.png';
+import PaymentPlans from '../../components/PaymentPlans/PaymentPlans';
 import SignUpModal from '../../Modals/SignUpModal';
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
 import { login } from '../../redux/users/users';
 import { userRoutes } from '../../Routes/Routes';
+
+const LandingPageTop = styled(Box)`
+  background-image: url(${landingPageTopBG});
+  background-repeat: no-repeat;
+`;
+
+const LandingPagePlans = styled(Box)`
+  background-color: #e5e5e5;
+`;
+
+const PlansContainer = styled(Grid)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 90px;
+  margin-top: 100px;
+  margin-bottom: 100px;
+`;
+
+const LandingPageCateg = styled(Box)`
+  background-color: #fff;
+  height: 500px;
+`;
 
 const LandingPageContainer = styled(Grid)`
   background-image: url(${landingPageBG});
@@ -48,6 +66,45 @@ const FormContainer = styled(Box)`
   }
 `;
 
+const Plans = [
+  {
+    cost: 'Free',
+    type: 'Basic',
+    features: [
+      'Lorem ipsum dolor sit amet.',
+      'Lorem ipsum dolor sit amet.',
+      'Lorem ipsum dolor sit amet.',
+      'Lorem ipsum dolor sit amet.',
+    ],
+    contained: false,
+  },
+  {
+    cost: '$30',
+    type: 'Standard',
+    features: [
+      'Lorem ipsum dolor sit amet.',
+      'Lorem ipsum dolor sit amet.',
+      'Lorem ipsum dolor sit amet.',
+      'Lorem ipsum dolor sit amet.',
+      'Lorem ipsum dolor sit amet.',
+    ],
+    contained: true,
+  },
+  {
+    cost: '$50',
+    type: 'Premium',
+    features: [
+      'Lorem ipsum dolor sit amet.',
+      'Lorem ipsum dolor sit amet.',
+      'Lorem ipsum dolor sit amet.',
+      'Lorem ipsum dolor sit amet.',
+      'Lorem ipsum dolor sit amet.',
+      'Lorem ipsum dolor sit amet.',
+    ],
+    contained: false,
+  },
+];
+
 const LandingPage = () => {
   const [signUpModal, setSignUpModal] = useState(false);
   const handleModalOpen = () => setSignUpModal(true);
@@ -72,128 +129,217 @@ const LandingPage = () => {
   }, [isAuthenticated]);
 
   return (
-    <LandingPageContainer
-      container
-      sx={{ minHeight: 'calc(200vh - 160px)', scrollBehavior: 'smooth' }}
-    >
-      <LandingPageItem
-        item
-        xs={6}
+    <>
+      <LandingPageTop sx={{ minHeight: '802.5px', scrollBehavior: 'smooth' }}>
+        <LandingPageItem
+          item
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            ml: '150px',
+            mt: '212px',
+            width: '818px',
+          }}
+        >
+          <Typography variant="h1" color="primary" sx={{ fontWeight: '700' }}>
+            We Provide <br /> Total Health Care
+          </Typography>
+          <Typography variant="body1" sx={{ mt: '35px', color: 'grey.500' }}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sollicitudin sed
+            commodo tincidunt eget eu. Aliquam rhoncus sodales sed aenean pellentesque sit
+            turpis magna quis. Imperdiet leo blandit hac pretium id enim, gravida. Quam
+            est dolor, egestas vitae dolor congue. Sodales aliquam pulvinar in odio
+            gravida. Volutpat, fermentum aliquam pharetra, augue nullam aliquet vitae
+            accumsan. Tristique est risus lacinia consequat. Id id aliquet lacus, vitae.
+            Feugiat tortor lacus, feugiat feugiat vehicula ipsum dolor est gravida.
+            Rhoncus nibh integer aliquet orci scelerisque. Varius ullamcorper aliquet
+            consequat orci, at.
+          </Typography>
+        </LandingPageItem>
+      </LandingPageTop>
+
+      <LandingPagePlans
         sx={{
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          pl: 3,
-          pr: 2,
+          alignItems: 'center',
         }}
       >
-        <Typography variant="h1" color="primary" sx={{ fontWeight: '700' }}>
-          We Provide Total Health Care
-        </Typography>
-        <Typography variant="body1" sx={{ fontSize: '24px', color: 'grey.500' }}>
-          mauris vitae ultricies leo integer malesuada nunc vel risus commodo viverra
-          maecenas accumsan lacus vel facilisis volutpat est velit egestas dui id ornare
-          arcu odio ut sem nulla pharetra diam sit amet nisl suscipit adipiscing bibendum
-          est ultricies integer quis augue praesent
-        </Typography>
-      </LandingPageItem>
-
-      <Grid
-        item
-        xs={6}
-        sx={{
-          backgroundImage: `url(${doctorImageBG})`,
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-          backgroundSize: 'contain',
-        }}
-      />
-
-      <LandingPageItem item xs={6} id="sign-in-form">
         <Typography
-          variant="h2"
-          component="p"
-          color="primary"
-          sx={{ textAlign: 'center' }}
+          color={'primary.main'}
+          sx={{ fontWeight: '700', fontSize: '36px', mt: '99.5px' }}
         >
-          Sign in to your account
+          Choose from
         </Typography>
-        <form onSubmit={signInHandler}>
-          <FormContainer>
-            <TextField
-              label="Email address"
-              name="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              placeholder="example@mail.com"
-              sx={{ width: '100%' }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <MailOutlineIcon />
-                  </InputAdornment>
-                ),
-              }}
-              required
-            />
-            <TextField
-              type="password"
-              label="Password"
-              name="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              placeholder="*************"
-              sx={{ width: '100%' }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <LockOutlinedIcon />
-                  </InputAdornment>
-                ),
-              }}
-              required
-            />
-            <Button type="submit" variant="contained" color="primary">
-              Sign in
-            </Button>
-            <Button color="inherit" sx={{ textTransform: 'capitalize' }}>
-              Forgot password?
-            </Button>
-          </FormContainer>
-        </form>
-      </LandingPageItem>
-
-      <LandingPageItem item xs={6} id="sign-up">
-        <Box
+        <Typography
+          color={'text.primary'}
+          sx={{ fontWeight: '700', fontSize: '64px', lineHeight: '75px', mt: '16px' }}
+        >
+          Our Best Pricing Plan
+        </Typography>
+        <Typography
+          color={'text.primary'}
+          variant="body1"
           sx={{
-            maxHeight: { md: '430px' },
-            height: { md: '100%' },
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 10,
-            color: 'white',
+            fontWeight: '400',
+            width: '703px',
+            lineHeight: '18.75px',
+            textAlign: 'center',
+            mt: '16px',
           }}
         >
-          <Typography variant="h2" component="p" sx={{ textAlign: 'center' }}>
-            Hello, Friend!
+          It is available to teenagers, Lorem ipsum dolor sit amet, consectetur adipiscing
+          elit. Odio viverra eu mi fermentum amet, faucibus purus. Ac, lectus hac et
+          phasellus commodo nunc eget.
+        </Typography>
+        <PlansContainer container spacing={3}>
+          {Plans.map(({ cost, type, features, contained }) => (
+            <PaymentPlans
+                cost={cost}
+                type={type}
+                features={features}
+                contained={contained}
+                key={uuidv4()}
+            />     
+          ))}
+        </PlansContainer>
+      </LandingPagePlans>
+
+      <LandingPageCateg>
+        <Typography sx={{ fontWeight: '700', fontSize: '40px', mt: '36px', ml: '288px' }}>
+          Book from top specialties
+        </Typography>
+      </LandingPageCateg>
+
+      <LandingPageContainer
+        container
+        sx={{ minHeight: 'calc(200vh - 160px)', scrollBehavior: 'smooth' }}
+      >
+        <LandingPageItem
+          item
+          xs={6}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            pl: 3,
+            pr: 2,
+          }}
+        >
+          <Typography variant="h1" color="primary" sx={{ fontWeight: '700' }}>
+            We Provide Total Health Care
           </Typography>
-          <Box sx={{ maxWidth: { md: '540px' }, marginX: 'auto', textAlign: 'center' }}>
-            <Typography variant="h4" component="p">
-              Fill up personal information and Improve Your health with us.
-            </Typography>
-          </Box>
-          <Button
-            variant="outlined"
-            color="inherit"
-            sx={{ alignSelf: 'center' }}
-            onClick={handleModalOpen}
+          <Typography variant="body1" sx={{ fontSize: '24px', color: 'grey.500' }}>
+            mauris vitae ultricies leo integer malesuada nunc vel risus commodo viverra
+            maecenas accumsan lacus vel facilisis volutpat est velit egestas dui id ornare
+            arcu odio ut sem nulla pharetra diam sit amet nisl suscipit adipiscing
+            bibendum est ultricies integer quis augue praesent
+          </Typography>
+        </LandingPageItem>
+
+        <Grid
+          item
+          xs={6}
+          sx={{
+            backgroundImage: `url(${doctorImageBG})`,
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            backgroundSize: 'contain',
+          }}
+        />
+
+        <LandingPageItem item xs={6} id="sign-in-form">
+          <Typography
+            variant="h2"
+            component="p"
+            color="primary"
+            sx={{ textAlign: 'center' }}
           >
-            Sign up
-          </Button>
-        </Box>
-      </LandingPageItem>
-      <SignUpModal handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} open={signUpModal} />
-    </LandingPageContainer>
+            Sign in to your account
+          </Typography>
+          <form onSubmit={signInHandler}>
+            <FormContainer>
+              <TextField
+                label="Email address"
+                name="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                placeholder="example@mail.com"
+                sx={{ width: '100%' }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <MailOutlineIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                required
+              />
+              <TextField
+                type="password"
+                label="Password"
+                name="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                placeholder="*************"
+                sx={{ width: '100%' }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockOutlinedIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                required
+              />
+              <Button type="submit" variant="contained" color="primary">
+                Sign in
+              </Button>
+              <Button color="inherit" sx={{ textTransform: 'capitalize' }}>
+                Forgot password?
+              </Button>
+            </FormContainer>
+          </form>
+        </LandingPageItem>
+
+        <LandingPageItem item xs={6} id="sign-up">
+          <Box
+            sx={{
+              maxHeight: { md: '430px' },
+              height: { md: '100%' },
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 10,
+              color: 'white',
+            }}
+          >
+            <Typography variant="h2" component="p" sx={{ textAlign: 'center' }}>
+              Hello, Friend!
+            </Typography>
+            <Box sx={{ maxWidth: { md: '540px' }, marginX: 'auto', textAlign: 'center' }}>
+              <Typography variant="h4" component="p">
+                Fill up personal information and Improve Your health with us.
+              </Typography>
+            </Box>
+            <Button
+              variant="outlined"
+              color="inherit"
+              sx={{ alignSelf: 'center' }}
+              onClick={handleModalOpen}
+            >
+              Sign up
+            </Button>
+          </Box>
+        </LandingPageItem>
+        <SignUpModal
+          handleModalOpen={handleModalOpen}
+          handleModalClose={handleModalClose}
+          open={signUpModal}
+        />
+      </LandingPageContainer>
+    </>
   );
 };
 
