@@ -6,8 +6,7 @@ import AuthLayout from './components/AuthLayout/AuthLayout';
 import GuestLayout from './components/GuestLayout/GuestLayout';
 import { useAppDispatch, useAppSelector } from './redux/configureStore';
 import { userFromToken } from './redux/users/users';
-import GuestPages from './Routes/GuestRoutes';
-import UserAuthPages from './Routes/Index';
+import Routes from './Routes/Index';
 
 const theme = createTheme({
   palette: {
@@ -84,12 +83,12 @@ const App = () => {
         {isAuthenticated ? (
           <AuthLayout>
             <DisplayAlert />
-            <UserAuthPages />
+            <Routes />
           </AuthLayout>
         ) : (
           <GuestLayout>
             <DisplayAlert />
-            <GuestPages />
+            <Routes />
           </GuestLayout>
         )}
       </div>

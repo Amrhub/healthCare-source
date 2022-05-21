@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 
+import PrivateRoute from '../components/PrivateRoute/PrivateRoute';
 import Chat from '../pages/Chat/Chat';
 import Community from '../pages/Community/Community';
 import LandingPage from '../pages/Guest/LandingPage';
@@ -15,9 +16,20 @@ import { guestRoutes, userRoutes } from './Routes';
 const index = () => {
   return (
     <Routes>
-      <Route path={userRoutes.home} element={<Home />} />
-      <Route path={userRoutes.profile.main} element={<ProfileMainUser />} />
-      <Route path={userRoutes.profile.community} element={<ProfileCommunityUser />} />    
+      {/* Guests Routes */}
+      <Route path={guestRoutes.home} element={<LandingPage />} />
+      {/* User Routes */}
+      <Route path={userRoutes.home} element={
+        <PrivateRoute>
+          <Home />
+        </PrivateRoute>
+      } />
+      <Route path={userRoutes.profile.main} element={
+        <PrivateRoute>
+          <ProfileMainUser />
+        </PrivateRoute>
+      } />
+      <Route path={userRoutes.profile.community} element={<ProfileCommunityUser />} />
       <Route path={userRoutes.reportHistory} element={<ReportHistory />} />
       <Route path={userRoutes.chat} element={<Chat />} />
       <Route path={userRoutes.stories.index + '/*'} element={<Stories />} />
