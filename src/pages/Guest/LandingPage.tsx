@@ -5,11 +5,16 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { Box, styled } from '@mui/system';
 import { StyledProvider, Footer } from 'components-extra';
 import React, { useState, useEffect } from 'react';
+import Carousel from 'react-material-ui-carousel';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 import landingPageBG from '/src/assets/landingPage/Card.svg';
 
+import bones from '../../assets/landingPage/categories/bone.png';
+import brain from '../../assets/landingPage/categories/brain-nervous-system.png';
+import earNoseThroat from '../../assets/landingPage/categories/ear-nose-throat.png';
+import teeth from '../../assets/landingPage/categories/teeth.svg.png';
 import landingPageTopBG from '../../assets/landingPage/landing-page-image.png';
 import logo from '../../assets/landingPage/Logo.png';
 import PaymentPlans from '../../components/PaymentPlans/PaymentPlans';
@@ -41,6 +46,8 @@ const PlansContainer = styled(Grid)`
 const LandingPageCateg = styled(Box)`
   background-color: #fff;
   height: 500px;
+  margin-left: 288px;
+  margin-right: 288px;
 `;
 
 const LandingPageFormContainer = styled(Stack)`
@@ -70,6 +77,11 @@ const FormContainer = styled(Box)`
   & > * {
     flex-grow: 1;
   }
+`;
+
+const SpecialtiesContainer = styled(Box)`
+  borderRadius: 10px;
+  overflow: hidden;
 `;
 
 const Plans = [
@@ -111,6 +123,89 @@ const Plans = [
   },
 ];
 
+const specialtiesItems = [
+  {
+    row: [
+      {
+        name: 'Teeth',
+        image: teeth,
+      },
+      {
+        name: 'Bone',
+        image: bones,
+      },
+      {
+        name: 'Ear, Nose and Throat',
+        image: earNoseThroat,
+      },
+      {
+        name: 'Brain and Nervous',
+        image: brain,
+      },
+    ],
+  },
+  {
+    row: [
+      {
+        name: 'Brain and Nervous',
+        image: brain,
+      },
+      {
+        name: 'Teeth',
+        image: teeth,
+      },
+      {
+        name: 'Bone',
+        image: bones,
+      },
+      {
+        name: 'Ear, Nose and Throat',
+        image: earNoseThroat,
+      },
+    ],
+  },
+  {
+    row: [
+      {
+        name: 'Ear, Nose and Throat',
+        image: earNoseThroat,
+      },
+      {
+        name: 'Brain and Nervous',
+        image: brain,
+      },
+      {
+        name: 'Teeth',
+        image: teeth,
+      },
+      {
+        name: 'Bone',
+        image: bones,
+      },
+    ],
+  },
+  {
+    row: [
+      {
+        name: 'Bone',
+        image: bones,
+      },
+      {
+        name: 'Ear, Nose and Throat',
+        image: earNoseThroat,
+      },
+      {
+        name: 'Brain and Nervous',
+        image: brain,
+      },
+      {
+        name: 'Teeth',
+        image: teeth,
+      },
+    ],
+  },
+];
+
 const LandingPage = () => {
   const [signUpModal, setSignUpModal] = useState(false);
   const handleModalOpen = () => setSignUpModal(true);
@@ -118,9 +213,8 @@ const LandingPage = () => {
   const dispatch = useAppDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { isAuthenticated } = useAppSelector(state => state.user.auth);
+  const { isAuthenticated } = useAppSelector((state) => state.user.auth);
   const navigate = useNavigate();
-
 
   // eslint-disable-next-line unicorn/consistent-function-scoping
   const signInHandler = (event: React.FormEvent<HTMLFormElement>) => {
@@ -215,9 +309,29 @@ const LandingPage = () => {
       </LandingPagePlans>
 
       <LandingPageCateg>
-        <Typography sx={{ fontWeight: '700', fontSize: '40px', mt: '36px', ml: '288px' }}>
+        <Typography sx={{ fontWeight: '700', fontSize: '40px', mt: '36px' }}>
           Book from top specialties
         </Typography>
+        <Carousel>
+          {specialtiesItems.map((item) => (
+            <Stack direction={'row'} gap={'48px'} key={uuidv4()}>
+              {item.row.map(({ name, image }) => (
+                <SpecialtiesContainer>
+                  <img src={image} alt={name} height={'300px'} />
+                  <Typography
+                    sx={{
+                      fontWeight: '700',
+                      fontSize: '24px',
+                      backgroundColor: 'grey.100',
+                    }}
+                  >
+                    {name}
+                  </Typography>
+                </SpecialtiesContainer>
+              ))}
+            </Stack>
+          ))}
+        </Carousel>
       </LandingPageCateg>
 
       <LandingPageFormContainer>
@@ -367,7 +481,7 @@ const LandingPage = () => {
             </Footer.Item>
           </Footer.Column>
         </Footer>
-        <CustomBackToTop color='secondary' />
+        <CustomBackToTop color="secondary" />
       </StyledProvider>
     </>
   );
