@@ -136,7 +136,7 @@ const SignUpModal = ({
         patientFormData.append('hypertension', hyperTension.toString());
         patientFormData.append('diabetes', diabetes.toString());
         if (otherDiseases)
-          userFormData.append('other_diseases_detail', otherDiseasesDetails.value);
+          patientFormData.append('other_diseases_detail', otherDiseasesDetails.value);
         dispatch(createPatient(patientFormData));
       }
 
