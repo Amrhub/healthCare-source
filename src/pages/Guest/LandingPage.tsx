@@ -1,21 +1,24 @@
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import { Button, Grid, TextField, Typography } from '@mui/material';
+import { Button, Grid, Stack, TextField, Typography } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Box, styled } from '@mui/system';
+import { StyledProvider, Footer } from 'components-extra';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
-import doctorImageBG from '/src/assets/landingPage/DoctorImage.svg';
-import landingPageBG from '/src/assets/landingPage/landing-page-bg.svg';
+import landingPageBG from '/src/assets/landingPage/Card.svg';
 
 import landingPageTopBG from '../../assets/landingPage/landing-page-image.png';
+import logo from '../../assets/landingPage/Logo.png';
 import PaymentPlans from '../../components/PaymentPlans/PaymentPlans';
 import SignUpModal from '../../Modals/SignUpModal';
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
 import { login } from '../../redux/users/users';
 import { userRoutes } from '../../Routes/Routes';
+
+import myTheme, { CustomBackToTop } from './extraComponentsTheme';
 
 const LandingPageTop = styled(Box)`
   background-image: url(${landingPageTopBG});
@@ -40,10 +43,13 @@ const LandingPageCateg = styled(Box)`
   height: 500px;
 `;
 
-const LandingPageContainer = styled(Grid)`
-  background-image: url(${landingPageBG});
-  background-repeat: no-repeat;
-  background-position: right top;
+const LandingPageFormContainer = styled(Stack)`
+  height: 1000px;
+  background-color: #e5e5e5;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 `;
 
 const LandingPageItem = styled(Grid)`
@@ -133,6 +139,7 @@ const LandingPage = () => {
       <LandingPageTop sx={{ minHeight: '802.5px', scrollBehavior: 'smooth' }}>
         <LandingPageItem
           item
+          xs={12}
           sx={{
             display: 'flex',
             flexDirection: 'column',
@@ -197,12 +204,12 @@ const LandingPage = () => {
         <PlansContainer container spacing={3}>
           {Plans.map(({ cost, type, features, contained }) => (
             <PaymentPlans
-                cost={cost}
-                type={type}
-                features={features}
-                contained={contained}
-                key={uuidv4()}
-            />     
+              cost={cost}
+              type={type}
+              features={features}
+              contained={contained}
+              key={uuidv4()}
+            />
           ))}
         </PlansContainer>
       </LandingPagePlans>
@@ -213,44 +220,16 @@ const LandingPage = () => {
         </Typography>
       </LandingPageCateg>
 
-      <LandingPageContainer
-        container
-        sx={{ minHeight: 'calc(200vh - 160px)', scrollBehavior: 'smooth' }}
-      >
+      <LandingPageFormContainer>
         <LandingPageItem
           item
-          xs={6}
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            pl: 3,
-            pr: 2,
-          }}
+          id="sign-in-form"
+          bgcolor={'#fff'}
+          height={'800px'}
+          ml={'287px'}
+          width={'100%'}
+          sx={{ borderRadius: '10px' }}
         >
-          <Typography variant="h1" color="primary" sx={{ fontWeight: '700' }}>
-            We Provide Total Health Care
-          </Typography>
-          <Typography variant="body1" sx={{ fontSize: '24px', color: 'grey.500' }}>
-            mauris vitae ultricies leo integer malesuada nunc vel risus commodo viverra
-            maecenas accumsan lacus vel facilisis volutpat est velit egestas dui id ornare
-            arcu odio ut sem nulla pharetra diam sit amet nisl suscipit adipiscing
-            bibendum est ultricies integer quis augue praesent
-          </Typography>
-        </LandingPageItem>
-
-        <Grid
-          item
-          xs={6}
-          sx={{
-            backgroundImage: `url(${doctorImageBG})`,
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center',
-            backgroundSize: 'contain',
-          }}
-        />
-
-        <LandingPageItem item xs={6} id="sign-in-form">
           <Typography
             variant="h2"
             component="p"
@@ -303,8 +282,14 @@ const LandingPage = () => {
             </FormContainer>
           </form>
         </LandingPageItem>
-
-        <LandingPageItem item xs={6} id="sign-up">
+        <LandingPageItem
+          item
+          id="sign-up"
+          height={'800px'}
+          mr={'287px'}
+          width={'100%'}
+          sx={{ backgroundImage: `url(${landingPageBG})`, borderRadius: '10px' }}
+        >
           <Box
             sx={{
               maxHeight: { md: '430px' },
@@ -338,7 +323,52 @@ const LandingPage = () => {
           handleModalClose={handleModalClose}
           open={signUpModal}
         />
-      </LandingPageContainer>
+      </LandingPageFormContainer>
+      <StyledProvider theme={myTheme}>
+        <Footer>
+          <Footer.Column isInline>
+            <Footer.Item>
+              <Box
+                component="img"
+                sx={{
+                  height: '61px',
+                  width: '317px',
+                  maxHeight: { xs: 233, md: 167 },
+                  maxWidth: { xs: 350, md: 250 },
+                }}
+                alt="logo"
+                src={logo}
+              />
+            </Footer.Item>
+            <Footer.Item href="#">
+              <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: '700' }}>
+                About Us
+              </Typography>
+            </Footer.Item>
+            <Footer.Item href="#">
+              <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: '700' }}>
+                Our Team
+              </Typography>
+            </Footer.Item>
+            <Footer.Item href="#">
+              <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: '700' }}>
+                Membership
+              </Typography>
+            </Footer.Item>
+            <Footer.Item href="#">
+              <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: '700' }}>
+                Specialties
+              </Typography>
+            </Footer.Item>
+            <Footer.Item href="#">
+              <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: '700' }}>
+                Help
+              </Typography>
+            </Footer.Item>
+          </Footer.Column>
+        </Footer>
+        <CustomBackToTop color='secondary' />
+      </StyledProvider>
     </>
   );
 };

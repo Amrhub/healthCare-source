@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from './redux/configureStore';
 import { userFromToken } from './redux/users/users';
 import Routes from './Routes/Index';
 
-const theme = createTheme({
+export const theme = createTheme({
   palette: {
     primary: {
       main: '#4264D0',

@@ -28,12 +28,14 @@ const PaymentPlans = ({ cost, type, features, contained }: IProps) => (
       color: contained ? 'primary.contrastText' : 'grey.900',
     }}
   >
-    <Typography sx={{ fontWeight: '700' }} variant="h3">
-      {cost}
+    <Stack direction={'row'} alignItems={'end'}>
+      <Typography sx={{ fontWeight: '700', display: 'inline-block' }} variant="h3">
+        {cost}
+      </Typography>
       <Typography sx={{ display: 'inline-block' }}>/month</Typography>
-    </Typography>
+    </Stack>
     <Typography sx={{ fontWeight: '700', fontSize: '24px' }}>{type}</Typography>
-    <Typography variant="body1" sx={{ mt: '35px' }}>
+    <Box sx={{ mt: '35px' }}>
       <Stack rowGap={0.5}>
         {features.map((feature) => (
           <Stack key={uuidv4()} alignItems="center" direction="row">
@@ -44,11 +46,13 @@ const PaymentPlans = ({ cost, type, features, contained }: IProps) => (
               color={contained ? 'inherit' : 'primary'}
               fontSize="medium"
             />
-            <Typography style={{ fontWeight: '700', fontSize: '16px' }}>{feature}</Typography>
+            <Typography style={{ fontWeight: '700', fontSize: '16px' }}>
+              {feature}
+            </Typography>
           </Stack>
         ))}
       </Stack>
-    </Typography>
+    </Box>
     <Box sx={{ color: '#fff', mt: 'auto', mx: 'auto' }}>
       <Button
         variant="contained"

@@ -9,7 +9,7 @@ import App from './App';
 import { store } from './redux/configureStore';
 
 ReactDOM.render(
-  <React.StrictMode>
+  <React.Fragment>
     <Router>
       <ScopedCssBaseline>
         <Provider store={store}>
@@ -17,6 +17,6 @@ ReactDOM.render(
         </Provider>
       </ScopedCssBaseline>
     </Router>
-  </React.StrictMode>,
+  </React.Fragment>,
   document.getElementById('root'),
 );
