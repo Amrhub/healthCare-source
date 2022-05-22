@@ -168,6 +168,7 @@ const userSlice = createSlice({
         state.userInfo.address = payload.data.user.address;
         state.userInfo.bio = payload.data.user.bio;
         state.userInfo.birthDate = payload.data.user.birth_date;
+        state.userInfo.gender = payload.data.user.gender;
         state.userInfo.email = payload.data.user.email;
         state.userInfo.firstName = payload.data.user.first_name;
         state.userInfo.lastName = payload.data.user.last_name;
