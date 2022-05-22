@@ -55,7 +55,7 @@ const Story = ({
         />
         <Box>
           <Typography variant="body1" sx={{ fontWeight: 700 }}>
-            {story.user.firstName} {story.user.lastName}
+            {story.user.name}
           </Typography>
           <Typography variant="body2" sx={{ color: 'grey.500' }}>
             {story.category}

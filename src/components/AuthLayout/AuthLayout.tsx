@@ -371,7 +371,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
         <DrawerHeader />
         <Box
           component="main"
-          sx={{ flexGrow: 1, height: '100%', backgroundColor: 'grey.100' }}
+          sx={{ flexGrow: 1, height: '100%', backgroundColor: 'grey.100', overflow: 'hidden' }}
         >
           {children}
         </Box>

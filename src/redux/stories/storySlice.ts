@@ -44,10 +44,15 @@ const storySlice = createSlice({
   name: 'story',
   initialState: {
     stories: [] as Story[],
+    myStories: [] as Story[],
     loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    getMyStories: (state, { payload }) => {
+      state.myStories = state.stories.filter((story) => story.user.id === payload);
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(createStory.pending, (state) => {
       state.loading = true;
@@ -70,3 +75,5 @@ const storySlice = createSlice({
 });
 
 export const postReducer = storySlice.reducer;
+
+export const { getMyStories } = storySlice.actions;
