@@ -1,9 +1,7 @@
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
-import { Avatar, Button, Divider, Menu, MenuItem, Typography } from '@mui/material';
+import { Avatar, Menu, MenuItem, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import { Box, styled } from '@mui/system';
 import React, { useState } from 'react';
@@ -13,8 +11,9 @@ import { useAppDispatch } from '../../redux/configureStore';
 import { removeStory } from '../../redux/stories/storySlice';
 import { userRoutes } from '../../Routes/Routes';
 
+import StoryFooter from './StoryFooter';
+
 const StoryHeader = styled(Box)``;
-const Footer = styled(Box)``;
 
 const Story = ({
   story,
@@ -101,28 +100,7 @@ const Story = ({
       <Typography variant="body1" sx={{ color: 'grey.500' }}>
         {story.content}
       </Typography>
-      <Footer>
-        <Typography variant="body2" sx={{ color: 'grey.900', fontWeight: '700' }}>
-          {story.likesCounter} Likes, {story.commentsCounter} Comments
-        </Typography>
-        <Divider sx={{ mt: 1, bgcolor: 'grey.900' }} />
-        <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
-          <Button
-            startIcon={<ThumbUpAltIcon />}
-            color="inherit"
-            sx={{ fontWeight: '700' }}
-          >
-            Like
-          </Button>
-          <Button
-            startIcon={<ChatBubbleOutlineIcon />}
-            color="inherit"
-            sx={{ fontWeight: '700' }}
-          >
-            Comment
-          </Button>
-        </Box>
-      </Footer>
+      <StoryFooter likesCounter={story.likesCounter} commentsCounter={story.commentsCounter} />
     </Box>
   );
 };
