@@ -6,9 +6,11 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import { Avatar, Button, Divider, Menu, MenuItem, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import { Box, styled } from '@mui/system';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
+import { useAppDispatch } from '../../redux/configureStore';
+import { removeStory } from '../../redux/stories/storySlice';
 import { userRoutes } from '../../Routes/Routes';
 
 const StoryHeader = styled(Box)``;
@@ -23,8 +25,9 @@ const Story = ({
 }) => {
   const location = useLocation();
   const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState<any>();
   const isEditable = location.pathname === userRoutes.stories.myStories; // TODO: check if user is logged in
+  const dispatch = useAppDispatch();
 
   const handleClick = (e: any) => {
     setOpen((prev) => !prev);
@@ -34,6 +37,11 @@ const Story = ({
   const handleEditClick = (e: any) => {
     handleClick(e);
     handleEditStory(story.content, story.category, story.id);
+  };
+
+  const handleRemoveStory = (e: any) => {
+    handleClick(e);
+    dispatch(removeStory(story.id));
   };
   return (
     <Box
@@ -84,7 +92,7 @@ const Story = ({
             <ModeEditIcon sx={{ mr: 1 }} />
             Edit Story
           </MenuItem>
-          <MenuItem onClick={handleClick}>
+          <MenuItem onClick={handleRemoveStory}>
             <DeleteOutlinedIcon sx={{ mr: 1 }} />
             Remove Story
           </MenuItem>

@@ -35,6 +35,12 @@ export const updateStory = createAsyncThunk(
   },
 );
 
+export const removeStory = createAsyncThunk('story/remove', async (storyId: number) => {
+  const response = await fetch(`${baseUrl}${apiVersion}/posts/${storyId}`, {
+    method: 'DELETE',
+  });
+  return { response, storyId };
+});
 interface UpdateStoryPayload {
   id: number;
   content: string;
@@ -111,6 +117,17 @@ const storySlice = createSlice({
         state.myStories[myIndex].content = action.payload.content;
         state.myStories[myIndex].category = action.payload.category;
       }
+    });
+
+    builder.addCase(removeStory.fulfilled, (state, action) => {
+      if (!action.payload.response.ok) return state;
+
+      state.stories = state.stories.filter(
+        (story) => story.id !== action.payload.storyId,
+      );
+      state.myStories = state.myStories.filter(
+        (story) => story.id !== action.payload.storyId,
+      );
     });
   },
 });
