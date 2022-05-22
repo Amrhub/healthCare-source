@@ -19,11 +19,14 @@ const Stories = () => {
   const [openModal, setOpenModal] = useState(false);
   const [storyContent, setStoryContent] = useState('');
   const [storyCategory, setStoryCategory] = useState('');
+  const [storyId, setStoryId] = useState<number>();
   const location = useLocation();
 
-  const handleEditStory = (content: string, category: string) => {
+
+  const handleEditStory = (content: string, category: string, storyId: number) => {
     setStoryContent(content);
     setStoryCategory(category);
+    setStoryId(storyId);
     setOpenModal(true);
   };
 
@@ -85,6 +88,7 @@ const Stories = () => {
           setOpen={setOpenModal}
           content={storyContent}
           category={storyCategory}
+          storyId={storyId}
         />
       </Box>
     </ContainerBox>

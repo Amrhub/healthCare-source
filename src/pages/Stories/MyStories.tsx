@@ -9,7 +9,7 @@ import { getMyStories } from '../../redux/stories/storySlice';
 const MyStories = ({
   handleEditStory,
 }: {
-  handleEditStory: (content: string, category: string) => void;
+  handleEditStory: (content: string, category: string, storyId: number) => void;
 }) => {
   const stories = useAppSelector((state) => state.posts.myStories);
   const dispatch = useAppDispatch();

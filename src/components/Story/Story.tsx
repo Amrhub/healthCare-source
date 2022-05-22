@@ -19,7 +19,7 @@ const Story = ({
   handleEditStory,
 }: {
   story: any;
-  handleEditStory: (content: string, category: string) => void | undefined;
+  handleEditStory: (content: string, category: string, storyId: number) => void | undefined;
 }) => {
   const location = useLocation();
   const [open, setOpen] = useState(false);
@@ -33,7 +33,7 @@ const Story = ({
 
   const handleEditClick = (e: any) => {
     handleClick(e);
-    handleEditStory(story.content, story.category);
+    handleEditStory(story.content, story.category, story.id);
   };
   return (
     <Box
