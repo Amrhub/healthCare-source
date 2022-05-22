@@ -5,6 +5,7 @@ import { DisplayAlert } from './components/Alert/DisplayAlert';
 import AuthLayout from './components/AuthLayout/AuthLayout';
 import GuestLayout from './components/GuestLayout/GuestLayout';
 import { useAppDispatch, useAppSelector } from './redux/configureStore';
+import { fetchStories } from './redux/stories/storySlice';
 import { userFromToken } from './redux/users/users';
 import Routes from './Routes/Index';
 
@@ -75,6 +76,10 @@ const App = () => {
     if (token && !isAuthenticated) {
       dispatch(userFromToken(token));
     }
+  }, [dispatch, localStorage, isAuthenticated]);
+
+  useEffect(() => {
+    dispatch(fetchStories());
   }, [])
 
   return (
