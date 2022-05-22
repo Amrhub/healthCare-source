@@ -552,8 +552,8 @@ const SignUpModal = ({
                             <DatePicker
                               disableFuture
                               label="Date of Birth"
-                              openTo="day"
-                              views={['day', 'month', 'year']}
+                              openTo="year"
+                              views={['year', 'month', 'day']}
                               value={birthDate.value}
                               onChange={(e: Date | null) => setBirthDate(prev => ({ ...prev, value: formatDate(e) }))}
                               inputFormat={DATEFORMAT}
