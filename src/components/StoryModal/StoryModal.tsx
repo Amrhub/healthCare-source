@@ -3,10 +3,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Avatar, Box, Button, IconButton, TextField } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { dfCenterCenter } from '../../abstracts/common.styles';
-import { useAppSelector } from '../../redux/configureStore';
+import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
+import { createStory } from '../../redux/stories/storySlice';
 
 interface StoryModalProps {
   open: boolean;
@@ -22,6 +23,8 @@ const ModalHeader = styled(Box)`
 `;
 
 const StoryModal = ({ content = '', category = '', open, setOpen }: StoryModalProps) => {
+  const dispatch = useAppDispatch();
+  const { id } = useAppSelector((state) => state.user.userInfo);
   const isEdit = content.length > 0;
   const { profilePic, firstName, lastName } = useAppSelector((state) => state.user.userInfo);
   const [storyContent, setStoryContent] = useState(content);
@@ -39,6 +42,15 @@ const StoryModal = ({ content = '', category = '', open, setOpen }: StoryModalPr
   const updateCategory = (e: any) => {
     setStoryCategory(e.target.value);
   };
+
+  const handleSubmit = (e: any) => {
+    if (!isEdit) {
+      dispatch(createStory({ content: storyContent, category: storyCategory, user_id: id }));
+      setStoryCategory('');
+      setStoryContent('');
+      setOpen(false);
+    }
+  }
 
   return (
     <Modal
@@ -93,7 +105,7 @@ const StoryModal = ({ content = '', category = '', open, setOpen }: StoryModalPr
             value={storyCategory}
             onChange={updateCategory}
           />
-          <Button variant="contained" sx={{ px: 4 }}>
+          <Button variant="contained" sx={{ px: 4 }} onClick={handleSubmit}>
             {isEdit ? 'Edit' : 'Post'}
           </Button>
         </Box>
