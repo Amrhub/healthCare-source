@@ -88,6 +88,8 @@ const StoryShowModal = ({ story, open, setOpen }: IProps) => {
                 <TextField fullWidth placeholder='Write a comment....'
                   variant="outlined" size='small' sx={{ bgcolor: 'grey.100' }} required
                   value={comment} onChange={e => setComment(e.target.value)}
+                  multiline
+                  maxRows={4}
                 />
                 <IconButton
                   aria-label="add comment"
