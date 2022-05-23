@@ -99,6 +99,16 @@ const storySlice = createSlice({
         }
       }
     },
+    incrementCommentsCounter: (state, { payload }: PayloadAction<number>) => {
+      const story = state.stories.find((story) => story.id === payload);
+      const myStory = state.myStories.find((story) => story.id === payload);
+      if (story) {
+        story.commentsCounter++;
+        if (myStory) {
+          myStory.commentsCounter++;
+        }
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(createStory.pending, (state) => {
@@ -158,5 +168,9 @@ const storySlice = createSlice({
 
 export const postReducer = storySlice.reducer;
 
-export const { getMyStories, incrementLikesCounter, decrementLikesCounter } =
-  storySlice.actions;
+export const {
+  getMyStories,
+  incrementLikesCounter,
+  decrementLikesCounter,
+  incrementCommentsCounter,
+} = storySlice.actions;
