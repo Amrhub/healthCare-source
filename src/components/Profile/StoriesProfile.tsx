@@ -52,7 +52,7 @@ const StoriesProfile = ({ mainUser, stories }: IProps) => {
         )}
         <Divider sx={{ my: 1, bgcolor: 'grey.900' }} />
       </Box>
-      <MyStories stories={lastThreeStories} handleEditStory={(content, category) => {}} />
+      <MyStories handleEditStory={(content, category) => {}} />
       {mainUser ? (
         <>
           <IconButton

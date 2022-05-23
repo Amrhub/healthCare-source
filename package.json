@@ -10,22 +10,24 @@
   "dependencies": {
     "@date-io/date-fns": "^2.14.0",
     "@devexpress/dx-react-chart-material-ui": "^3.0.3",
-    "@emotion/core": "^10.1.1",
-    "@emotion/react": "^11.7.1",
-    "@emotion/styled": "^11.6.0",
-    "@material-ui/core": "^4.12.4",
-    "@mui/icons-material": "^5.2.4",
-    "@mui/lab": "^5.0.0-alpha.82",
-    "@mui/material": "^5.2.4",
-    "@mui/system": "^5.8.0",
-    "@mui/x-date-pickers": "^5.0.0-alpha.3",
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
+    "@mui/icons-material": "^5.8.0",
+    "@mui/lab": "^5.0.0-alpha.83",
+    "@mui/material": "^5.8.1",
+    "@mui/x-date-pickers": "^5.0.0-alpha.4",
     "@reduxjs/toolkit": "^1.8.1",
+    "@types/react": "^17.0.45",
     "@types/react-redux": "^7.1.24",
     "@types/styled-components": "^5.1.25",
     "components-extra": "^3.2.1",
+    "csstype": "^3.1.0",
     "date-fns": "^2.28.0",
+<<<<<<< HEAD
     "lodash": "^4.17.21",
     "mui-image": "^1.0.4",
+=======
+>>>>>>> 39513a0 (Update: fake representation for ECG)
     "prettier": "^2.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -41,7 +43,6 @@
     "@babel/eslint-parser": "^7.16.5",
     "@babel/plugin-syntax-jsx": "^7.16.5",
     "@babel/preset-react": "^7.16.5",
-    "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.10",
     "@typescript-eslint/eslint-plugin": "^5.7.0",
     "@typescript-eslint/parser": "^5.7.0",
@@ -55,5 +56,8 @@
     "eslint-plugin-unused-imports": "^1.1.0",
     "typescript": "^4.4.4",
     "vite": "^2.7.2"
+  },
+  "resolutions": {
+    "csstype": "^3.1.0"
   }
 }
