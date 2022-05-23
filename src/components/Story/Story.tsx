@@ -98,7 +98,7 @@ const Story = ({
           </MenuItem>
         </Menu>
       </StoryHeader>
-      <Typography variant="body1" sx={{ color: 'grey.500' }}>
+      <Typography variant="body1" sx={{ color: 'grey.500' }} noWrap>
         {story.content}
       </Typography>
       <StoryFooter likesCounter={story.likesCounter} commentsCounter={story.commentsCounter} postId={story.id} />
