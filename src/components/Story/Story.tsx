@@ -7,8 +7,9 @@ import { Box, styled } from '@mui/system';
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
+import StoryShowModal from '../../Modals/StoryShowModal';
 import { useAppDispatch } from '../../redux/configureStore';
-import { removeStory } from '../../redux/stories/storySlice';
+import { removeStory, StoryType } from '../../redux/stories/storySlice';
 import { userRoutes } from '../../Routes/Routes';
 
 import StoryFooter from './StoryFooter';
@@ -19,12 +20,13 @@ const Story = ({
   story,
   handleEditStory,
 }: {
-  story: any;
+  story: StoryType;
   handleEditStory?: (content: string, category: string, storyId: number) => void | undefined;
 }) => {
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<any>();
+  const [storyShowModalOpen, setStoryShowModalOpen] = useState(false);
   const isEditable = location.pathname === userRoutes.stories.myStories; // TODO: check if user is logged in
   const dispatch = useAppDispatch();
 
@@ -98,10 +100,12 @@ const Story = ({
           </MenuItem>
         </Menu>
       </StoryHeader>
-      <Typography variant="body1" sx={{ color: 'grey.500' }} noWrap>
+      <Typography variant="body1" sx={{ color: 'grey.500', cursor: 'pointer' }} noWrap onClick={() => { setStoryShowModalOpen(true) }}>
         {story.content}
       </Typography>
-      <StoryFooter likesCounter={story.likesCounter} commentsCounter={story.commentsCounter} postId={story.id} />
+      <StoryFooter likesCounter={story.likesCounter} commentsCounter={story.commentsCounter}
+        postId={story.id} setStoryShowModalOpen={setStoryShowModalOpen} />
+      <StoryShowModal story={story} open={storyShowModalOpen} setOpen={setStoryShowModalOpen} />
     </Box>
   );
 };

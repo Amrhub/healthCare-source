@@ -12,9 +12,10 @@ interface IProps {
   likesCounter: number;
   commentsCounter: number;
   postId: number;
+  setStoryShowModalOpen?: (open: boolean) => void;
 }
 
-const StoryFooter = ({ likesCounter, commentsCounter, postId }: IProps) => {
+const StoryFooter = ({ likesCounter, commentsCounter, postId, setStoryShowModalOpen }: IProps) => {
   const user = useAppSelector(state => state.user);
   const { likedPosts } = user;
   const dispatch = useAppDispatch();
@@ -55,6 +56,7 @@ const StoryFooter = ({ likesCounter, commentsCounter, postId }: IProps) => {
           startIcon={<ChatBubbleOutlineIcon />}
           color="inherit"
           sx={{ fontWeight: '700' }}
+          onClick={() => !!setStoryShowModalOpen && setStoryShowModalOpen(true)}
         >
           Comment
         </Button>
