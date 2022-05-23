@@ -5,18 +5,14 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { Box, styled } from '@mui/system';
 import { StyledProvider, Footer } from 'components-extra';
 import React, { useState, useEffect } from 'react';
-import Carousel from 'react-material-ui-carousel';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 import landingPageBG from '/src/assets/landingPage/Card.svg';
 
-import bones from '../../assets/landingPage/categories/bone.png';
-import brain from '../../assets/landingPage/categories/brain-nervous-system.png';
-import earNoseThroat from '../../assets/landingPage/categories/ear-nose-throat.png';
-import teeth from '../../assets/landingPage/categories/teeth.svg.png';
 import landingPageTopBG from '../../assets/landingPage/landing-page-image.png';
 import logo from '../../assets/landingPage/Logo.png';
+import CarouselSpecialties from '../../components/CarouselSpecialties/CarouselSpecialties';
 import PaymentPlans from '../../components/PaymentPlans/PaymentPlans';
 import SignUpModal from '../../Modals/SignUpModal';
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
@@ -79,11 +75,6 @@ const FormContainer = styled(Box)`
   }
 `;
 
-const SpecialtiesContainer = styled(Box)`
-  borderRadius: 10px;
-  overflow: hidden;
-`;
-
 const Plans = [
   {
     cost: 'Free',
@@ -120,89 +111,6 @@ const Plans = [
       'Lorem ipsum dolor sit amet.',
     ],
     contained: false,
-  },
-];
-
-const specialtiesItems = [
-  {
-    row: [
-      {
-        name: 'Teeth',
-        image: teeth,
-      },
-      {
-        name: 'Bone',
-        image: bones,
-      },
-      {
-        name: 'Ear, Nose and Throat',
-        image: earNoseThroat,
-      },
-      {
-        name: 'Brain and Nervous',
-        image: brain,
-      },
-    ],
-  },
-  {
-    row: [
-      {
-        name: 'Brain and Nervous',
-        image: brain,
-      },
-      {
-        name: 'Teeth',
-        image: teeth,
-      },
-      {
-        name: 'Bone',
-        image: bones,
-      },
-      {
-        name: 'Ear, Nose and Throat',
-        image: earNoseThroat,
-      },
-    ],
-  },
-  {
-    row: [
-      {
-        name: 'Ear, Nose and Throat',
-        image: earNoseThroat,
-      },
-      {
-        name: 'Brain and Nervous',
-        image: brain,
-      },
-      {
-        name: 'Teeth',
-        image: teeth,
-      },
-      {
-        name: 'Bone',
-        image: bones,
-      },
-    ],
-  },
-  {
-    row: [
-      {
-        name: 'Bone',
-        image: bones,
-      },
-      {
-        name: 'Ear, Nose and Throat',
-        image: earNoseThroat,
-      },
-      {
-        name: 'Brain and Nervous',
-        image: brain,
-      },
-      {
-        name: 'Teeth',
-        image: teeth,
-      },
-    ],
   },
 ];
 
@@ -311,27 +219,8 @@ const LandingPage = () => {
       <LandingPageCateg>
         <Typography sx={{ fontWeight: '700', fontSize: '40px', mt: '36px' }}>
           Book from top specialties
-        </Typography>
-        <Carousel>
-          {specialtiesItems.map((item) => (
-            <Stack direction={'row'} gap={'48px'} key={uuidv4()}>
-              {item.row.map(({ name, image }) => (
-                <SpecialtiesContainer>
-                  <img src={image} alt={name} height={'300px'} />
-                  <Typography
-                    sx={{
-                      fontWeight: '700',
-                      fontSize: '24px',
-                      backgroundColor: 'grey.100',
-                    }}
-                  >
-                    {name}
-                  </Typography>
-                </SpecialtiesContainer>
-              ))}
-            </Stack>
-          ))}
-        </Carousel>
+        </Typography>       
+        <CarouselSpecialties />
       </LandingPageCateg>
 
       <LandingPageFormContainer>
