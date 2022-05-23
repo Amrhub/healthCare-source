@@ -7,6 +7,7 @@ import {
   ListItemText,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { v4 as uuidv4 } from 'uuid';
 
 const StyledBadge = styled(Badge)({
   '@keyframes ripple': {
@@ -35,7 +36,7 @@ const FriendsRenderer = ({
       {friendsList.map((friend: any) => {
         const isActive = activeChat.id === friend.id;
         return (
-          <ListItem key={friend.id} sx={{ px: 0 }}>
+          <ListItem key={uuidv4()} sx={{ px: 0 }}>
             <ListItemButton
               sx={{
                 borderRadius: '10px',
