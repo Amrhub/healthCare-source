@@ -3,7 +3,6 @@ import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import { Button, Grid, Stack, TextField, Typography } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Box, styled } from '@mui/system';
-import { StyledProvider, Footer } from 'components-extra';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
@@ -11,15 +10,12 @@ import { v4 as uuidv4 } from 'uuid';
 import landingPageBG from '/src/assets/landingPage/Card.svg';
 
 import landingPageTopBG from '../../assets/landingPage/landing-page-image.png';
-import logo from '../../assets/landingPage/Logo.png';
 import CarouselSpecialties from '../../components/CarouselSpecialties/CarouselSpecialties';
 import PaymentPlans from '../../components/PaymentPlans/PaymentPlans';
 import SignUpModal from '../../Modals/SignUpModal';
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
 import { login } from '../../redux/users/users';
 import { userRoutes } from '../../Routes/Routes';
-
-import myTheme, { CustomBackToTop } from './extraComponentsTheme';
 
 const LandingPageTop = styled(Box)`
   background-image: url(${landingPageTopBG});
@@ -327,51 +323,6 @@ const LandingPage = () => {
           open={signUpModal}
         />
       </LandingPageFormContainer>
-      <StyledProvider theme={myTheme}>
-        <Footer>
-          <Footer.Column isInline>
-            <Footer.Item>
-              <Box
-                component="img"
-                sx={{
-                  height: '61px',
-                  width: '317px',
-                  maxHeight: { xs: 233, md: 167 },
-                  maxWidth: { xs: 350, md: 250 },
-                }}
-                alt="logo"
-                src={logo}
-              />
-            </Footer.Item>
-            <Footer.Item href="#">
-              <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: '700' }}>
-                About Us
-              </Typography>
-            </Footer.Item>
-            <Footer.Item href="#">
-              <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: '700' }}>
-                Our Team
-              </Typography>
-            </Footer.Item>
-            <Footer.Item href="#">
-              <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: '700' }}>
-                Membership
-              </Typography>
-            </Footer.Item>
-            <Footer.Item href="#">
-              <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: '700' }}>
-                Specialties
-              </Typography>
-            </Footer.Item>
-            <Footer.Item href="#">
-              <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: '700' }}>
-                Help
-              </Typography>
-            </Footer.Item>
-          </Footer.Column>
-        </Footer>
-        <CustomBackToTop color="secondary" />
-      </StyledProvider>
     </>
   );
 };

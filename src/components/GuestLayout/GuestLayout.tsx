@@ -6,6 +6,8 @@ import React from 'react';
 
 import { BRAND_NAME } from '../../abstracts/common';
 
+import FooterLayout from './FooterLayout';
+
 const ContentPusher = styled('div')<any>(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
@@ -41,6 +43,7 @@ const GuestLayout = ({ children }: { children: React.ReactNode }) => {
       </AppBar>
       <ContentPusher /> {/* Necessary for the content to be below the AppBar*/}
       {children}
+      <FooterLayout />
     </Box>
   );
 };
