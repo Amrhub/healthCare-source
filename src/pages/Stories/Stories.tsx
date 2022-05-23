@@ -31,6 +31,8 @@ const Stories = () => {
   };
 
   const addStoryClickHandler = () => {
+    setStoryContent('');
+    setStoryCategory('');
     setOpenModal(true);
   };
 
