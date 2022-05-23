@@ -6,7 +6,7 @@ import AuthLayout from './components/AuthLayout/AuthLayout';
 import GuestLayout from './components/GuestLayout/GuestLayout';
 import { useAppDispatch, useAppSelector } from './redux/configureStore';
 import { fetchStories } from './redux/stories/storySlice';
-import { userFromToken } from './redux/users/users';
+import { getPostsUserLike, userFromToken } from './redux/users/users';
 import Routes from './Routes/Index';
 
 export const theme = createTheme({
@@ -68,13 +68,17 @@ export const theme = createTheme({
 });
 
 const App = () => {
-  const { isAuthenticated } = useAppSelector(state => state.user.auth);
+  const { userInfo, auth } = useAppSelector(state => state.user);
+  const userId = userInfo?.id;
+  const { isAuthenticated } = auth;
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     const token = localStorage.getItem('authorization');
     if (token && !isAuthenticated) {
       dispatch(userFromToken(token));
+    } else {
+      dispatch(getPostsUserLike(userId));
     }
   }, [dispatch, localStorage, isAuthenticated]);
 

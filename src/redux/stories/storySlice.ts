@@ -78,6 +78,27 @@ const storySlice = createSlice({
     getMyStories: (state, { payload }) => {
       state.myStories = state.stories.filter((story) => story.user.id === payload);
     },
+    incrementLikesCounter: (state, { payload }: PayloadAction<number>) => {
+      const story = state.stories.find((story) => story.id === payload);
+      const myStory = state.myStories.find((story) => story.id === payload);
+
+      if (story) {
+        story.likesCounter++;
+        if (myStory) {
+          myStory.likesCounter++;
+        }
+      }
+    },
+    decrementLikesCounter: (state, { payload }: PayloadAction<number>) => {
+      const story = state.stories.find((story) => story.id === payload);
+      const myStory = state.myStories.find((story) => story.id === payload);
+      if (story) {
+        story.likesCounter--;
+        if (myStory) {
+          myStory.likesCounter--;
+        }
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(createStory.pending, (state) => {
@@ -134,4 +155,5 @@ const storySlice = createSlice({
 
 export const postReducer = storySlice.reducer;
 
-export const { getMyStories } = storySlice.actions;
+export const { getMyStories, incrementLikesCounter, decrementLikesCounter } =
+  storySlice.actions;

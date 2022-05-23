@@ -1,14 +1,41 @@
+/* eslint-disable unicorn/consistent-function-scoping */
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline'
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import { Box, Button, Divider, Typography } from '@mui/material';
+
+import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
+import { decrementLikesCounter, incrementLikesCounter } from '../../redux/stories/storySlice';
+import { likePost, unlikePost } from '../../redux/users/users';
 
 
 interface IProps {
   likesCounter: number;
   commentsCounter: number;
+  postId: number;
 }
 
-const StoryFooter = ({ likesCounter, commentsCounter }: IProps) => {
+const StoryFooter = ({ likesCounter, commentsCounter, postId }: IProps) => {
+  const user = useAppSelector(state => state.user);
+  const { likedPosts } = user;
+  const dispatch = useAppDispatch();
+
+  const isLiked = () => {
+    return likedPosts.some(likedPost => likedPost.postId === postId);
+  }
+
+  const handleLikeClick = () => {
+    if (isLiked()) {
+      const like = likedPosts.find(likedPost => likedPost.postId === postId)
+      if (like) {
+        dispatch(unlikePost(like.likeId))
+        dispatch(decrementLikesCounter(postId));
+      }
+    } else {
+      dispatch(likePost({ userId: user.userInfo.id, postId }));
+      dispatch(incrementLikesCounter(postId));
+    }
+  }
+
   return (
     <Box>
       <Typography variant="body2" sx={{ color: 'grey.900', fontWeight: '700' }}>
@@ -18,8 +45,9 @@ const StoryFooter = ({ likesCounter, commentsCounter }: IProps) => {
       <Box sx={{ display: 'flex', justifyContent: 'space-around', py: 1 }}>
         <Button
           startIcon={<ThumbUpAltIcon />}
-          color="inherit"
+          color={isLiked() ? 'primary' : 'inherit'}
           sx={{ fontWeight: '700' }}
+          onClick={handleLikeClick}
         >
           Like
         </Button>

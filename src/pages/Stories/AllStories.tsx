@@ -9,7 +9,7 @@ const AllStories = () => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       {stories.length > 0 ? (stories?.map((story: any) => (
-        <Story key={story.id} story={story} handleEditStory={() => {}} />
+        <Story key={story.id} story={story} />
       ))) : (
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant="body1">

@@ -81,10 +81,41 @@ export const userFromToken = createAsyncThunk(
 );
 
 export const logout = createAsyncThunk('users/logout', async () => {
-  const response = await fetch(`${baseUrl}users/sign_out`, {
+  await fetch(`${baseUrl}users/sign_out`, {
     method: 'DELETE',
   });
 });
+
+export const likePost = createAsyncThunk(
+  'users/likePost',
+  async ({ postId, userId }: { userId: number; postId: number }) => {
+    const response = await fetch(`${baseUrl}${apiVersion}likes`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ post_id: postId, user_id: userId }),
+    });
+    return await response.json();
+  },
+);
+
+export const unlikePost = createAsyncThunk('users/unlikePost', async (likeId: number) => {
+  const response = await fetch(`${baseUrl}${apiVersion}likes/${likeId}`, {
+    method: 'DELETE',
+  });
+  return { likeId };
+});
+
+export const getPostsUserLike = createAsyncThunk(
+  'users/getPostsUserLike',
+  async (userId: number) => {
+    const response = await fetch(
+      `${baseUrl}${apiVersion}likes/posts_user_likes?user_id=${userId}`,
+    );
+    return await response.json();
+  },
+);
 
 interface RoleDoctorInfo {
   specialization: string;
@@ -128,6 +159,7 @@ const userSlice = createSlice({
       age: 0,
       roleInfo: {} as RoleInfo,
     },
+    likedPosts: [] as { likeId: number; postId: number }[],
     loading: 'idle' as Loading,
     errors: '',
     isReferenceCreated: false,
@@ -149,12 +181,12 @@ const userSlice = createSlice({
       state.userInfo.referenceId = payload.id;
     });
 
-    builder.addCase(createDoctor.pending, (state, action) => {
+    builder.addCase(createDoctor.pending, (state) => {
       state.isReferenceCreated = false;
       state.loading = 'pending';
     });
 
-    builder.addCase(createDoctor.rejected, (state, action) => {
+    builder.addCase(createDoctor.rejected, (state) => {
       state.isReferenceCreated = false;
       state.loading = 'rejected';
     });
@@ -259,6 +291,20 @@ const userSlice = createSlice({
       state.auth.token = '';
       state.auth.isAuthenticated = false;
       localStorage.removeItem('authorization');
+    });
+
+    builder.addCase(likePost.fulfilled, (state, { payload }) => {
+      state.likedPosts.push(payload);
+    });
+
+    builder.addCase(unlikePost.fulfilled, (state, { payload }) => {
+      state.likedPosts = state.likedPosts.filter(
+        (post) => post.likeId !== payload.likeId,
+      );
+    });
+
+    builder.addCase(getPostsUserLike.fulfilled, (state, { payload }) => {
+      state.likedPosts = payload;
     });
   },
 });

@@ -20,7 +20,7 @@ const Story = ({
   handleEditStory,
 }: {
   story: any;
-  handleEditStory: (content: string, category: string, storyId: number) => void | undefined;
+  handleEditStory?: (content: string, category: string, storyId: number) => void | undefined;
 }) => {
   const location = useLocation();
   const [open, setOpen] = useState(false);
@@ -35,7 +35,8 @@ const Story = ({
 
   const handleEditClick = (e: any) => {
     handleClick(e);
-    handleEditStory(story.content, story.category, story.id);
+    if (handleEditStory)
+      handleEditStory(story.content, story.category, story.id);
   };
 
   const handleRemoveStory = (e: any) => {
@@ -100,7 +101,7 @@ const Story = ({
       <Typography variant="body1" sx={{ color: 'grey.500' }}>
         {story.content}
       </Typography>
-      <StoryFooter likesCounter={story.likesCounter} commentsCounter={story.commentsCounter} />
+      <StoryFooter likesCounter={story.likesCounter} commentsCounter={story.commentsCounter} postId={story.id} />
     </Box>
   );
 };
