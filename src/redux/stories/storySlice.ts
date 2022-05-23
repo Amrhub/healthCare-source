@@ -39,7 +39,7 @@ export const removeStory = createAsyncThunk('story/remove', async (storyId: numb
   const response = await fetch(`${baseUrl}${apiVersion}/posts/${storyId}`, {
     method: 'DELETE',
   });
-  return { response, storyId };
+  return { status: response.ok, storyId };
 });
 interface UpdateStoryPayload {
   id: number;
@@ -53,7 +53,7 @@ interface CreateStoryPayload {
   user_id: number;
 }
 
-export interface Story {
+export interface StoryType {
   id: number;
   category: string;
   content: string;
@@ -69,8 +69,8 @@ export interface Story {
 const storySlice = createSlice({
   name: 'story',
   initialState: {
-    stories: [] as Story[],
-    myStories: [] as Story[],
+    stories: [] as StoryType[],
+    myStories: [] as StoryType[],
     loading: false,
     error: null,
   },
@@ -105,9 +105,9 @@ const storySlice = createSlice({
       state.loading = true;
     });
 
-    builder.addCase(createStory.fulfilled, (state, action: PayloadAction<Story>) => {
+    builder.addCase(createStory.fulfilled, (state, action: PayloadAction<StoryType>) => {
       state.loading = false;
-      state.stories.push(action.payload);
+      state.stories = [action.payload, ...state.stories];
       state.myStories = state.stories.filter(
         (story) => story.user.id === action.payload.user.id,
       );
@@ -117,10 +117,13 @@ const storySlice = createSlice({
       state.loading = true;
     });
 
-    builder.addCase(fetchStories.fulfilled, (state, action: PayloadAction<Story[]>) => {
-      state.loading = false;
-      state.stories = action.payload;
-    });
+    builder.addCase(
+      fetchStories.fulfilled,
+      (state, action: PayloadAction<StoryType[]>) => {
+        state.loading = false;
+        state.stories = action.payload;
+      },
+    );
 
     builder.addCase(updateStory.pending, (state) => {
       state.loading = true;
@@ -141,7 +144,7 @@ const storySlice = createSlice({
     });
 
     builder.addCase(removeStory.fulfilled, (state, action) => {
-      if (!action.payload.response.ok) return state;
+      if (!action.payload.status) return state;
 
       state.stories = state.stories.filter(
         (story) => story.id !== action.payload.storyId,
