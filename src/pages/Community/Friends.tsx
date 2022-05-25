@@ -24,6 +24,7 @@ const Friends = () => {
               <FriendCard
                 userName={userInfo.name}
                 userAvatar={userInfo.profilePic}
+                userId={userInfo.id}
                 IconButtons={[<IconButton children={<PersonRemoveIcon color="error" />} key={uuidv4()}
                   onClick={() => { removeFriend(id) }} />]}
               />

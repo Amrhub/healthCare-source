@@ -1,38 +1,63 @@
-import { useAppSelector } from '../../redux/configureStore';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+
+import LoadingScreen from '../../Modals/LoadingScreen';
+import { apiVersion, baseUrl, useAppSelector } from '../../redux/configureStore';
+import { StoryType } from '../../redux/stories/storySlice';
 
 import Profile from './Profile';
 
-const ProfileCommunityUser = () => {
-  const user = useAppSelector((state) => state.user.userInfo);
 
-  const stories = [
-    {
-      id: 1,
-      category: 'covid-19',
-      content:
-        'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Delectus corporis dolores laudantium quis. Eveniet, molestias? Dolorem, nisi iste! Pariatur, officiis?...',
-      user,
-      commentsCounter: 2,
-      likesCounter: 3,
-    },
-    {
-      id: 2,
-      user,
-      category: 'cancer',
-      content:
-        'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Delectus corporis dolores laudantium quis. Eveniet, molestias? Dolorem, nisi iste! Pariatur, officiis?...',
-      commentsCounter: 5,
-      likesCounter: 9,
-    },
-  ];
+const ProfileCommunityUser = () => {
+  const currentUser = useAppSelector((state) => state.user);
+  const allStories = useAppSelector((state) => state.posts.stories);
+  const [stories, setStories] = useState<StoryType[]>([]);
+  const [isFriend, setIsFriend] = useState(false);
+  const [isFriendRequest, setIsFriendRequest] = useState(false);
+  const [user, setUser] = useState<any>();
+
+  const { userId } = useParams();
+
+  const fetchUser = async () => {
+    const response = await fetch(`${baseUrl}${apiVersion}users/${userId}`);
+    setUser(await response.json());
+  };
+
+  useEffect(() => {
+    if (!userId) return;
+    setStories(allStories.filter((story) => story.user.id === parseInt(userId as string)));
+    fetchUser();
+    if (currentUser.friends.pending.some((friend) => friend.requester_id === parseInt(userId as string)
+      || friend.requestee_id === parseInt(userId as string))) {
+      setIsFriendRequest(true);
+    }
+
+    if (currentUser.friends.accepted.some((friend) => friend.requestee_id === parseInt(userId as string) || friend.requester_id === parseInt(userId as string))) {
+      setIsFriend(true);
+    }
+  }, [])
 
   return (
-    <Profile
-      mainUser={false}
-      stories={stories}
-      friend={true}
-      friendRequest={false}
-    />
+    userId ? (
+      user?.id ? (
+        <Profile
+          mainUser={false}
+          visitedUser={user}
+          stories={stories}
+          friend={isFriend}
+          friendRequest={isFriendRequest}
+        />
+      ) : (
+        <LoadingScreen />
+      )
+    ) : (
+      <Profile
+        mainUser={false}
+        stories={stories}
+        friend={isFriend}
+        friendRequest={isFriendRequest}
+      />
+    )
   );
 };
 

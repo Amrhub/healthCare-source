@@ -61,10 +61,10 @@ const BioProfile = ({
             <Typography>{user.address}</Typography>
           </Grid>
           <Grid item xs={3}>
-            <Typography>Birthdate</Typography>
+            <Typography>Birth date</Typography>
           </Grid>
           <Grid item xs={9}>
-            <Typography>{user.birthDate}</Typography>
+            <Typography>{user.birthDate} ({user.age})</Typography>
           </Grid>
           <Grid item xs={3}>
             <Typography>Gender</Typography>
@@ -145,7 +145,8 @@ const BioProfile = ({
             sx={{
               bgcolor: 'primary.main',
               color: '#fff',
-              px: '140px',
+              px: '135px',
+              mt: 'auto',
 
               '&:hover': {
                 bgcolor: 'primary.dark',

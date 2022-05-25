@@ -10,6 +10,7 @@ const MyStories = ({
   handleEditStory,
 }: {
   handleEditStory: (content: string, category: string, storyId: number) => void;
+  isProfileView?: boolean;
 }) => {
   const stories = useAppSelector((state) => state.posts.myStories);
   const dispatch = useAppDispatch();

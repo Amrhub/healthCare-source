@@ -58,7 +58,7 @@ const StoryShowModal = ({ story, open, setOpen }: IProps) => {
                 <Typography variant="subtitle2">{story.category}</Typography>
               </Stack>
             </Stack>
-            <Typography sx={{ mb: 'auto' }} >
+            <Typography sx={{ mb: 'auto', wordBreak: 'break-word' }} >
               {story.content}
             </Typography>
             <StoryFooter likesCounter={story.likesCounter} commentsCounter={story.commentsCounter} postId={story.id} />

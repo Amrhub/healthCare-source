@@ -3,13 +3,13 @@ import { Box } from '@mui/system';
 import React from 'react'
 
 import { MyLink } from '../../abstracts/Link';
-import { userRoutes } from '../../Routes/Routes';
 interface FriendCardProps {
   userName: string;
   userAvatar: string;
   IconButtons: Array<React.ReactElement>;
+  userId: number;
 }
-const FriendCard = ({ userName, userAvatar, IconButtons }: FriendCardProps) => {
+const FriendCard = ({ userName, userAvatar, IconButtons, userId }: FriendCardProps) => {
   return (
     <Box
       sx={{
@@ -22,7 +22,7 @@ const FriendCard = ({ userName, userAvatar, IconButtons }: FriendCardProps) => {
         height: { md: '120px' },
       }}
     >
-      <MyLink to={userRoutes.profile.community}>
+      <MyLink to={`/user/profile/${userId}`}>
         <Avatar src={userAvatar} sx={{ width: { md: '80px' }, height: { md: '80px' } }} />
       </MyLink>
       <Typography variant="body1" sx={{ fontWeight: '700', fontSize: '24px' }}>

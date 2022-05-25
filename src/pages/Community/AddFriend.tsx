@@ -6,7 +6,7 @@ import FriendCard from '../../components/FriendCard/FriendCard';
 import { apiVersion, baseUrl, useAppDispatch, useAppSelector } from '../../redux/configureStore';
 import { makeFriendship } from '../../redux/users/users';
 
-interface UserOverview {
+export interface UserOverview {
   id: number;
   name: string;
   profilePic: string;
@@ -52,6 +52,7 @@ const AddFriend = () => {
             <FriendCard
               userName={`${user.name}`}
               userAvatar={user.profilePic}
+              userId={user.id}
               IconButtons={[<IconButton children={<PersonAddIcon color="primary" />} onClick={() => { addFriend({ requesteeId: user.id }) }} key={user.id} />]}
             />
           </Grid>
