@@ -1,9 +1,13 @@
 import { Divider } from '@mui/material';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import ContainerBox from '../../layouts/ContainerBox/ContainerBox';
 import ContainerBoxNav, {
   ContainerBoxNavLink,
 } from '../../layouts/ContainerBox/ContainerBoxNav';
+import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
+import { fetchFriendships } from '../../redux/users/users';
 import { userRoutes } from '../../Routes/Routes';
 
 import AddFriend from './AddFriend';
@@ -11,14 +15,22 @@ import FriendRequests from './FriendRequests';
 import Friends from './Friends';
 
 const Community = () => {
-  const pathName = window.location.pathname;
+  const userId = useAppSelector(state => state.user.userInfo.id);
+  const dispatch = useAppDispatch();
+
+  const location = useLocation();
+  const { pathname } = location;
   const communityRoutes = userRoutes.community;
 
   const renderCommunityPages = () => {
-    if (pathName === communityRoutes.index) return <Friends />;
-    if (pathName === communityRoutes.friendRequest) return <FriendRequests />;
-    if (pathName === communityRoutes.addFriend) return <AddFriend />;
+    if (pathname === communityRoutes.index) return <Friends />;
+    if (pathname === communityRoutes.friendRequest) return <FriendRequests />;
+    if (pathname === communityRoutes.addFriend) return <AddFriend />;
   };
+
+  useEffect(() => {
+    dispatch(fetchFriendships(userId));
+  }, [pathname])
   return (
     <ContainerBox>
       <ContainerBoxNav>

@@ -113,7 +113,7 @@ export const cancelFriendship = createAsyncThunk(
 
 export const acceptFriendship = createAsyncThunk(
   'users/acceptFriendship',
-  async (friendship_id) => {
+  async (friendship_id: number) => {
     const response = await fetch(`${baseUrl}${apiVersion}friendships/${friendship_id}`, {
       method: 'PATCH',
       headers: {
@@ -132,7 +132,8 @@ export const fetchFriendships = createAsyncThunk(
     const response = await fetch(
       `${baseUrl}${apiVersion}show_friendships?user_id=${user_id}`,
     );
-    return await response.json();
+    const data = await response.json();
+    return data;
   },
 );
 
@@ -151,7 +152,7 @@ export const likePost = createAsyncThunk(
 );
 
 export const unlikePost = createAsyncThunk('users/unlikePost', async (likeId: number) => {
-  const response = await fetch(`${baseUrl}${apiVersion}likes/${likeId}`, {
+  await fetch(`${baseUrl}${apiVersion}likes/${likeId}`, {
     method: 'DELETE',
   });
   return { likeId };
@@ -189,6 +190,11 @@ interface Friendship {
   status: 'pending' | 'accepted' | 'blocked';
   requester_id: number;
   requestee_id: number;
+  userInfo: {
+    id: number;
+    name: string;
+    profilePic: string;
+  };
 }
 
 const friends = {
@@ -385,10 +391,17 @@ const userSlice = createSlice({
     });
 
     builder.addCase(acceptFriendship.fulfilled, (state, { payload }) => {
-      state.friends.accepted.push(payload);
+      const oldStatus = state.friends.pending.find(
+        (friend) => friend.id === payload.id,
+      ) as Friendship;
+      state.friends.accepted.push({ ...oldStatus, status: 'accepted' });
       state.friends.pending = state.friends.pending.filter(
         (friend) => friend.id !== payload.id,
       );
+    });
+
+    builder.addCase(fetchFriendships.fulfilled, (state, { payload }) => {
+      state.friends = payload;
     });
   },
 });

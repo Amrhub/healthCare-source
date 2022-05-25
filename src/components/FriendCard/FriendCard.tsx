@@ -1,12 +1,15 @@
-import { Avatar, IconButton, Typography } from '@mui/material';
+import { Avatar, Typography } from '@mui/material';
 import { Box } from '@mui/system';
+import React from 'react'
 
+import { MyLink } from '../../abstracts/Link';
+import { userRoutes } from '../../Routes/Routes';
 interface FriendCardProps {
   userName: string;
   userAvatar: string;
-  icons: Array<any>;
+  IconButtons: Array<React.ReactElement>;
 }
-const FriendCard = ({ userName, userAvatar, icons }: FriendCardProps) => {
+const FriendCard = ({ userName, userAvatar, IconButtons }: FriendCardProps) => {
   return (
     <Box
       sx={{
@@ -19,15 +22,15 @@ const FriendCard = ({ userName, userAvatar, icons }: FriendCardProps) => {
         height: { md: '120px' },
       }}
     >
-      <Avatar src={userAvatar} sx={{ width: { md: '80px' }, height: { md: '80px' } }} />
+      <MyLink to={userRoutes.profile.community}>
+        <Avatar src={userAvatar} sx={{ width: { md: '80px' }, height: { md: '80px' } }} />
+      </MyLink>
       <Typography variant="body1" sx={{ fontWeight: '700', fontSize: '24px' }}>
         {userName}
       </Typography>
 
       <Box sx={{ marginLeft: 'auto', display: 'flex', gap: '5px' }}>
-        {icons.map((icon) => (
-          <IconButton>{icon}</IconButton>
-        ))}
+        {IconButtons}
       </Box>
     </Box>
   );
