@@ -86,6 +86,56 @@ export const logout = createAsyncThunk('users/logout', async () => {
   });
 });
 
+export const makeFriendship = createAsyncThunk(
+  'users/makeFriendship',
+  async (friendship: { requestee_id: number; requester_id: number }) => {
+    const response = await fetch(`${baseUrl}${apiVersion}friendships`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(friendship),
+    });
+    return await response.json();
+  },
+);
+
+export const cancelFriendship = createAsyncThunk(
+  'users/cancelFriendship',
+  async (friendship_id: number) => {
+    const response = await fetch(`${baseUrl}${apiVersion}friendships/${friendship_id}`, {
+      method: 'DELETE',
+    });
+
+    return { id: friendship_id };
+  },
+);
+
+export const acceptFriendship = createAsyncThunk(
+  'users/acceptFriendship',
+  async (friendship_id) => {
+    const response = await fetch(`${baseUrl}${apiVersion}friendships/${friendship_id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ status: 'accepted' }),
+    });
+
+    return await response.json();
+  },
+);
+
+export const fetchFriendships = createAsyncThunk(
+  'users/fetchFriendships',
+  async (user_id: number) => {
+    const response = await fetch(
+      `${baseUrl}${apiVersion}show_friendships?user_id=${user_id}`,
+    );
+    return await response.json();
+  },
+);
+
 export const likePost = createAsyncThunk(
   'users/likePost',
   async ({ postId, userId }: { userId: number; postId: number }) => {
@@ -134,6 +184,19 @@ interface RolePatientInfo {
   otherDiseases: string;
 }
 
+interface Friendship {
+  id: number;
+  status: 'pending' | 'accepted' | 'blocked';
+  requester_id: number;
+  requestee_id: number;
+}
+
+const friends = {
+  pending: [] as Friendship[],
+  accepted: [] as Friendship[],
+  blocked: [] as Friendship[],
+};
+
 type AuthToken = string | null | undefined;
 
 export type Loading = 'pending' | 'rejected' | 'idle';
@@ -160,6 +223,7 @@ const userSlice = createSlice({
       roleInfo: {} as RoleInfo,
     },
     likedPosts: [] as { likeId: number; postId: number }[],
+    friends,
     loading: 'idle' as Loading,
     errors: '',
     isReferenceCreated: false,
@@ -305,6 +369,26 @@ const userSlice = createSlice({
 
     builder.addCase(getPostsUserLike.fulfilled, (state, { payload }) => {
       state.likedPosts = payload;
+    });
+
+    builder.addCase(makeFriendship.fulfilled, (state, { payload }) => {
+      state.friends.pending.push(payload);
+    });
+
+    builder.addCase(cancelFriendship.fulfilled, (state, { payload }) => {
+      state.friends.pending = state.friends.pending.filter(
+        (friend) => friend.id !== payload.id,
+      );
+      state.friends.accepted = state.friends.accepted.filter(
+        (friend) => friend.id !== payload.id,
+      );
+    });
+
+    builder.addCase(acceptFriendship.fulfilled, (state, { payload }) => {
+      state.friends.accepted.push(payload);
+      state.friends.pending = state.friends.pending.filter(
+        (friend) => friend.id !== payload.id,
+      );
     });
   },
 });

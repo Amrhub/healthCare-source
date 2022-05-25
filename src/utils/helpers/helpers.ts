@@ -8,3 +8,9 @@ export const formatDate = (date: Date | null) => {
 };
 
 export const DATEFORMAT = 'yyyy/MM/dd';
+
+export const FriendShipStatus = {
+  PENDING: 'pending',
+  ACCEPTED: 'accepted',
+  BLOCKED: 'blocked',
+};
