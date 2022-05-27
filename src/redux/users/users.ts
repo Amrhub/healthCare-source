@@ -80,6 +80,21 @@ export const userFromToken = createAsyncThunk(
   },
 );
 
+export const updateUser = createAsyncThunk(
+  'users/updateUser',
+  async (userInformation: { userFormData: FormData; userId: number }) => {
+    const response = await fetch(
+      `${baseUrl}${apiVersion}users/${userInformation.userId}`,
+      {
+        method: 'PATCH',
+        body: userInformation.userFormData,
+      },
+    );
+
+    return await response.json();
+  },
+);
+
 export const logout = createAsyncThunk('users/logout', async () => {
   await fetch(`${baseUrl}users/sign_out`, {
     method: 'DELETE',
@@ -402,6 +417,13 @@ const userSlice = createSlice({
 
     builder.addCase(fetchFriendships.fulfilled, (state, { payload }) => {
       state.friends = payload;
+    });
+
+    builder.addCase(updateUser.fulfilled, (state, { payload }) => {
+      state.userInfo = {
+        ...state.userInfo,
+        ...payload,
+      };
     });
   },
 });

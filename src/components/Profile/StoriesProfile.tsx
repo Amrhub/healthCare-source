@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react';
 
 import StoryModal from '../../components/StoryModal/StoryModal';
 import AllStories from '../../pages/Stories/AllStories';
-import { apiVersion, baseUrl, useAppSelector } from '../../redux/configureStore';
-import { StoryType } from '../../redux/stories/storySlice';
+import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
+import { currentUserRecentStories, fetchUserStories } from '../../redux/stories/storySlice';
 
 interface IProps {
   mainUser: boolean;
@@ -17,8 +17,8 @@ const StoriesProfile = ({ mainUser, userId }: IProps) => {
   const [openModal, setOpenModal] = useState(false);
   const [storyContent, setStoryContent] = useState('');
   const [storyCategory, setStoryCategory] = useState('');
-  const { myStories } = useAppSelector((state) => state.posts);
-  const [stories, setStories] = useState<StoryType[]>([]);
+  const dispatch = useAppDispatch();
+  const { profileStories } = useAppSelector(state => state.posts);
 
   const addStoryClickHandler = () => {
     setStoryContent('');
@@ -26,17 +26,13 @@ const StoriesProfile = ({ mainUser, userId }: IProps) => {
     setOpenModal(true);
   };
 
-  const fetchUserStories = async () => {
-    const response = await fetch(`${baseUrl}${apiVersion}/user_posts?user_id=${userId}`);
-    const data = await response.json();
-    setStories(data);
-  }
+
   // todo to be moved to redux for hot reloading
   useEffect(() => {
     if (mainUser) {
-      setStories(myStories.slice(0, 3))
+      dispatch(currentUserRecentStories());
     } else {
-      fetchUserStories()
+      dispatch(fetchUserStories(userId));
     }
   }, [])
 
@@ -69,7 +65,7 @@ const StoriesProfile = ({ mainUser, userId }: IProps) => {
         <Divider sx={{ my: 1, bgcolor: 'grey.900' }} />
       </Box>
       <Box sx={{ py: 2 }}>
-        <AllStories posts={stories} />
+        <AllStories posts={profileStories} />
       </Box>
       {mainUser ? (
         <>

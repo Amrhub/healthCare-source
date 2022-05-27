@@ -41,6 +41,15 @@ export const removeStory = createAsyncThunk('story/remove', async (storyId: numb
   });
   return { status: response.ok, storyId };
 });
+
+export const fetchUserStories = createAsyncThunk(
+  'story/fetchUserStories',
+  async (userId: number) => {
+    const response = await fetch(`${baseUrl}${apiVersion}/user_posts?user_id=${userId}`);
+    return await response.json();
+  },
+);
+
 interface UpdateStoryPayload {
   id: number;
   content: string;
@@ -71,6 +80,7 @@ const storySlice = createSlice({
   initialState: {
     stories: [] as StoryType[],
     myStories: [] as StoryType[],
+    profileStories: [] as StoryType[],
     loading: false,
     error: null,
   },
@@ -81,33 +91,49 @@ const storySlice = createSlice({
     incrementLikesCounter: (state, { payload }: PayloadAction<number>) => {
       const story = state.stories.find((story) => story.id === payload);
       const myStory = state.myStories.find((story) => story.id === payload);
+      const profileStory = state.profileStories.find((story) => story.id === payload);
 
       if (story) {
         story.likesCounter++;
         if (myStory) {
           myStory.likesCounter++;
         }
+
+        if (profileStory) {
+          profileStory.likesCounter++;
+        }
       }
     },
     decrementLikesCounter: (state, { payload }: PayloadAction<number>) => {
       const story = state.stories.find((story) => story.id === payload);
       const myStory = state.myStories.find((story) => story.id === payload);
+      const profileStory = state.profileStories.find((story) => story.id === payload);
       if (story) {
         story.likesCounter--;
         if (myStory) {
           myStory.likesCounter--;
+        }
+        if (profileStory) {
+          profileStory.likesCounter--;
         }
       }
     },
     incrementCommentsCounter: (state, { payload }: PayloadAction<number>) => {
       const story = state.stories.find((story) => story.id === payload);
       const myStory = state.myStories.find((story) => story.id === payload);
+      const profileStory = state.profileStories.find((story) => story.id === payload);
       if (story) {
         story.commentsCounter++;
         if (myStory) {
           myStory.commentsCounter++;
         }
+        if (profileStory) {
+          profileStory.commentsCounter++;
+        }
       }
+    },
+    currentUserRecentStories: (state) => {
+      state.profileStories = state.myStories.slice(0, 3);
     },
   },
   extraReducers: (builder) => {
@@ -163,6 +189,13 @@ const storySlice = createSlice({
         (story) => story.id !== action.payload.storyId,
       );
     });
+
+    builder.addCase(
+      fetchUserStories.fulfilled,
+      (state, { payload }: PayloadAction<StoryType[]>) => {
+        state.profileStories = payload;
+      },
+    );
   },
 });
 
@@ -173,4 +206,5 @@ export const {
   incrementLikesCounter,
   decrementLikesCounter,
   incrementCommentsCounter,
+  currentUserRecentStories,
 } = storySlice.actions;

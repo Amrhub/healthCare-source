@@ -161,6 +161,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     </Menu>
   );
 
+
   const userSideBar = [
     { text: 'Home', component: <HomeSharpIcon />, path: userRoutes.home },
     { text: 'Profile', component: <PersonIcon />, path: userRoutes.profile.main },

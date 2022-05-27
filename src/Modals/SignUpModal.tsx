@@ -19,7 +19,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { dfCenterCenter, dfUnsetCenter } from '../abstracts/common.styles';
 import { setAlert } from '../redux/alert/alertSlice';
 import { useAppDispatch, useAppSelector } from '../redux/configureStore';
-import { createDoctor, createPatient, createUser } from '../redux/users/users';
+import { createDoctor, createPatient, createUser, updateUser } from '../redux/users/users';
 import { DATEFORMAT, formatDate } from '../utils/helpers/helpers';
 const ModalContainer = styled(Box)(({ theme }) => ({
   marginX: 'auto',
@@ -47,15 +47,16 @@ const ImageListPreviewContainer = styled(Box)`
 `
 
 interface IProps {
-  handleModalOpen: () => void;
   handleModalClose: () => void;
   open: boolean;
+  userToEdit: any;
 }
 
 const userFormData = new FormData();
 
 const SignUpModal = ({
   handleModalClose,
+  userToEdit,
   open
 }: IProps) => {
   const dispatch = useAppDispatch();
@@ -64,17 +65,17 @@ const SignUpModal = ({
   const [isFirstStep, setIsFirstStep] = useState(true);
   // users fields
   const [profilePicture, setProfilePicture] = useState<ImageListType>([]);
-  const [firstName, setFirstName] = useState({ value: '', error: false, errorMessage: '' });
-  const [lastName, setLastName] = useState({ value: '', error: false, errorMessage: '' });
-  const [email, setEmail] = useState({ value: '', error: false, errorMessage: '' });
-  const [phoneNumber, setPhoneNumber] = useState({ value: '', error: false, errorMessage: '' });
+  const [firstName, setFirstName] = useState({ value: userToEdit?.firstName || '', error: false, errorMessage: '' });
+  const [lastName, setLastName] = useState({ value: userToEdit?.lastName || '', error: false, errorMessage: '' });
+  const [email, setEmail] = useState({ value: userToEdit?.email || '', error: false, errorMessage: '' });
+  const [phoneNumber, setPhoneNumber] = useState({ value: userToEdit?.phone || '', error: false, errorMessage: '' });
   const [password, setPassword] = useState({ value: '', error: false, errorMessage: '' });
   const [confirmPassword, setConfirmPassword] = useState({ value: '', error: false, errorMessage: '' });
-  const [birthDate, setBirthDate] = useState({ value: '', error: false, errorMessage: '' });
-  const [address, setAddress] = useState({ value: '', error: false, errorMessage: '' });
-  const [gender, setGender] = useState('female');
-  const [role, setRole] = useState('patient');
-  const [bio, setBio] = useState('');
+  const [birthDate, setBirthDate] = useState({ value: userToEdit?.birthDate.replaceAll('-', '/') || '', error: false, errorMessage: '' });
+  const [address, setAddress] = useState({ value: userToEdit?.address || '', error: false, errorMessage: '' });
+  const [gender, setGender] = useState(userToEdit?.gender || 'female');
+  const [role, setRole] = useState(userToEdit?.role || 'patient');
+  const [bio, setBio] = useState(userToEdit?.bio || '');
   // patients fields
   const [weight, setWeight] = useState({ value: 0, error: false, errorMessage: '' });
   const [height, setHeight] = useState({ value: 0, error: false, errorMessage: '' });
@@ -124,7 +125,11 @@ const SignUpModal = ({
       userFormData.append('role', role);
       userFormData.append('bio', bio);
 
-
+      if (userToEdit?.id) {
+        dispatch(updateUser({ userFormData, userId: userToEdit.id }))
+        handleModalClose();
+        return;
+      }
 
       if (role === 'patient') {
         // patient formData
@@ -273,6 +278,8 @@ const SignUpModal = ({
       setBirthDate(prev => ({ ...prev, error: false, errorMessage: '' }));
     }
 
+    if (userToEdit) return isValid;
+
     // Second step validation
     if (role === 'patient') {
       // patient validation
@@ -407,6 +414,7 @@ const SignUpModal = ({
                           {/* When no image is uploaded */}
                           <Avatar
                             alt="placeholder"
+                            src={userToEdit?.profilePic}
                             sx={{
                               width: { lg: '150px' }, height: { lg: '150px' },
                               '&:hover': {
@@ -608,7 +616,7 @@ const SignUpModal = ({
                           </RadioGroup>
                         </FormControl>
                       </Grid>
-                      <Grid item sx={{ display: 'flex' }} xs={6}>
+                      {!userToEdit && (<Grid item sx={{ display: 'flex' }} xs={6}>
                         <FormControl component="fieldset" sx={{ flexDirection: 'row' }}>
                           <FormLabel component="p" sx={{ mr: 8 }}>
                             Role
@@ -629,7 +637,8 @@ const SignUpModal = ({
                             <FormControlLabel value="doctor" control={<Radio />} label="Doctor" />
                           </RadioGroup>
                         </FormControl>
-                      </Grid>
+                      </Grid>)
+                      }
                     </Grid>
                   </Grid>
                 </Grid>
@@ -910,7 +919,11 @@ const SignUpModal = ({
           }
 
           <Box sx={{ mt: 4, display: 'flex', justifyContent: isFirstStep ? 'center' : 'space-between' }}>
-            {isFirstStep ? (
+            {isFirstStep ? userToEdit?.id ? (
+              <Button variant="contained" type="submit">
+                Edit
+              </Button>
+            ) : (
               <Button size='large' endIcon={<ChevronRight />}
                 onClick={() => setIsFirstStep(false)}
               >Next</Button>

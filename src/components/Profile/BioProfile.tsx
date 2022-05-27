@@ -1,5 +1,8 @@
 import { Avatar, Button, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
+import { useState } from 'react';
+
+import SignUpModal from '../../Modals/SignUpModal';
 
 
 const BioProfile = ({
@@ -8,6 +11,11 @@ const BioProfile = ({
   friend,
   friendRequest,
 }: any) => {
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleModalOpen = () => setModalOpen(true);
+  const handleModalClose = () => setModalOpen(false);
+
   return (
     <>
       <Box
@@ -74,23 +82,30 @@ const BioProfile = ({
           </Grid>
         </Grid>
         {mainUser ? (
-          <Button
-            variant="contained"
-            sx={{
-              bgcolor: 'grey.200',
-              color: '#000',
-              width: '100%',
-              mt: 'auto',
-              mb: '10px',
-
-              '&:hover': {
-                bgcolor: 'primary.main',
-                color: 'primary.contrastText',
-              },
-            }}
-          >
-            Edit Information
-          </Button>
+          <>
+            <Button
+              variant="contained"
+              sx={{
+                bgcolor: 'grey.200',
+                color: '#000',
+                width: '100%',
+                mt: 'auto',
+                mb: '10px',
+                '&:hover': {
+                  bgcolor: 'primary.main',
+                  color: 'primary.contrastText',
+                },
+              }}
+              onClick={handleModalOpen}
+            >
+              Edit Information
+            </Button>
+            <SignUpModal
+              handleModalClose={handleModalClose}
+              open={modalOpen}
+              userToEdit={user}
+            />
+          </>
         ) : friend ? (
           <Button
             variant="contained"

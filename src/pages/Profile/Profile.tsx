@@ -22,7 +22,7 @@ const Profile = ({
   return (
     <Box sx={{ display: 'flex', gap: '50px' }}>
       <BioProfile
-        user={stories[0]?.user ?? visitedUser}
+        user={mainUser ? stories[0].user : visitedUser}
         mainUser={mainUser}
         friend={friend}
         friendRequest={friendRequest}

@@ -7,6 +7,7 @@ import { Box, styled } from '@mui/system';
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
+import { MyLink } from '../../abstracts/Link';
 import StoryShowModal from '../../Modals/StoryShowModal';
 import { useAppDispatch } from '../../redux/configureStore';
 import { removeStory, StoryType } from '../../redux/stories/storySlice';
@@ -58,11 +59,13 @@ const Story = ({
       }}
     >
       <StoryHeader sx={{ display: 'flex', gap: 3 }}>
-        <Avatar
-          alt="profile pic"
-          src={story.user.profilePic}
-          sx={{ width: '40px', height: '40px' }}
-        />
+        <MyLink to={`/user/profile/${story.user.id}`}>
+          <Avatar
+            alt="profile pic"
+            src={story.user.profilePic}
+            sx={{ width: '40px', height: '40px' }}
+          />
+        </MyLink>
         <Box>
           <Typography variant="body1" sx={{ fontWeight: 700 }}>
             {story.user.name}
@@ -106,7 +109,7 @@ const Story = ({
       <StoryFooter likesCounter={story.likesCounter} commentsCounter={story.commentsCounter}
         postId={story.id} setStoryShowModalOpen={setStoryShowModalOpen} />
       <StoryShowModal story={story} open={storyShowModalOpen} setOpen={setStoryShowModalOpen} />
-    </Box>
+    </Box >
   );
 };
 
