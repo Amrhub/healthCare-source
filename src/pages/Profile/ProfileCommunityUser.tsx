@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import LoadingScreen from '../../Modals/LoadingScreen';
 import { apiVersion, baseUrl, useAppSelector } from '../../redux/configureStore';
 import { UserGeneralInfo } from '../../redux/users/users';
+import { userRoutes } from '../../Routes/Routes';
 
 import Profile, { ProfilePropsFriendRequest } from './Profile';
 
 
 const ProfileCommunityUser = () => {
   const currentUser = useAppSelector((state) => state.user);
-  const allStories = useAppSelector((state) => state.posts.stories);
   const [isFriend, setIsFriend] = useState(false);
   const [isFriendRequest, setIsFriendRequest] = useState<ProfilePropsFriendRequest>({ bool: false });
   const [user, setUser] = useState<UserGeneralInfo>();
+  const navigate = useNavigate();
+
 
   const { userId } = useParams();
 
@@ -24,6 +26,7 @@ const ProfileCommunityUser = () => {
 
   useEffect(() => {
     if (!userId) return;
+    if (currentUser.userInfo.id === parseInt(userId)) navigate(userRoutes.profile.main)
     fetchUser();
     const friendship = currentUser.friends.pending.find((friend) => friend.requester_id === parseInt(userId as string)
       || friend.requestee_id === parseInt(userId as string)
