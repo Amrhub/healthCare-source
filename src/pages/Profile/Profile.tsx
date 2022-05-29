@@ -2,32 +2,38 @@ import { Box } from '@mui/material';
 
 import BioProfile from '../../components/Profile/BioProfile';
 import StoriesProfile from '../../components/Profile/StoriesProfile';
-import { StoryType } from '../../redux/stories/storySlice';
+import { UserGeneralInfo } from '../../redux/users/users';
+
+export interface ProfilePropsFriendRequest {
+  requester_id?: number;
+  requestee_id?: number;
+  bool: boolean;
+}
 
 interface IProps {
-  visitedUser?: any,
+  visitedUser?: UserGeneralInfo,
   mainUser: boolean,
-  stories: StoryType[],
+  mainUserInfo?: UserGeneralInfo,
   friend: boolean,
-  friendRequest: boolean,
+  friendRequest: ProfilePropsFriendRequest,
 }
 
 const Profile = ({
   visitedUser,
   mainUser,
-  stories,
+  mainUserInfo,
   friend,
   friendRequest,
 }: IProps) => {
   return (
     <Box sx={{ display: 'flex', gap: '50px' }}>
       <BioProfile
-        user={mainUser ? stories[0].user : visitedUser}
+        user={mainUser ? mainUserInfo as UserGeneralInfo : visitedUser as UserGeneralInfo}
         mainUser={mainUser}
         friend={friend}
         friendRequest={friendRequest}
       />
-      <StoriesProfile mainUser={mainUser} userId={stories[0]?.user.id ?? visitedUser.id} />
+      <StoriesProfile mainUser={mainUser} userId={mainUserInfo?.id as number ?? visitedUser?.id as number} />
 
     </Box>
   );

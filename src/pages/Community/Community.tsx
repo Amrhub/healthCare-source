@@ -30,7 +30,7 @@ const Community = () => {
 
   useEffect(() => {
     dispatch(fetchFriendships(userId));
-  }, [pathname])
+  }, [dispatch])
   return (
     <ContainerBox>
       <ContainerBoxNav>

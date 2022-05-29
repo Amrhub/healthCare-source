@@ -3,18 +3,17 @@ import { useParams } from 'react-router-dom';
 
 import LoadingScreen from '../../Modals/LoadingScreen';
 import { apiVersion, baseUrl, useAppSelector } from '../../redux/configureStore';
-import { StoryType } from '../../redux/stories/storySlice';
+import { UserGeneralInfo } from '../../redux/users/users';
 
-import Profile from './Profile';
+import Profile, { ProfilePropsFriendRequest } from './Profile';
 
 
 const ProfileCommunityUser = () => {
   const currentUser = useAppSelector((state) => state.user);
   const allStories = useAppSelector((state) => state.posts.stories);
-  const [stories, setStories] = useState<StoryType[]>([]);
   const [isFriend, setIsFriend] = useState(false);
-  const [isFriendRequest, setIsFriendRequest] = useState(false);
-  const [user, setUser] = useState<any>();
+  const [isFriendRequest, setIsFriendRequest] = useState<ProfilePropsFriendRequest>({ bool: false });
+  const [user, setUser] = useState<UserGeneralInfo>();
 
   const { userId } = useParams();
 
@@ -25,17 +24,26 @@ const ProfileCommunityUser = () => {
 
   useEffect(() => {
     if (!userId) return;
-    setStories(allStories.filter((story) => story.user.id === parseInt(userId as string)));
     fetchUser();
-    if (currentUser.friends.pending.some((friend) => friend.requester_id === parseInt(userId as string)
-      || friend.requestee_id === parseInt(userId as string))) {
-      setIsFriendRequest(true);
+    const friendship = currentUser.friends.pending.find((friend) => friend.requester_id === parseInt(userId as string)
+      || friend.requestee_id === parseInt(userId as string)
+    );
+
+    if (friendship) {
+      setIsFriendRequest({ requester_id: friendship.requester_id, requestee_id: friendship.requestee_id, bool: true });
+    } else {
+      setIsFriendRequest({ bool: false });
     }
 
-    if (currentUser.friends.accepted.some((friend) => friend.requestee_id === parseInt(userId as string) || friend.requester_id === parseInt(userId as string))) {
+    if (currentUser.friends.accepted.some((friend) =>
+      friend.requestee_id === parseInt(userId as string)
+      || friend.requester_id === parseInt(userId as string))
+    ) {
       setIsFriend(true);
+    } else {
+      setIsFriend(false);
     }
-  }, [])
+  }, [currentUser])
 
   return (
     userId ? (
@@ -43,7 +51,6 @@ const ProfileCommunityUser = () => {
         <Profile
           mainUser={false}
           visitedUser={user}
-          stories={stories}
           friend={isFriend}
           friendRequest={isFriendRequest}
         />
@@ -53,7 +60,6 @@ const ProfileCommunityUser = () => {
     ) : (
       <Profile
         mainUser={false}
-        stories={stories}
         friend={isFriend}
         friendRequest={isFriendRequest}
       />

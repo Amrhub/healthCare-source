@@ -118,7 +118,7 @@ export const makeFriendship = createAsyncThunk(
 export const cancelFriendship = createAsyncThunk(
   'users/cancelFriendship',
   async (friendship_id: number) => {
-    const response = await fetch(`${baseUrl}${apiVersion}friendships/${friendship_id}`, {
+    await fetch(`${baseUrl}${apiVersion}friendships/${friendship_id}`, {
       method: 'DELETE',
     });
 
@@ -210,6 +210,22 @@ interface Friendship {
     name: string;
     profilePic: string;
   };
+}
+
+export interface UserGeneralInfo {
+  id: number;
+  profilePic: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+  referenceId: string;
+  bio: string;
+  phone: string;
+  address: string;
+  gender: string;
+  birthDate: string;
+  age: number;
 }
 
 const friends = {
