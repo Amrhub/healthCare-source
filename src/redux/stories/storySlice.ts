@@ -87,6 +87,9 @@ const storySlice = createSlice({
   reducers: {
     getMyStories: (state, { payload }) => {
       state.myStories = state.stories.filter((story) => story.user.id === payload);
+      state.profileStories = state.stories
+        .filter((story) => story.user.id === payload)
+        .slice(0, 3);
     },
     incrementLikesCounter: (state, { payload }: PayloadAction<number>) => {
       const story = state.stories.find((story) => story.id === payload);
@@ -147,6 +150,7 @@ const storySlice = createSlice({
       state.myStories = state.stories.filter(
         (story) => story.user.id === action.payload.user.id,
       );
+      state.profileStories = state.myStories.slice(0, 3);
     });
 
     builder.addCase(fetchStories.pending, (state) => {

@@ -50,8 +50,8 @@ const Stories = () => {
   };
 
   return (
-    <ContainerBox scrollable>
-      <Box sx={{ position: 'relative', height: '100%', width: '100%' }}>
+    <ContainerBox>
+      <Box sx={{ height: '100%', width: '100%' }}>
         <ContainerBoxNav>
           <ContainerBoxNavLink end to={userRoutes.stories.index}>
             Stories
@@ -69,22 +69,6 @@ const Stories = () => {
         <Box sx={{ py: 3 }}>
           {renderChildren()}
         </Box>
-        <IconButton
-          children={<AddIcon fontSize="large" />}
-          sx={{
-            bgcolor: 'primary.main',
-            color: 'primary.contrastText',
-            ':hover': {
-              bgcolor: 'primary.main',
-            },
-            position: 'fixed',
-            bottom: '5rem',
-            right: '27rem',
-          }}
-          onClick={() => {
-            addStoryClickHandler();
-          }}
-        />
         <StoryModal
           open={openModal}
           setOpen={setOpenModal}
@@ -93,6 +77,23 @@ const Stories = () => {
           storyId={storyId}
         />
       </Box>
+
+      <IconButton
+        children={<AddIcon fontSize="large" />}
+        sx={{
+          bgcolor: 'primary.main',
+          color: 'primary.contrastText',
+          ':hover': {
+            bgcolor: 'primary.main',
+          },
+          position: 'fixed',
+          bottom: '5rem',
+          right: '27rem',
+        }}
+        onClick={() => {
+          addStoryClickHandler();
+        }}
+      />
     </ContainerBox>
   );
 };

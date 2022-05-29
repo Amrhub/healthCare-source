@@ -34,7 +34,7 @@ const StoriesProfile = ({ mainUser, userId }: IProps) => {
     } else {
       dispatch(fetchUserStories(userId));
     }
-  }, [])
+  }, [dispatch])
 
   return (
     <Box
@@ -55,11 +55,11 @@ const StoriesProfile = ({ mainUser, userId }: IProps) => {
       <Box sx={{ textAlign: 'left', mt: 2, color: 'primary.main' }}>
         {mainUser ? (
           <Typography sx={{ fontWeight: 700, fontSize: '24px', mt: '10px' }}>
-            My Story
+            My Recent Stories
           </Typography>
         ) : (
           <Typography sx={{ fontWeight: 700, fontSize: '24px', mt: '10px' }}>
-            Stories
+            Recent Stories
           </Typography>
         )}
         <Divider sx={{ my: 1, bgcolor: 'grey.900' }} />

@@ -1,19 +1,17 @@
 /* eslint-disable unicorn/consistent-function-scoping */
 import { AutoStories, ExpandMore, HistoryToggleOff } from '@mui/icons-material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import ChatIcon from '@mui/icons-material/Chat';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import GroupsIcon from '@mui/icons-material/Groups';
 import HomeSharpIcon from '@mui/icons-material/HomeSharp';
-import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import PersonIcon from '@mui/icons-material/Person';
 import StoreIcon from '@mui/icons-material/Store';
 import { Avatar, Container, IconButton, ListItem, List, Menu } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -168,6 +166,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     { text: 'History', component: <HistoryToggleOff />, path: userRoutes.reportHistory },
     { text: 'Community', component: <GroupsIcon />, path: userRoutes.community.index },
     { text: 'Stories', component: <AutoStories />, path: userRoutes.stories.index },
+    { text: 'Chat', component: <ChatIcon />, path: userRoutes.chat },
     {
       text: 'Membership',
       component: <StoreIcon />,
@@ -184,32 +183,6 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <MyNavLink to={userRoutes.chat}>
-          <IconButton
-            size="large"
-            aria-label="show 4 new mails"
-            sx={{ color: 'grey.900' }}
-          >
-            <Badge badgeContent={4} color="error">
-              <MailIcon />
-            </Badge>
-          </IconButton>
-        </MyNavLink>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          sx={{ color: 'grey.900' }}
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -228,7 +201,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
       <CssBaseline />
       <AppBar
-        elevation={0}
+        elevation={1}
         position="fixed"
         open={open}
         sx={{ backgroundColor: 'white' }}
@@ -254,26 +227,6 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <MyNavLink to={userRoutes.chat} sx={{ height: '24px' }}>
-              <IconButton
-                size="large"
-                aria-label="show 4 new mails"
-                sx={{ color: 'grey.900' }}
-              >
-                <Badge badgeContent={4} color="error">
-                  <MailIcon />
-                </Badge>
-              </IconButton>
-            </MyNavLink>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              sx={{ color: 'grey.900' }}
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
             <Container sx={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <Avatar src={user.userInfo.profilePic} alt="avatar" />
               <Typography>{user.userInfo.firstName} {user.userInfo.lastName}</Typography>

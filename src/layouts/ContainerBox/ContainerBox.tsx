@@ -6,6 +6,7 @@ const ContainerBox = ({ children, scrollable }: { children: React.ReactNode, scr
       <Container
         sx={{
           bgcolor: 'background.paper',
+          position: 'relative',
           maxWidth: { md: '1032px' },
           height: '90%',
           my: 'auto',
