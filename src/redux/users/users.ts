@@ -287,6 +287,7 @@ const userSlice = createSlice({
         state.userInfo.birthDate = payload.data.user.birth_date;
         state.userInfo.gender = payload.data.user.gender;
         state.userInfo.email = payload.data.user.email;
+        state.userInfo.age = payload.data.user.age;
         state.userInfo.firstName = payload.data.user.first_name;
         state.userInfo.lastName = payload.data.user.last_name;
         state.userInfo.role = payload.data.user.role;
