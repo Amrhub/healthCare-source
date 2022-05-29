@@ -215,7 +215,7 @@ const LandingPage = () => {
       <LandingPageCateg>
         <Typography sx={{ fontWeight: '700', fontSize: '40px', mt: '36px' }}>
           Book from top specialties
-        </Typography>       
+        </Typography>
         <CarouselSpecialties />
       </LandingPageCateg>
 
@@ -318,7 +318,6 @@ const LandingPage = () => {
           </Box>
         </LandingPageItem>
         <SignUpModal
-          handleModalOpen={handleModalOpen}
           handleModalClose={handleModalClose}
           open={signUpModal}
         />

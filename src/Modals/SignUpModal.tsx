@@ -49,7 +49,7 @@ const ImageListPreviewContainer = styled(Box)`
 interface IProps {
   handleModalClose: () => void;
   open: boolean;
-  userToEdit: any;
+  userToEdit?: any;
 }
 
 const userFormData = new FormData();

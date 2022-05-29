@@ -23,11 +23,8 @@
     "components-extra": "^3.2.1",
     "csstype": "^3.1.0",
     "date-fns": "^2.28.0",
-<<<<<<< HEAD
     "lodash": "^4.17.21",
     "mui-image": "^1.0.4",
-=======
->>>>>>> 39513a0 (Update: fake representation for ECG)
     "prettier": "^2.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
