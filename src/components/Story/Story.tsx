@@ -24,11 +24,11 @@ const Story = ({
   story: StoryType;
   handleEditStory?: (content: string, category: string, storyId: number) => void | undefined;
 }) => {
-  const location = useLocation();
+  const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<any>();
   const [storyShowModalOpen, setStoryShowModalOpen] = useState(false);
-  const isEditable = location.pathname === userRoutes.stories.myStories; // TODO: check if user is logged in
+  const isEditable = pathname === userRoutes.stories.myStories; // TODO: check if user is logged in
   const dispatch = useAppDispatch();
 
   const handleClick = (e: any) => {
@@ -58,7 +58,7 @@ const Story = ({
         mx: 7,
       }}
     >
-      <StoryHeader sx={{ display: 'flex', gap: 3 }}>
+      <StoryHeader sx={{ display: 'flex', gap: 3, pb: isEditable || pathname.includes('profile') ? 0 : '7px' }}>
         <MyLink to={`/user/profile/${story.user.id}`}>
           <Avatar
             alt="profile pic"
@@ -77,6 +77,7 @@ const Story = ({
         <IconButton
           sx={{
             ml: 'auto',
+            p: 1,
             color: 'grey.900',
             display: isEditable ? 'flex' : 'none',
             justifyContent: 'center',
