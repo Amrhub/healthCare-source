@@ -1,7 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Box, Divider, IconButton } from '@mui/material';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
 import StoryModal from '../../components/StoryModal/StoryModal';
@@ -9,21 +8,25 @@ import ContainerBox from '../../layouts/ContainerBox/ContainerBox';
 import ContainerBoxNav, {
   ContainerBoxNavLink,
 } from '../../layouts/ContainerBox/ContainerBoxNav';
+import { useAppSelector } from '../../redux/configureStore';
 import { userRoutes } from '../../Routes/Routes';
 
 import AllStories from './AllStories';
 import MyStories from './MyStories';
 
 const Stories = () => {
-  const [userOne, userTwo] = useSelector((state: any) => state.users.users);
+  const user = useAppSelector((state) => state.user.userInfo);
   const [openModal, setOpenModal] = useState(false);
   const [storyContent, setStoryContent] = useState('');
   const [storyCategory, setStoryCategory] = useState('');
+  const [storyId, setStoryId] = useState<number>();
   const location = useLocation();
 
-  const handleEditStory = (content: string, category: string) => {
+
+  const handleEditStory = (content: string, category: string, storyId: number) => {
     setStoryContent(content);
     setStoryCategory(category);
+    setStoryId(storyId);
     setOpenModal(true);
   };
 
@@ -33,35 +36,14 @@ const Stories = () => {
     setOpenModal(true);
   };
 
-  const stories = [
-    {
-      id: 1,
-      category: 'covid-19',
-      content:
-        'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Delectus corporis dolores laudantium quis. Eveniet, molestias? Dolorem, nisi iste! Pariatur, officiis?...',
-      user: userOne,
-      commentsCounter: 2,
-      likesCounter: 3,
-    },
-    {
-      id: 2,
-      user: userTwo,
-      category: 'cancer',
-      content:
-        'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Delectus corporis dolores laudantium quis. Eveniet, molestias? Dolorem, nisi iste! Pariatur, officiis?...',
-      commentsCounter: 5,
-      likesCounter: 9,
-    },
-  ];
-
   const renderChildren = () => {
     const { pathname } = location;
 
     switch (pathname) {
       case userRoutes.stories.index:
-        return <AllStories stories={stories} />;
+        return <AllStories />;
       case userRoutes.stories.myStories:
-        return <MyStories stories={stories} handleEditStory={handleEditStory} />;
+        return <MyStories handleEditStory={handleEditStory} />;
       default:
         return null;
     }
@@ -69,7 +51,7 @@ const Stories = () => {
 
   return (
     <ContainerBox>
-      <Box sx={{ position: 'relative', height: '100%', width: '100%' }}>
+      <Box sx={{ height: '100%', width: '100%' }}>
         <ContainerBoxNav>
           <ContainerBoxNavLink end to={userRoutes.stories.index}>
             Stories
@@ -82,33 +64,36 @@ const Stories = () => {
           sx={{
             bgcolor: 'grey.900',
             boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-            mb: 3,
           }}
         />
-        {renderChildren()}
-        <IconButton
-          children={<AddIcon fontSize="large" />}
-          sx={{
-            bgcolor: 'primary.main',
-            color: 'primary.contrastText',
-            ':hover': {
-              bgcolor: 'primary.main',
-            },
-            position: 'absolute',
-            bottom: '1rem',
-            right: '-1rem',
-          }}
-          onClick={() => {
-            addStoryClickHandler();
-          }}
-        />
+        <Box sx={{ py: 3 }}>
+          {renderChildren()}
+        </Box>
         <StoryModal
           open={openModal}
           setOpen={setOpenModal}
           content={storyContent}
           category={storyCategory}
+          storyId={storyId}
         />
       </Box>
+
+      <IconButton
+        children={<AddIcon fontSize="large" />}
+        sx={{
+          bgcolor: 'primary.main',
+          color: 'primary.contrastText',
+          ':hover': {
+            bgcolor: 'primary.main',
+          },
+          position: 'fixed',
+          bottom: '5rem',
+          right: '27rem',
+        }}
+        onClick={() => {
+          addStoryClickHandler();
+        }}
+      />
     </ContainerBox>
   );
 };

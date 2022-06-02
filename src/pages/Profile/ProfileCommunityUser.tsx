@@ -1,57 +1,72 @@
-import Profile from './Profile';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
-export const userData = {
-  name: 'Jane Paris',
-  image: 'https://i.pravatar.cc/300?img=9',
-  description:
-    'UI/UX Designer. In my year on the Customer Experience team at this strategic digital agency I was able to grow my design leadership and experience skills exponentially.',
-  email: 'mohamedadelyousry@gmail.com',
-  phone: '01155299730',
-  address: '3rd Settlement, New Cairo City',
-  birthdate: '28 - Aug - 1999',
-  gender: 'Male',
-  mainUser: false,
-  friend: false,
-  friendRequest: true,
+import LoadingScreen from '../../Modals/LoadingScreen';
+import { apiVersion, baseUrl, useAppSelector } from '../../redux/configureStore';
+import { UserGeneralInfo } from '../../redux/users/users';
+import { userRoutes } from '../../Routes/Routes';
 
-  stories: [
-    {
-      id: 1,
-      category: 'covid-19',
-      content:
-        'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Delectus corporis dolores laudantium quis. Eveniet, molestias? Dolorem, nisi iste! Pariatur, officiis?...',
-      commentsCounter: 2,
-      likesCounter: 3,
-      avatar: 'https://i.pravatar.cc/300?img=9',
-    },
-    {
-      id: 2,
-      category: 'cancer',
-      content:
-        'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Delectus corporis dolores laudantium quis. Eveniet, molestias? Dolorem, nisi iste! Pariatur, officiis?...',
-      commentsCounter: 5,
-      likesCounter: 9,
-      avatar: 'https://i.pravatar.cc/300?img=9',
-    },
-  ],
-};
+import Profile, { ProfilePropsFriendRequest } from './Profile';
+
 
 const ProfileCommunityUser = () => {
+  const currentUser = useAppSelector((state) => state.user);
+  const [isFriend, setIsFriend] = useState(false);
+  const [isFriendRequest, setIsFriendRequest] = useState<ProfilePropsFriendRequest>({ bool: false });
+  const [user, setUser] = useState<UserGeneralInfo>();
+  const navigate = useNavigate();
+
+
+  const { userId } = useParams();
+
+  const fetchUser = async () => {
+    const response = await fetch(`${baseUrl}${apiVersion}users/${userId}`);
+    setUser(await response.json());
+  };
+
+  useEffect(() => {
+    if (!userId) return;
+    if (currentUser.userInfo.id === parseInt(userId)) navigate(userRoutes.profile.main)
+    fetchUser();
+    const friendship = currentUser.friends.pending.find((friend) => friend.requester_id === parseInt(userId as string)
+      || friend.requestee_id === parseInt(userId as string)
+    );
+
+    if (friendship) {
+      setIsFriendRequest({ requester_id: friendship.requester_id, requestee_id: friendship.requestee_id, bool: true });
+    } else {
+      setIsFriendRequest({ bool: false });
+    }
+
+    if (currentUser.friends.accepted.some((friend) =>
+      friend.requestee_id === parseInt(userId as string)
+      || friend.requester_id === parseInt(userId as string))
+    ) {
+      setIsFriend(true);
+    } else {
+      setIsFriend(false);
+    }
+  }, [currentUser])
+
   return (
-    <Profile
-      name={userData.name}
-      image={userData.image}
-      description={userData.description}
-      email={userData.email}
-      phone={userData.phone}
-      address={userData.address}
-      birthdate={userData.birthdate}
-      gender={userData.gender}
-      mainUser={userData.mainUser}
-      stories={userData.stories}
-      friend={userData.friend}
-      friendRequest={userData.friendRequest}
-    />
+    userId ? (
+      user?.id ? (
+        <Profile
+          mainUser={false}
+          visitedUser={user}
+          friend={isFriend}
+          friendRequest={isFriendRequest}
+        />
+      ) : (
+        <LoadingScreen />
+      )
+    ) : (
+      <Profile
+        mainUser={false}
+        friend={isFriend}
+        friendRequest={isFriendRequest}
+      />
+    )
   );
 };
 

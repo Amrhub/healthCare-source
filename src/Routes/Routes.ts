@@ -2,7 +2,7 @@ export const userRoutes = {
   home: '/user',
   profile: {
     main: '/user/profile/main',
-    community: '/user/profile/id:',
+    community: '/user/profile/:userId',
   },
   reportHistory: '/user/report-history',
   community: {
@@ -18,7 +18,7 @@ export const userRoutes = {
     show: '/user/stories/show',
     edit: '/user/stories/edit',
   },
-  membership: '/user/membership',
+  store: '/user/store',
 };
 
 export const guestRoutes = {

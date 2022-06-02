@@ -1,12 +1,15 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
+import { DisplayAlert } from './components/Alert/DisplayAlert';
 import AuthLayout from './components/AuthLayout/AuthLayout';
 import GuestLayout from './components/GuestLayout/GuestLayout';
-import GuestPages from './Routes/GuestRoutes';
-import UserAuthPages from './Routes/Index';
+import { useAppDispatch, useAppSelector } from './redux/configureStore';
+import { fetchStories } from './redux/stories/storySlice';
+import { getPostsUserLike, userFromToken } from './redux/users/users';
+import Routes from './Routes/Route';
 
-const theme = createTheme({
+export const theme = createTheme({
   palette: {
     primary: {
       main: '#4264D0',
@@ -65,21 +68,36 @@ const theme = createTheme({
 });
 
 const App = () => {
-  const location = useLocation();
-  const isAuthenticated = location.pathname.includes('user');
+  const { userInfo, auth } = useAppSelector(state => state.user);
+  const userId = userInfo?.id;
+  const { isAuthenticated } = auth;
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const token = localStorage.getItem('authorization');
+    if (token && !isAuthenticated) {
+      dispatch(userFromToken(token));
+    } else {
+      dispatch(getPostsUserLike(userId));
+    }
+  }, [dispatch, localStorage, isAuthenticated]);
+
+  useEffect(() => {
+    dispatch(fetchStories());
+  }, [])
 
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
         {isAuthenticated ? (
           <AuthLayout>
-            {' '}
-            <UserAuthPages />{' '}
+            <DisplayAlert />
+            <Routes />
           </AuthLayout>
         ) : (
           <GuestLayout>
-            {' '}
-            <GuestPages />{' '}
+            <DisplayAlert />
+            <Routes />
           </GuestLayout>
         )}
       </div>

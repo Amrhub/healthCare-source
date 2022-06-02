@@ -1,28 +1,40 @@
 import AddIcon from '@mui/icons-material/Add';
 import MessageIcon from '@mui/icons-material/Message';
 import { Box, Divider, IconButton, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import StoryModal from '../../components/StoryModal/StoryModal';
-import MyStories from '../../pages/Stories/MyStories';
+import AllStories from '../../pages/Stories/AllStories';
+import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
+import { currentUserRecentStories, fetchUserStories } from '../../redux/stories/storySlice';
 
 interface IProps {
   mainUser: boolean;
-  stories: any;
+  userId: number;
 }
 
-const StoriesProfile = ({ mainUser, stories }: IProps) => {
-  const lastThreeStories = stories.slice(0, 3);
-
+const StoriesProfile = ({ mainUser, userId }: IProps) => {
   const [openModal, setOpenModal] = useState(false);
   const [storyContent, setStoryContent] = useState('');
   const [storyCategory, setStoryCategory] = useState('');
+  const dispatch = useAppDispatch();
+  const { profileStories } = useAppSelector(state => state.posts);
 
   const addStoryClickHandler = () => {
     setStoryContent('');
     setStoryCategory('');
     setOpenModal(true);
-    };
+  };
+
+
+  // todo to be moved to redux for hot reloading
+  useEffect(() => {
+    if (mainUser) {
+      dispatch(currentUserRecentStories());
+    } else {
+      dispatch(fetchUserStories(userId));
+    }
+  }, [dispatch])
 
   return (
     <Box
@@ -40,19 +52,21 @@ const StoriesProfile = ({ mainUser, stories }: IProps) => {
         position: 'relative',
       }}
     >
-      <Box sx={{ textAlign: 'left', mt: 6, color: 'primary.main' }}>
+      <Box sx={{ textAlign: 'left', mt: 2, color: 'primary.main' }}>
         {mainUser ? (
           <Typography sx={{ fontWeight: 700, fontSize: '24px', mt: '10px' }}>
-            My Story
+            My Recent Stories
           </Typography>
         ) : (
           <Typography sx={{ fontWeight: 700, fontSize: '24px', mt: '10px' }}>
-            Stories
+            Recent Stories
           </Typography>
         )}
         <Divider sx={{ my: 1, bgcolor: 'grey.900' }} />
       </Box>
-      <MyStories stories={lastThreeStories} handleEditStory={(content, category) => {}} />
+      <Box sx={{ py: 2 }}>
+        <AllStories posts={profileStories} />
+      </Box>
       {mainUser ? (
         <>
           <IconButton
@@ -67,9 +81,7 @@ const StoriesProfile = ({ mainUser, stories }: IProps) => {
               bottom: '3rem',
               right: '2rem',
             }}
-            onClick={() => {
-              addStoryClickHandler();
-            }}
+            onClick={addStoryClickHandler}
           />
           <StoryModal
             open={openModal}

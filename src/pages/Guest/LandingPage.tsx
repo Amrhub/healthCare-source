@@ -1,55 +1,55 @@
-import { PhotoCamera, Visibility, VisibilityOff } from '@mui/icons-material';
-import CloseIcon from '@mui/icons-material/Close';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import {
-  Button,
-  FormControlLabel,
-  FormLabel,
-  Grid,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Modal,
-  OutlinedInput,
-  Radio,
-  RadioGroup,
-  Select,
-  SelectChangeEvent,
-  TextField,
-  Typography,
-} from '@mui/material';
-import FormControl from '@mui/material/FormControl';
+import { Button, Grid, Stack, TextField, Typography } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Box, styled } from '@mui/system';
-import React, { useState } from 'react';
-
-import doctorImageBG from '/src/assets/landingPage/DoctorImage.svg';
-import landingPageBG from '/src/assets/landingPage/landing-page-bg.svg';
-import placeholderPP from '/src/assets/defaultProfilePic.svg';
-import signUpModalBG from '/src/assets/signUpModal/sign-up-bg.svg';
-
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
-import { dfCenterCenter } from '../../abstracts/common.styles';
-import { loginUserSuccess } from '../../redux/users/users';
+import landingPageBG from '/src/assets/landingPage/Card.svg';
 
-interface State {
-  password: 'string';
-  confirmPassword: 'string';
-  passwordVisibility: boolean;
-  confirmPasswordVisibility: boolean;
-  day: 'string';
-  month: 'string';
-  year: 'string';
-  gender: 'string';
-}
+import landingPageTopBG from '../../assets/landingPage/landing-page-image.png';
+import CarouselSpecialties from '../../components/CarouselSpecialties/CarouselSpecialties';
+import PaymentPlans from '../../components/PaymentPlans/PaymentPlans';
+import SignUpModal from '../../Modals/SignUpModal';
+import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
+import { login } from '../../redux/users/users';
+import { userRoutes } from '../../Routes/Routes';
+import { plans } from '../Store/Memberships';
 
-const LandingPageContainer = styled(Grid)`
-  background-image: url(${landingPageBG});
+const LandingPageTop = styled(Box)`
+  background-image: url(${landingPageTopBG});
   background-repeat: no-repeat;
-  background-position: right top;
+`;
+
+const LandingPagePlans = styled(Box)`
+  background-color: #e5e5e5;
+`;
+
+const PlansContainer = styled(Grid)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 90px;
+  margin-top: 100px;
+  margin-bottom: 100px;
+`;
+
+const LandingPageCateg = styled(Box)`
+  background-color: #fff;
+  height: 500px;
+  margin-left: 288px;
+  margin-right: 288px;
+`;
+
+const LandingPageFormContainer = styled(Stack)`
+  height: 1000px;
+  background-color: #e5e5e5;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 `;
 
 const LandingPageItem = styled(Grid)`
@@ -72,462 +72,219 @@ const FormContainer = styled(Box)`
   }
 `;
 
-const ModalContainer = styled(Box)(({ theme }) => ({
-  marginX: 'auto',
-  textAlign: 'center',
-  backgroundColor: 'white',
-  borderRadius: theme.shape.borderRadius,
-  paddingBlock: '50px',
-  paddingInline: '92px',
-  boxShadow: '1px 1px 4px rgba(0, 0, 0, 0.25)',
-  width: '100%',
-  maxWidth: '1480px',
-}));
-
-const Input = styled('input')({
-  display: 'none',
-});
-
 const LandingPage = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { users } = useSelector((state: any) => state.users);
   const [signUpModal, setSignUpModal] = useState(false);
   const handleModalOpen = () => setSignUpModal(true);
   const handleModalClose = () => setSignUpModal(false);
-  const [signUpForm, setSignUpForm] = useState({
-    password: '',
-    passwordVisibility: false,
-    confirmPassword: '',
-    confirmPasswordVisibility: false,
-    day: '',
-    month: '1',
-    year: '1998',
-    gender: '',
-  });
-  const signUpFormChangeHandler =
-    (key: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      const newState = {
-        ...signUpForm,
-        [key]: event.target.value,
-      };
-      setSignUpForm(newState);
-    };
+  const dispatch = useAppDispatch();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { isAuthenticated } = useAppSelector((state) => state.user.auth);
+  const navigate = useNavigate();
 
-  const signUpSelectChangeHandler = (key: keyof State) => (event: SelectChangeEvent) => {
-    const newState = {
-      ...signUpForm,
-      [key]: event.target.value,
-    };
-    setSignUpForm(newState);
-  };
-
-  const signInHandler = (event: any): void => {
+  // eslint-disable-next-line unicorn/consistent-function-scoping
+  const signInHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const form = event.target;
-    const email = form.email.value;
-    const password = form.password.value;
+    dispatch(login({ email, password }));
+  };
 
-    const user = users.find((user: any) => user.email === email);
-    if (user?.password === password) {
-      dispatch(loginUserSuccess(user));
-      navigate('/user');
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(userRoutes.home);
     }
-  };
-
-  const passwordVisibilityHandler = (key: keyof State) => {
-    setSignUpForm((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
+  }, [isAuthenticated]);
 
   return (
-    <LandingPageContainer
-      container
-      sx={{ minHeight: 'calc(200vh - 160px)', scrollBehavior: 'smooth' }}
-    >
-      <LandingPageItem
-        item
-        xs={6}
+    <>
+      <LandingPageTop sx={{ minHeight: '802.5px', scrollBehavior: 'smooth' }}>
+        <LandingPageItem
+          item
+          xs={12}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            ml: '150px',
+            mt: '212px',
+            width: '818px',
+          }}
+        >
+          <Typography variant="h1" color="primary" sx={{ fontWeight: '700' }}>
+            We Provide <br /> Total Health Care
+          </Typography>
+          <Typography variant="body1" sx={{ mt: '35px', color: 'grey.500' }}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sollicitudin sed
+            commodo tincidunt eget eu. Aliquam rhoncus sodales sed aenean pellentesque sit
+            turpis magna quis. Imperdiet leo blandit hac pretium id enim, gravida. Quam
+            est dolor, egestas vitae dolor congue. Sodales aliquam pulvinar in odio
+            gravida. Volutpat, fermentum aliquam pharetra, augue nullam aliquet vitae
+            accumsan. Tristique est risus lacinia consequat. Id id aliquet lacus, vitae.
+            Feugiat tortor lacus, feugiat feugiat vehicula ipsum dolor est gravida.
+            Rhoncus nibh integer aliquet orci scelerisque. Varius ullamcorper aliquet
+            consequat orci, at.
+          </Typography>
+        </LandingPageItem>
+      </LandingPageTop>
+
+      <LandingPagePlans
         sx={{
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          pl: 3,
-          pr: 2,
+          alignItems: 'center',
         }}
       >
-        <Typography variant="h1" color="primary" sx={{ fontWeight: '700' }}>
-          We Provide Total Health Care
-        </Typography>
-        <Typography variant="body1" sx={{ fontSize: '24px', color: 'grey.500' }}>
-          mauris vitae ultricies leo integer malesuada nunc vel risus commodo viverra
-          maecenas accumsan lacus vel facilisis volutpat est velit egestas dui id ornare
-          arcu odio ut sem nulla pharetra diam sit amet nisl suscipit adipiscing bibendum
-          est ultricies integer quis augue praesent
-        </Typography>
-      </LandingPageItem>
-
-      <Grid
-        item
-        xs={6}
-        sx={{
-          backgroundImage: `url(${doctorImageBG})`,
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-          backgroundSize: 'contain',
-        }}
-      />
-
-      <LandingPageItem item xs={6} id="sign-in-form">
         <Typography
-          variant="h2"
-          component="p"
-          color="primary"
-          sx={{ textAlign: 'center' }}
+          color={'primary.main'}
+          sx={{ fontWeight: '700', fontSize: '36px', mt: '99.5px' }}
         >
-          Sign in to your account
+          Choose from
         </Typography>
-        <form onSubmit={signInHandler}>
-          <FormContainer>
-            <TextField
-              label="Email address"
-              name="email"
-              placeholder="example@mail.com"
-              sx={{ width: '100%' }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <MailOutlineIcon />{' '}
-                  </InputAdornment>
-                ),
-              }}
-              required
-            />
-            <TextField
-              type="password"
-              label="Password"
-              name="password"
-              placeholder="*************"
-              sx={{ width: '100%' }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <LockOutlinedIcon />{' '}
-                  </InputAdornment>
-                ),
-              }}
-              required
-            />
-            <Button type="submit" variant="contained" color="primary">
-              Sign in
-            </Button>
-            <Button color="inherit" sx={{ textTransform: 'capitalize' }}>
-              Forgot password?
-            </Button>
-          </FormContainer>
-        </form>
-      </LandingPageItem>
-
-      <LandingPageItem item xs={6} id="sign-up">
-        <Box
+        <Typography
+          color={'text.primary'}
+          sx={{ fontWeight: '700', fontSize: '64px', lineHeight: '75px', mt: '16px' }}
+        >
+          Our Best Pricing Plan
+        </Typography>
+        <Typography
+          color={'text.primary'}
+          variant="body1"
           sx={{
-            maxHeight: { md: '430px' },
-            height: { md: '100%' },
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 10,
-            color: 'white',
+            fontWeight: '400',
+            width: '703px',
+            lineHeight: '18.75px',
+            textAlign: 'center',
+            mt: '16px',
           }}
         >
-          <Typography variant="h2" component="p" sx={{ textAlign: 'center' }}>
-            Hello, Friend!
-          </Typography>
-          <Box sx={{ maxWidth: { md: '540px' }, marginX: 'auto', textAlign: 'center' }}>
-            <Typography variant="h4" component="p">
-              Fill up personal information and Improve Your health with us.
-            </Typography>
-          </Box>
-          <Button
-            variant="outlined"
-            color="inherit"
-            sx={{ alignSelf: 'center' }}
-            onClick={handleModalOpen}
+          It is available to teenagers, Lorem ipsum dolor sit amet, consectetur adipiscing
+          elit. Odio viverra eu mi fermentum amet, faucibus purus. Ac, lectus hac et
+          phasellus commodo nunc eget.
+        </Typography>
+        <PlansContainer container spacing={3}>
+          {plans.map(({ cost, type, features, contained }) => (
+            <PaymentPlans
+              cost={cost}
+              type={type}
+              features={features}
+              contained={contained}
+              key={uuidv4()}
+            />
+          ))}
+        </PlansContainer>
+      </LandingPagePlans>
+
+      <LandingPageCateg>
+        <Typography sx={{ fontWeight: '700', fontSize: '40px', mt: '36px' }}>
+          Book from top specialties
+        </Typography>
+        <CarouselSpecialties />
+      </LandingPageCateg>
+
+      <LandingPageFormContainer>
+        <LandingPageItem
+          item
+          id="sign-in-form"
+          bgcolor={'#fff'}
+          height={'800px'}
+          ml={'287px'}
+          width={'100%'}
+          sx={{ borderRadius: '10px' }}
+        >
+          <Typography
+            variant="h2"
+            component="p"
+            color="primary"
+            sx={{ textAlign: 'center' }}
           >
-            Sign up
-          </Button>
-        </Box>
-      </LandingPageItem>
-      <Modal
-        sx={{
-          ...dfCenterCenter,
-          background: `url(${signUpModalBG})`,
-          backgroundRepeat: 'no-repeat',
-        }}
-        BackdropProps={{ invisible: true }}
-        open={signUpModal}
-        onClose={handleModalClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <ModalContainer>
-          <Typography id="modal-modal-title" component="h2" className="sr-only">
-            Sign up pop-up window
+            Sign in to your account
           </Typography>
-          <Typography id="modal-modal-description" className="sr-only">
-            Sign up form
-          </Typography>
-
-          <form style={{ position: 'relative' }}>
-            <label htmlFor="icon-button-file" style={{ position: 'relative' }}>
-              <img
-                src={placeholderPP}
-                alt="person circle icon"
-                width={'150'}
-                height={'150'}
+          <form onSubmit={signInHandler}>
+            <FormContainer>
+              <TextField
+                label="Email address"
+                name="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                placeholder="example@mail.com"
+                sx={{ width: '100%' }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <MailOutlineIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                required
               />
-              <Input accept="image/*" id="icon-button-file" type="file" />
-              <IconButton
-                color="primary"
-                aria-label="upload picture"
-                component="span"
-                sx={{ position: 'absolute', bottom: '-10px', right: '-10px' }}
-              >
-                <PhotoCamera />
-              </IconButton>
-            </label>
-            <Grid container sx={{ mt: 4 }}>
-              <Grid container columnSpacing={35.5} rowSpacing={4}>
-                <Grid item xs={6}>
-                  <FormControl fullWidth>
-                    <InputLabel htmlFor="firstName">First Name</InputLabel>
-                    <OutlinedInput
-                      id="firstName"
-                      label="First Name"
-                      placeholder="Amr"
-                      type="text"
-                      name="firstName"
-                    />
-                  </FormControl>
-                </Grid>
-
-                <Grid item xs={6}>
-                  <FormControl fullWidth>
-                    <InputLabel htmlFor="lastName">Last Name</InputLabel>
-                    <OutlinedInput
-                      id="lastName"
-                      label="Last Name"
-                      placeholder="Ahmed"
-                      type="text"
-                      name="lastName"
-                    />
-                  </FormControl>
-                </Grid>
-
-                <Grid item xs={6}>
-                  <FormControl fullWidth>
-                    <InputLabel htmlFor="emailAddress">Email Address</InputLabel>
-                    <OutlinedInput
-                      id="emailAddress"
-                      label="Email Address"
-                      placeholder="example@mail.com"
-                      type="email"
-                      name="emailAddress"
-                    />
-                  </FormControl>
-                </Grid>
-
-                <Grid item xs={6}>
-                  <FormControl fullWidth>
-                    <InputLabel htmlFor="phoneNumber">Phone number</InputLabel>
-                    <OutlinedInput
-                      id="phoneNumber"
-                      label="Phone number"
-                      placeholder="+201012345678"
-                      type="text"
-                      name="phoneNumber"
-                    />
-                  </FormControl>
-                </Grid>
-
-                <Grid item xs={6}>
-                  <FormControl fullWidth>
-                    <InputLabel htmlFor="password">Password</InputLabel>
-                    <OutlinedInput
-                      id="password"
-                      label="Password"
-                      placeholder="*************"
-                      type={signUpForm.passwordVisibility ? 'text' : 'password'}
-                      name="password"
-                      value={signUpForm.password}
-                      onChange={signUpFormChangeHandler('password')}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() =>
-                              passwordVisibilityHandler('passwordVisibility')
-                            }
-                          >
-                            {signUpForm.passwordVisibility ? (
-                              <Visibility />
-                            ) : (
-                              <VisibilityOff />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                  </FormControl>
-                </Grid>
-
-                <Grid item xs={6}>
-                  <FormControl fullWidth>
-                    <InputLabel htmlFor="confirmPassword">Confirm Password</InputLabel>
-                    <OutlinedInput
-                      id="confirmPassword"
-                      label="Confirm Password"
-                      placeholder="*************"
-                      type={signUpForm.confirmPasswordVisibility ? 'text' : 'password'}
-                      name="confirmPassword"
-                      value={signUpForm.confirmPassword}
-                      onChange={signUpFormChangeHandler('confirmPassword')}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() =>
-                              passwordVisibilityHandler('confirmPasswordVisibility')
-                            }
-                          >
-                            {signUpForm.confirmPasswordVisibility ? (
-                              <Visibility />
-                            ) : (
-                              <VisibilityOff />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                  </FormControl>
-                </Grid>
-
-                <Grid item xs={6}>
-                  <TextField
-                    label="Nationality"
-                    placeholder="Egyptian"
-                    name="nationality"
-                    fullWidth
-                  />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <TextField
-                    label="Address"
-                    placeholder="Block No.1, Street No.1, 5th Settlement, Cairo"
-                    name="Address"
-                    fullWidth
-                  />
-                </Grid>
-              </Grid>
-              <Typography variant="h5" className="sr-only">
-                Birth date
-              </Typography>
-              <Grid container sx={{ marginBlock: 4 }} columnSpacing={24}>
-                <Grid xs item>
-                  <FormControl fullWidth>
-                    <InputLabel id="Day">Day</InputLabel>
-                    <Select
-                      labelId="Day"
-                      name="day"
-                      fullWidth
-                      label="Day"
-                      value={signUpForm.day}
-                      onChange={signUpSelectChangeHandler('day')}
-                      sx={{ textAlign: 'left' }}
-                    >
-                      <MenuItem value="1">1</MenuItem>
-                      <MenuItem value="2">2</MenuItem>
-                      <MenuItem value="3">3</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-
-                <Grid xs item>
-                  <FormControl fullWidth>
-                    <InputLabel id="Month">Month</InputLabel>
-                    <Select
-                      labelId="Month"
-                      name="month"
-                      fullWidth
-                      label="Month"
-                      value={signUpForm.month}
-                      onChange={signUpSelectChangeHandler('day')}
-                      sx={{ textAlign: 'left' }}
-                    >
-                      <MenuItem value="1">1</MenuItem>
-                      <MenuItem value="2">2</MenuItem>
-                      <MenuItem value="3">3</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-
-                <Grid xs item>
-                  <FormControl fullWidth>
-                    <InputLabel id="Year">Year</InputLabel>
-                    <Select
-                      labelId="Year"
-                      name="year"
-                      fullWidth
-                      label="Year"
-                      value={signUpForm.year}
-                      onChange={signUpSelectChangeHandler('day')}
-                      sx={{ textAlign: 'left' }}
-                    >
-                      <MenuItem value="1997">1997</MenuItem>
-                      <MenuItem value="1998">1998</MenuItem>
-                      <MenuItem value="1999">1999</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-              </Grid>
-
-              <Grid item sx={{ width: '365px' }}>
-                <FormControl component="fieldset" sx={{ flexDirection: 'row' }}>
-                  <FormLabel component="p" sx={{ mr: 8 }}>
-                    Gender
-                  </FormLabel>
-                  <RadioGroup
-                    aria-label="gender"
-                    name="controlled-radio-buttons-group"
-                    value={signUpForm.gender}
-                    onChange={signUpFormChangeHandler('gender')}
-                    row
-                  >
-                    <FormControlLabel
-                      value="female"
-                      control={<Radio />}
-                      label="Female"
-                      sx={{ mr: 8 }}
-                    />
-                    <FormControlLabel value="male" control={<Radio />} label="Male" />
-                  </RadioGroup>
-                </FormControl>
-              </Grid>
-            </Grid>
-            <Button type="submit" variant="contained" sx={{ mt: 4 }}>
-              Sign Up
-            </Button>
-            <IconButton
-              aria-label="close"
-              onClick={handleModalClose}
-              sx={{ position: 'absolute', top: '0', right: '0', color: 'grey.900' }}
-            >
-              <CloseIcon />
-            </IconButton>
+              <TextField
+                type="password"
+                label="Password"
+                name="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                placeholder="*************"
+                sx={{ width: '100%' }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockOutlinedIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                required
+              />
+              <Button type="submit" variant="contained" color="primary">
+                Sign in
+              </Button>
+              <Button color="inherit" sx={{ textTransform: 'capitalize' }}>
+                Forgot password?
+              </Button>
+            </FormContainer>
           </form>
-        </ModalContainer>
-      </Modal>
-    </LandingPageContainer>
+        </LandingPageItem>
+        <LandingPageItem
+          item
+          id="sign-up"
+          height={'800px'}
+          mr={'287px'}
+          width={'100%'}
+          sx={{ backgroundImage: `url(${landingPageBG})`, borderRadius: '10px' }}
+        >
+          <Box
+            sx={{
+              maxHeight: { md: '430px' },
+              height: { md: '100%' },
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 10,
+              color: 'white',
+            }}
+          >
+            <Typography variant="h2" component="p" sx={{ textAlign: 'center' }}>
+              Hello, Friend!
+            </Typography>
+            <Box sx={{ maxWidth: { md: '540px' }, marginX: 'auto', textAlign: 'center' }}>
+              <Typography variant="h4" component="p">
+                Fill up personal information and Improve Your health with us.
+              </Typography>
+            </Box>
+            <Button
+              variant="outlined"
+              color="inherit"
+              sx={{ alignSelf: 'center' }}
+              onClick={handleModalOpen}
+            >
+              Sign up
+            </Button>
+          </Box>
+        </LandingPageItem>
+        <SignUpModal
+          handleModalClose={handleModalClose}
+          open={signUpModal}
+        />
+      </LandingPageFormContainer>
+    </>
   );
 };
 

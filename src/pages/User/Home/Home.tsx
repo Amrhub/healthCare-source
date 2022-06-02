@@ -1,13 +1,13 @@
 import { Avatar, Box, Grid, Typography } from '@mui/material';
-import { useSelector } from 'react-redux';
 
 import { dfCenterCenter } from '../../../abstracts/common.styles';
 import HomePageBG from '../../../assets/homePage/home_header-bg.svg';
+import { useAppSelector } from '../../../redux/configureStore';
 
 import ECGChart from './ECGChart';
 import HealthCards from './HealthCards';
 const Home = () => {
-  const user = useSelector((state: any) => state.users.authUserInfo);
+  const { profilePic, firstName, lastName } = useAppSelector((state) => state.user.userInfo);
   return (
     <Box
       sx={{ minHeight: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}
@@ -24,12 +24,12 @@ const Home = () => {
       >
         <Box sx={{ ...dfCenterCenter, width: 'max-content' }}>
           <Avatar
-            src={user.avatar}
+            src={profilePic}
             alt="avatar"
             sx={{ width: { lg: '165px' }, height: { lg: '165px' } }}
           />
           <Typography variant="h4" ml={4}>
-            {user.name}
+            {firstName} {lastName}
           </Typography>
         </Box>
       </Box>

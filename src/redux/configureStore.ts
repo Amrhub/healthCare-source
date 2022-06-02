@@ -1,13 +1,26 @@
-import { createStore, applyMiddleware, combineReducers } from 'redux';
-import logger from 'redux-logger';
-import thunk from 'redux-thunk';
+import { configureStore } from '@reduxjs/toolkit';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
-import usersReducer from './users/users';
+import { alertReducer } from './alert/alertSlice';
+import { commentReducer } from './comments/commentSlice';
+import { postReducer } from './stories/storySlice';
+import { userReducer } from './users/users';
 
-const reducer = combineReducers({
-  users: usersReducer,
+export const baseUrl = 'https://healthcare-system-api.herokuapp.com/';
+// https://healthcare-system-api.herokuapp.com/ production URL
+export const apiVersion = 'api/v1/';
+
+export const store = configureStore({
+  reducer: {
+    user: userReducer,
+    alert: alertReducer,
+    posts: postReducer,
+    comments: commentReducer,
+  },
 });
 
-const store = createStore(reducer, applyMiddleware(thunk, logger));
+type RootState = ReturnType<typeof store.getState>;
+type AppDispatch = typeof store.dispatch;
 
-export default store;
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

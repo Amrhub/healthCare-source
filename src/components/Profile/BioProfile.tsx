@@ -1,33 +1,61 @@
 import { Avatar, Button, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
+import { useState } from 'react';
 
-interface IProps {  
-  name: string;
-  image: string;
-  description: string;
-  email: string;
-  phone: any;
-  address: string;
-  birthdate: string;
-  gender: string;
+import SignUpModal from '../../Modals/SignUpModal';
+import { ProfilePropsFriendRequest } from '../../pages/Profile/Profile'
+import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
+import { acceptFriendship, cancelFriendship, makeFriendship, UserGeneralInfo } from '../../redux/users/users';
+
+interface IProps {
+  user: UserGeneralInfo;
   mainUser: boolean;
-  friend?: boolean;
-  friendRequest?: boolean;
-};
+  friend: boolean;
+  friendRequest: ProfilePropsFriendRequest;
+}
+
 
 const BioProfile = ({
-  name,
-  image,
-  description,
-  email,
-  phone,
-  address,
-  birthdate,
-  gender,
+  user,
   mainUser,
   friend,
   friendRequest,
 }: IProps) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  const userId = useAppSelector(state => state.user.userInfo.id)
+  const pendingFriendship = useAppSelector(state => state.user.friends.pending)
+  const acceptedFriendship = useAppSelector(state => state.user.friends.accepted)
+
+  const handleModalOpen = () => setModalOpen(true);
+  const handleModalClose = () => setModalOpen(false);
+
+  const getFriendshipId = ({ userId, user2Id }: { userId: number, user2Id: number }) => {
+    return pendingFriendship.find(friendship => (
+      friendship.requestee_id === userId && friendship.requester_id === user2Id
+      || friendship.requestee_id === user2Id && friendship.requester_id === userId
+    )) || acceptedFriendship.find(friendship => (
+      friendship.requestee_id === userId && friendship.requester_id === user2Id
+      || friendship.requestee_id === user2Id && friendship.requester_id === userId
+    ))
+  }
+
+  const addFriendHandler = () => {
+    dispatch(makeFriendship({ requester_id: userId, requestee_id: user.id }));
+  };
+
+  const acceptFriendshipHandler = () => {
+    const friendship = getFriendshipId({ userId, user2Id: user.id });
+
+    if (friendship?.id) dispatch(acceptFriendship(friendship.id));
+  }
+
+  const rejectFriendHandler = () => {
+    const friendship = getFriendshipId({ userId, user2Id: user.id });
+
+    if (friendship?.id) dispatch(cancelFriendship(friendship.id));
+  };
+
   return (
     <>
       <Box
@@ -48,17 +76,17 @@ const BioProfile = ({
       >
         <Avatar
           alt="profile pic"
-          src={image}
+          src={user.profilePic}
           sx={{ width: '100px', height: '100px', mt: '20px' }}
         />
         <Box>
           <Typography variant="body1" sx={{ fontWeight: 700, mt: '10px' }}>
-            {name}
+            {user.firstName} {user.lastName}
           </Typography>
         </Box>
         <Box>
           <Typography variant="body1" sx={{ my: '25px' }}>
-            {description}
+            {user.bio}
           </Typography>
         </Box>
         <Grid container spacing={2}>
@@ -66,51 +94,58 @@ const BioProfile = ({
             <Typography>Email</Typography>
           </Grid>
           <Grid item xs={9}>
-            <Typography>{email}</Typography>
+            <Typography>{user.email}</Typography>
           </Grid>
           <Grid item xs={3}>
             <Typography>Phone</Typography>
           </Grid>
           <Grid item xs={9}>
-            <Typography>{phone}</Typography>
+            <Typography>{user.phone}</Typography>
           </Grid>
           <Grid item xs={3}>
             <Typography>Address</Typography>
           </Grid>
           <Grid item xs={9}>
-            <Typography>{address}</Typography>
+            <Typography>{user.address}</Typography>
           </Grid>
           <Grid item xs={3}>
-            <Typography>Birthdate</Typography>
+            <Typography>Birth date</Typography>
           </Grid>
           <Grid item xs={9}>
-            <Typography>{birthdate}</Typography>
+            <Typography>{user.birthDate} ({user.age})</Typography>
           </Grid>
           <Grid item xs={3}>
             <Typography>Gender</Typography>
           </Grid>
           <Grid item xs={9}>
-            <Typography>{gender}</Typography>
+            <Typography>{user.gender}</Typography>
           </Grid>
         </Grid>
         {mainUser ? (
-          <Button
-            variant="contained"
-            sx={{
-              bgcolor: 'grey.200',
-              color: '#000',
-              width: '100%',
-              mt: 'auto',
-              mb: '10px',
-
-              '&:hover': {
-                bgcolor: 'primary.main',
-                color: 'primary.contrastText',
-              },
-            }}
-          >
-            Edit Information
-          </Button>
+          <>
+            <Button
+              variant="contained"
+              sx={{
+                bgcolor: 'grey.200',
+                color: '#000',
+                width: '100%',
+                mt: 'auto',
+                mb: '10px',
+                '&:hover': {
+                  bgcolor: 'primary.main',
+                  color: 'primary.contrastText',
+                },
+              }}
+              onClick={handleModalOpen}
+            >
+              Edit Information
+            </Button>
+            <SignUpModal
+              handleModalClose={handleModalClose}
+              open={modalOpen}
+              userToEdit={user}
+            />
+          </>
         ) : friend ? (
           <Button
             variant="contained"
@@ -119,58 +154,78 @@ const BioProfile = ({
               color: '#fff',
               width: '100%',
               mt: 'auto',
-              mb: '10px',
-
               '&:hover': {
                 bgcolor: '#940000',
               },
             }}
+            onClick={rejectFriendHandler}
           >
             Remove friend
           </Button>
-        ) : friendRequest ? (
-          <Box sx={{ display: 'flex', gap: '2px', mt: 'auto', mb: '10px' }}>
-            <Button
-              variant="contained"
-              sx={{
-                bgcolor: 'primary.main',
-                color: '#fff',
-                px: '70px',
-
-                '&:hover': {
-                  bgcolor: 'primary.dark',
-                },
-              }}
-            >
-              Accept
-            </Button>
+        ) : friendRequest.bool ? (
+          friendRequest.requester_id === userId ? (
             <Button
               variant="contained"
               sx={{
                 bgcolor: 'red',
                 color: '#fff',
-                px: '70px',
-
+                width: '100%',
+                mt: 'auto',
                 '&:hover': {
                   bgcolor: '#940000',
                 },
               }}
+              onClick={rejectFriendHandler}
             >
-              Reject
+              Cancel Request
             </Button>
-          </Box>
+          ) :
+            (<Box sx={{ display: 'flex', gap: '2px', mt: 'auto' }}>
+              <Button
+                variant="contained"
+                sx={{
+                  bgcolor: 'primary.main',
+                  color: '#fff',
+                  px: '70px',
+
+                  '&:hover': {
+                    bgcolor: 'primary.dark',
+                  },
+                }}
+                onClick={acceptFriendshipHandler}
+              >
+                Accept
+              </Button>
+              <Button
+                variant="contained"
+                sx={{
+                  bgcolor: 'red',
+                  color: '#fff',
+                  px: '70px',
+
+                  '&:hover': {
+                    bgcolor: '#940000',
+                  },
+                }}
+                onClick={rejectFriendHandler}
+              >
+                Reject
+              </Button>
+            </Box>)
         ) : (
           <Button
             variant="contained"
             sx={{
               bgcolor: 'primary.main',
               color: '#fff',
-              px: '140px',
+              px: '135px',
+              mt: 'auto',
 
               '&:hover': {
                 bgcolor: 'primary.dark',
               },
             }}
+            onClick={addFriendHandler}
           >
             Add friend
           </Button>

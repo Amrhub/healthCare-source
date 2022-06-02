@@ -1,12 +1,10 @@
-import {
-  ArgumentAxis,
-  ValueAxis,
-  Chart,
-  SplineSeries,
-} from '@devexpress/dx-react-chart-material-ui';
-import Paper from '@mui/material/Paper';
 
-const data = [
+
+import { ArgumentAxis, Chart, SplineSeries, ValueAxis } from '@devexpress/dx-react-chart-material-ui';
+import Paper from '@mui/material/Paper';
+import { useEffect, useState } from 'react';
+
+const data2 = [
   { argument: 1, value: 40 },
   { argument: 1.2, value: 50 },
   { argument: 1.4, value: 30 },
@@ -21,12 +19,25 @@ const data = [
 ];
 
 const ECGChart = () => {
+  const [data, setData] = useState(data2);
+  useEffect(() => {
+    const timeInterval = setInterval(() => {
+      setData((prev) => (
+        [...prev, { argument: prev[prev.length - 1].argument + 0.2, value: Math.random() * 100 }]
+      ));
+      if (data.length > 20) {
+        setData((prev) => prev.slice(1));
+      }
+    }, 1000);
+
+    return () => clearInterval(timeInterval);
+  }, [data])
+
   return (
     <Paper sx={{ height: '100%' }}>
       <Chart data={data}>
         <ArgumentAxis />
         <ValueAxis />
-
         <SplineSeries valueField="value" argumentField="argument" color="#4264D0" />
       </Chart>
     </Paper>
