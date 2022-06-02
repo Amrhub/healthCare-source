@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import PrivateRoute from '../components/PrivateRoute/PrivateRoute';
 import Chat from '../pages/Chat/Chat';
@@ -33,7 +33,11 @@ const index = () => {
       <Route path={userRoutes.reportHistory} element={<ReportHistory />} />
       <Route path={userRoutes.chat} element={<Chat />} />
       <Route path={userRoutes.stories.index + '/*'} element={<Stories />} />
-      <Route path={userRoutes.membership} element={<Store />} />
+      <Route
+        path={userRoutes.store}
+        element={<Navigate to={`${userRoutes.store}/memberships`} replace />}
+      />
+      <Route path={`${userRoutes.store}/:tab`} element={<Store />} />
       <Route path={userRoutes.community.index + '/*'} element={<Community />} />
       <Route path={guestRoutes.home} element={<LandingPage />} />
     </Routes>

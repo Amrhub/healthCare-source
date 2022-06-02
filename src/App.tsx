@@ -7,7 +7,7 @@ import GuestLayout from './components/GuestLayout/GuestLayout';
 import { useAppDispatch, useAppSelector } from './redux/configureStore';
 import { fetchStories } from './redux/stories/storySlice';
 import { getPostsUserLike, userFromToken } from './redux/users/users';
-import Routes from './Routes/Index';
+import Routes from './Routes/Route';
 
 export const theme = createTheme({
   palette: {

@@ -16,6 +16,7 @@ import SignUpModal from '../../Modals/SignUpModal';
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
 import { login } from '../../redux/users/users';
 import { userRoutes } from '../../Routes/Routes';
+import { plans } from '../Store/Memberships';
 
 const LandingPageTop = styled(Box)`
   background-image: url(${landingPageTopBG});
@@ -70,45 +71,6 @@ const FormContainer = styled(Box)`
     flex-grow: 1;
   }
 `;
-
-const Plans = [
-  {
-    cost: 'Free',
-    type: 'Basic',
-    features: [
-      'Lorem ipsum dolor sit amet.',
-      'Lorem ipsum dolor sit amet.',
-      'Lorem ipsum dolor sit amet.',
-      'Lorem ipsum dolor sit amet.',
-    ],
-    contained: false,
-  },
-  {
-    cost: '$30',
-    type: 'Standard',
-    features: [
-      'Lorem ipsum dolor sit amet.',
-      'Lorem ipsum dolor sit amet.',
-      'Lorem ipsum dolor sit amet.',
-      'Lorem ipsum dolor sit amet.',
-      'Lorem ipsum dolor sit amet.',
-    ],
-    contained: true,
-  },
-  {
-    cost: '$50',
-    type: 'Premium',
-    features: [
-      'Lorem ipsum dolor sit amet.',
-      'Lorem ipsum dolor sit amet.',
-      'Lorem ipsum dolor sit amet.',
-      'Lorem ipsum dolor sit amet.',
-      'Lorem ipsum dolor sit amet.',
-      'Lorem ipsum dolor sit amet.',
-    ],
-    contained: false,
-  },
-];
 
 const LandingPage = () => {
   const [signUpModal, setSignUpModal] = useState(false);
@@ -200,7 +162,7 @@ const LandingPage = () => {
           phasellus commodo nunc eget.
         </Typography>
         <PlansContainer container spacing={3}>
-          {Plans.map(({ cost, type, features, contained }) => (
+          {plans.map(({ cost, type, features, contained }) => (
             <PaymentPlans
               cost={cost}
               type={type}

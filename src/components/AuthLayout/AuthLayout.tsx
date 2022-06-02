@@ -170,7 +170,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     {
       text: 'Membership',
       component: <StoreIcon />,
-      path: userRoutes.membership,
+      path: userRoutes.store,
     },
   ];
 
