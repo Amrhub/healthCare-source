@@ -7,6 +7,7 @@ import { userRoutes } from '../../Routes/Routes';
 
 import Devices from './Devices';
 import Memberships from './Memberships';
+import RelatedProducts from './RelatedProducts';
 
 const StyledTab = styled(Tab)`
   font-size: 18px;
@@ -41,7 +42,9 @@ const Store = () => {
         <StyledTabPanel value="devices">
           <Devices />
         </StyledTabPanel>
-        <StyledTabPanel value="related_products">Item Three</StyledTabPanel>
+        <StyledTabPanel value="related_products">
+          <RelatedProducts />
+        </StyledTabPanel>
       </TabContext>
     </Box>
   );
