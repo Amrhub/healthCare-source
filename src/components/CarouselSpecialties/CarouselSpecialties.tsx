@@ -118,7 +118,7 @@ const Image = styled('img')`
 `;
 
 const CarouselSpecialties = () => (
-  <Carousel animation="slide" >
+  <Carousel animation="slide">
     {specialtiesItems.map((item) => (
       <Stack direction={'row'} gap={'48px'} key={uuidv4()}>
         {item.row.map(({ image, name }) => (

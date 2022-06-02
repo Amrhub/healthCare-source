@@ -18,7 +18,7 @@ export const userRoutes = {
     show: '/user/stories/show',
     edit: '/user/stories/edit',
   },
-  membership: '/user/membership',
+  membership: '/user/store',
 };
 
 export const guestRoutes = {

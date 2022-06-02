@@ -7,6 +7,7 @@ import { postReducer } from './stories/storySlice';
 import { userReducer } from './users/users';
 
 export const baseUrl = 'http://localhost:3000/';
+// https://healthcare-system-api.herokuapp.com/ production URL
 export const apiVersion = 'api/v1/';
 
 export const store = configureStore({
