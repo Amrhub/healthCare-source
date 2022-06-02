@@ -6,7 +6,7 @@ import { commentReducer } from './comments/commentSlice';
 import { postReducer } from './stories/storySlice';
 import { userReducer } from './users/users';
 
-export const baseUrl = 'http://localhost:3000/';
+export const baseUrl = 'https://healthcare-system-api.herokuapp.com/';
 // https://healthcare-system-api.herokuapp.com/ production URL
 export const apiVersion = 'api/v1/';
 

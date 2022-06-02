@@ -1,6 +1,6 @@
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import { Box, Stack, Typography, IconButton } from '@mui/material';
+import { Box, Stack, Typography, IconButton, Button } from '@mui/material';
 import { useState } from 'react';
 
 import { ProductType } from '../../pages/Store/RelatedProducts';
@@ -31,6 +31,9 @@ const RelatedProduct = ({ product }: { product: ProductType }) => {
         <IconButton onClick={() => setQuantity(prev => prev + 1)}>
           <AddCircleIcon />
         </IconButton>
+        <Button variant="contained" color="primary" sx={{ ml: 'auto' }} disabled={!product.inStock}>
+          Buy Now
+        </Button>
       </Stack>
     </Stack>
   )
