@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { userRoutes } from '../../Routes/Routes';
 
+import Devices from './Devices';
 import Memberships from './Memberships';
 
 const StyledTab = styled(Tab)`
@@ -37,7 +38,9 @@ const Store = () => {
         <StyledTabPanel value="memberships">
           <Memberships />
         </StyledTabPanel>
-        <StyledTabPanel value="devices">Item Two</StyledTabPanel>
+        <StyledTabPanel value="devices">
+          <Devices />
+        </StyledTabPanel>
         <StyledTabPanel value="related_products">Item Three</StyledTabPanel>
       </TabContext>
     </Box>
