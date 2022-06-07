@@ -22,6 +22,7 @@ import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { BRAND_NAME } from '../../abstracts/common';
 import MyNavLink from '../../abstracts/NavLink';
@@ -107,6 +108,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   const [open, setOpen] = React.useState(false);
   const { user } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -137,6 +139,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   };
 
   const handleLogOut = () => {
+    navigate('/');
     dispatch(logout());
   };
 

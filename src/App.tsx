@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { DisplayAlert } from './components/Alert/DisplayAlert';
 import AuthLayout from './components/AuthLayout/AuthLayout';
 import GuestLayout from './components/GuestLayout/GuestLayout';
+import LoadingScreen from './Modals/LoadingScreen';
 import { useAppDispatch, useAppSelector } from './redux/configureStore';
 import { fetchStories } from './redux/stories/storySlice';
 import { getPostsUserLike, userFromToken } from './redux/users/users';
@@ -68,7 +69,7 @@ export const theme = createTheme({
 });
 
 const App = () => {
-  const { userInfo, auth } = useAppSelector(state => state.user);
+  const { userInfo, auth, loading } = useAppSelector(state => state.user);
   const userId = userInfo?.id;
   const { isAuthenticated } = auth;
   const dispatch = useAppDispatch();
@@ -89,6 +90,9 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
+        {loading === "pending" && (
+          <LoadingScreen />
+        )}
         {isAuthenticated ? (
           <AuthLayout>
             <DisplayAlert />

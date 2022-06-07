@@ -3,8 +3,6 @@ import { ChevronLeft, ChevronRight, PhotoCamera, Visibility, VisibilityOff } fro
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
-import SaveIcon from '@mui/icons-material/Save'
-import { LoadingButton } from '@mui/lab';
 import { Avatar, Button, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, Modal, Radio, RadioGroup, Stack, TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
@@ -104,73 +102,6 @@ const SignUpModal = ({
   ) => {
     setProfilePicture(imageList);
   };
-
-
-
-  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (isFormValid()) {
-      // user formData
-      if (profilePicture.length > 0 && profilePicture[0].file)
-        userFormData.append('profile_pic', profilePicture[0].file as Blob);
-      userFormData.append('first_name', firstName.value);
-      userFormData.append('last_name', lastName.value);
-      userFormData.append('email', email.value);
-      userFormData.append('phone', phoneNumber.value);
-      userFormData.append('password', password.value);
-      userFormData.append('password_confirmation', confirmPassword.value);
-      userFormData.append('birth_date', birthDate.value);
-      userFormData.append('address', address.value);
-      userFormData.append('gender', gender);
-      userFormData.append('role', role);
-      userFormData.append('bio', bio);
-
-      if (userToEdit?.id) {
-        dispatch(updateUser({ userFormData, userId: userToEdit.id }))
-        handleModalClose();
-        return;
-      }
-
-      if (role === 'patient') {
-        // patient formData
-        const patientFormData = new FormData();
-        patientFormData.append('weight', JSON.stringify(weight.value));
-        patientFormData.append('height', JSON.stringify(height.value));
-        patientFormData.append('smoking', JSON.stringify(smoker === 'yes'));
-        patientFormData.append('covid', JSON.stringify(covid));
-        patientFormData.append('hypertension', hyperTension.toString());
-        patientFormData.append('diabetes', diabetes.toString());
-        if (otherDiseases)
-          patientFormData.append('other_diseases_detail', otherDiseasesDetails.value);
-        dispatch(createPatient(patientFormData));
-      }
-
-      if (role === 'doctor') {
-        // doctor formData
-        const doctorFormData = new FormData();
-        doctorFormData.append('specialization', specialization.value);
-        doctorFormData.append('years_experience', JSON.stringify(yearsOfExperience.value));
-        doctorFormData.append('salary', JSON.stringify(expectedSalary.value));
-        if (certificates.length > 0 && certificates[0].file)
-          certificates.forEach((certificate) => {
-            doctorFormData.append('certificates[]', certificate.file as Blob);
-          });
-        dispatch(createDoctor(doctorFormData));
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (user.isReferenceCreated) {
-      userFormData.append('reference_id', user.userInfo.referenceId);
-      dispatch(createUser(userFormData));
-    }
-  }, [dispatch, user.isReferenceCreated, user.userInfo.referenceId]);
-
-  useEffect(() => {
-    if (user.errors)
-      dispatch(setAlert({ message: user.errors, type: 'error' }));
-  }, [dispatch, user.errors])
 
   const isFormValid = () => {
     let isValid = true;
@@ -345,6 +276,70 @@ const SignUpModal = ({
     }
     return isValid;
   }
+
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!isFormValid()) return;
+    // user formData
+    if (profilePicture.length > 0 && profilePicture[0].file)
+      userFormData.append('profile_pic', profilePicture[0].file as Blob);
+    userFormData.append('first_name', firstName.value);
+    userFormData.append('last_name', lastName.value);
+    userFormData.append('email', email.value);
+    userFormData.append('phone', phoneNumber.value);
+    userFormData.append('password', password.value);
+    userFormData.append('password_confirmation', confirmPassword.value);
+    userFormData.append('birth_date', birthDate.value);
+    userFormData.append('address', address.value);
+    userFormData.append('gender', gender);
+    userFormData.append('role', role);
+    userFormData.append('bio', bio);
+
+    if (userToEdit?.id) {
+      dispatch(updateUser({ userFormData, userId: userToEdit.id }))
+      handleModalClose();
+      return;
+    }
+
+    if (role === 'patient') {
+      // patient formData
+      const patientFormData = new FormData();
+      patientFormData.append('weight', JSON.stringify(weight.value));
+      patientFormData.append('height', JSON.stringify(height.value));
+      patientFormData.append('smoking', JSON.stringify(smoker === 'yes'));
+      patientFormData.append('covid', JSON.stringify(covid));
+      patientFormData.append('hypertension', hyperTension.toString());
+      patientFormData.append('diabetes', diabetes.toString());
+      if (otherDiseases)
+        patientFormData.append('other_diseases_detail', otherDiseasesDetails.value);
+      dispatch(createPatient(patientFormData));
+    }
+
+    if (role === 'doctor') {
+      // doctor formData
+      const doctorFormData = new FormData();
+      doctorFormData.append('specialization', specialization.value);
+      doctorFormData.append('years_experience', JSON.stringify(yearsOfExperience.value));
+      doctorFormData.append('salary', JSON.stringify(expectedSalary.value));
+      if (certificates.length > 0 && certificates[0].file)
+        certificates.forEach((certificate) => {
+          doctorFormData.append('certificates[]', certificate.file as Blob);
+        });
+      dispatch(createDoctor(doctorFormData));
+    }
+  };
+
+  useEffect(() => {
+    if (user.isReferenceCreated && !user.auth.isAuthenticated) {
+      userFormData.append('reference_id', user.userInfo.referenceId);
+      dispatch(createUser(userFormData));
+    }
+  }, [dispatch, user.isReferenceCreated, user.userInfo.referenceId]);
+
+  useEffect(() => {
+    if (user.errors)
+      dispatch(setAlert({ message: user.errors, type: 'error' }));
+  }, [dispatch, user.errors])
 
   return (
     <Modal
@@ -935,11 +930,10 @@ const SignUpModal = ({
                   >Back</Button>
 
 
-                  <LoadingButton type="submit" variant="contained" sx={{ px: 5 }}
-                    endIcon={<SaveIcon />} loading={user.loading === "pending"} loadingPosition="end"
+                  <Button type="submit" variant="contained" sx={{ px: 5 }}
                   >
                     Sign Up
-                  </LoadingButton>
+                  </Button>
                 </>
               )}
           </Box>

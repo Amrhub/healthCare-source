@@ -393,6 +393,11 @@ const userSlice = createSlice({
       state.auth.token = '';
       state.auth.isAuthenticated = false;
       localStorage.removeItem('authorization');
+      state.loading = 'idle';
+    });
+
+    builder.addCase(logout.pending, (state) => {
+      state.loading = 'pending';
     });
 
     builder.addCase(likePost.fulfilled, (state, { payload }) => {
