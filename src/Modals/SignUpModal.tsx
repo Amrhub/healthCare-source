@@ -486,7 +486,7 @@ const SignUpModal = ({
                         <TextField
                           id="phoneNumber"
                           label="Phone Number"
-                          placeholder='+2 (123) 456-7890'
+                          placeholder='+201001234567'
                           variant="outlined"
                           value={phoneNumber.value}
                           onChange={(e) => setPhoneNumber((prev) => ({ ...prev, value: e.target.value }))}

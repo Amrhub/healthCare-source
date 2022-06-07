@@ -67,7 +67,7 @@ const StoryShowModal = ({ story, open, setOpen }: IProps) => {
 
         <Grid item xs={6} sx={{ ...gridItemSpacing, pr: 14 }}>
           <Stack sx={{ width: '100%', height: '100%' }}>
-            <Stack rowGap={4} sx={{ overflowY: 'scroll', flexGrow: 5, height: '500px', pr: 1 }}>
+            <Stack rowGap={4} sx={{ overflowY: 'auto', flexGrow: 5, height: '500px', pr: 1 }}>
               {comments.length > 0 ? (
                 comments.map(comment => (
                   <Stack key={comment.id} direction="row" columnGap={2}>

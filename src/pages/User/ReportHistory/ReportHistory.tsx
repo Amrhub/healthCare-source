@@ -111,7 +111,7 @@ const ReportHistory = () => {
         </Typography>
         These are average data
       </Typography>
-      <TableContainer component={Paper} sx={{ maxHeight: '80vh', overflowY: 'scroll' }}>
+      <TableContainer component={Paper} sx={{ maxHeight: '80vh', overflowY: 'auto' }}>
         <Table aria-label="collapsible table">
           <TableHead>
             <TableRow>
