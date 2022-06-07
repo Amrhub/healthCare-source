@@ -156,9 +156,15 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem onClick={handleLogOut}>Log out</MenuItem>
+      <MenuItem onClick={() => {
+        navigate(userRoutes.home);
+        handleMenuClose();
+      }}>Home Page</MenuItem>
+      <MenuItem onClick={() => {
+        navigate(userRoutes.profile.main);
+        handleMenuClose();
+      }}>My Profile</MenuItem>
+      <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
     </Menu>
   );
 
