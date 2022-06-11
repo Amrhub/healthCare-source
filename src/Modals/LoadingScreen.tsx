@@ -1,11 +1,10 @@
-import { Modal, CircularProgress } from '@mui/material'
-import React from 'react'
+import { CircularProgress, Backdrop } from '@mui/material'
 
 const LoadingScreen = () => {
   return (
-    <Modal open={true}>
+    <Backdrop open={true} sx={{ zIndex: '99999999' }}>
       <CircularProgress />
-    </Modal>
+    </Backdrop>
   )
 }
 

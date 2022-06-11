@@ -22,7 +22,7 @@ import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
-
+import { useNavigate } from 'react-router-dom';
 import { BRAND_NAME } from '../../abstracts/common';
 import MyNavLink from '../../abstracts/NavLink';
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
@@ -107,6 +107,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   const [open, setOpen] = React.useState(false);
   const { user } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -137,6 +138,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   };
 
   const handleLogOut = () => {
+    navigate('/');
     dispatch(logout());
   };
 
@@ -153,9 +155,15 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem onClick={handleLogOut}>Log out</MenuItem>
+      <MenuItem onClick={() => {
+        navigate(userRoutes.home);
+        handleMenuClose();
+      }}>Home Page</MenuItem>
+      <MenuItem onClick={() => {
+        navigate(userRoutes.profile.main);
+        handleMenuClose();
+      }}>My Profile</MenuItem>
+      <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
     </Menu>
   );
 

@@ -13,6 +13,7 @@ export const DisplayAlert = () => {
       <Alert
         elevation={1}
         severity={type}
+        variant="filled"
         action={
           <IconButton
             aria-label="close"

@@ -190,16 +190,6 @@ interface RoleDoctorInfo {
   certificates: string[];
 }
 
-interface RolePatientInfo {
-  weight: number;
-  height: number;
-  covid: boolean;
-  smoking: boolean;
-  hypertension: boolean;
-  diabetes: boolean;
-  otherDiseases: string;
-}
-
 interface Friendship {
   id: number;
   status: 'pending' | 'accepted' | 'blocked';
@@ -327,6 +317,9 @@ const userSlice = createSlice({
 
     builder.addCase(createPatient.fulfilled, (state, { payload }) => {
       state.userInfo.roleInfo = {
+        deviceId: payload.deviceId,
+        hasDeviceConnected: !!payload.deviceId,
+
         weight: parseFloat(payload.weight),
         height: parseFloat(payload.height),
         covid: payload.covid,
@@ -354,7 +347,11 @@ const userSlice = createSlice({
       } else {
         state.userInfo = {
           ...payload.userInfo,
-          roleInfo: payload.roleInfo,
+          roleInfo: {
+            ...payload.roleInfo,
+            hasDeviceConnected: !!payload.roleInfo.deviceId,
+          },
+
         };
         state.auth.token = payload.authorization;
         state.auth.isAuthenticated = true;
@@ -374,7 +371,10 @@ const userSlice = createSlice({
     builder.addCase(userFromToken.fulfilled, (state, { payload }) => {
       state.userInfo = {
         ...payload.userInfo,
-        roleInfo: payload.roleInfo,
+        roleInfo: {
+          ...payload.roleInfo,
+          hasDeviceConnected: !!payload.roleInfo.deviceId
+        },
       };
       state.auth.token = localStorage.getItem('authorization');
       state.auth.isAuthenticated = true;
@@ -393,6 +393,11 @@ const userSlice = createSlice({
       state.auth.token = '';
       state.auth.isAuthenticated = false;
       localStorage.removeItem('authorization');
+      state.loading = 'idle';
+    });
+    builder.addCase(logout.pending, (state) => {
+      state.loading = 'pending';
+
     });
 
     builder.addCase(likePost.fulfilled, (state, { payload }) => {

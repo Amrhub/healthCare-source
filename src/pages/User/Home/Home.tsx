@@ -2,12 +2,15 @@ import { Avatar, Box, Grid, Typography } from '@mui/material';
 
 import { dfCenterCenter } from '../../../abstracts/common.styles';
 import HomePageBG from '../../../assets/homePage/home_header-bg.svg';
+import NoDeviceConnected from '../../../Modals/NoDeviceConnected';
 import { useAppSelector } from '../../../redux/configureStore';
 
 import ECGChart from './ECGChart';
 import HealthCards from './HealthCards';
 const Home = () => {
-  const { profilePic, firstName, lastName } = useAppSelector((state) => state.user.userInfo);
+  const currentUser = useAppSelector(state => state.user.userInfo);
+  const { profilePic, firstName, lastName } = currentUser;
+
   return (
     <Box
       sx={{ minHeight: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}
@@ -38,8 +41,9 @@ const Home = () => {
         container
         py={4}
         px={10}
-        sx={{ height: '70%', m: 'auto', justifyContent: 'space-between' }}
+        sx={{ height: '80%', justifyContent: 'space-between', position: 'relative' }}
       >
+        <NoDeviceConnected />
         <Grid
           item
           xs={2}

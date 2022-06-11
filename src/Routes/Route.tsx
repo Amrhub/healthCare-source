@@ -29,17 +29,43 @@ const index = () => {
           <ProfileMainUser />
         </PrivateRoute>
       } />
-      <Route path={userRoutes.profile.community} element={<ProfileCommunityUser />} />
-      <Route path={userRoutes.reportHistory} element={<ReportHistory />} />
-      <Route path={userRoutes.chat} element={<Chat />} />
-      <Route path={userRoutes.stories.index + '/*'} element={<Stories />} />
+      <Route path={userRoutes.profile.community} element={
+        <PrivateRoute>
+          <ProfileCommunityUser />
+        </PrivateRoute>
+      } />
+      <Route path={userRoutes.reportHistory} element={
+        <PrivateRoute>
+          <ReportHistory />
+        </PrivateRoute>
+      } />
+      <Route path={userRoutes.chat} element={
+        <PrivateRoute>
+          <Chat />
+        </PrivateRoute>} />
+      <Route path={userRoutes.stories.index + '/*'} element={
+        <PrivateRoute>
+          <Stories />
+        </PrivateRoute>
+      } />
       <Route
         path={userRoutes.store}
-        element={<Navigate to={`${userRoutes.store}/memberships`} replace />}
+        element={
+          <PrivateRoute>
+            <Navigate to={`${userRoutes.store}/memberships`} replace />
+          </PrivateRoute>
+        }
       />
-      <Route path={`${userRoutes.store}/:tab`} element={<Store />} />
-      <Route path={userRoutes.community.index + '/*'} element={<Community />} />
-      <Route path={guestRoutes.home} element={<LandingPage />} />
+      <Route path={`${userRoutes.store}/:tab`} element={
+        <PrivateRoute>
+          <Store />
+        </PrivateRoute>
+      } />
+      <Route path={userRoutes.community.index + '/*'} element={
+        <PrivateRoute>
+          <Community />
+        </PrivateRoute>
+      } />
     </Routes>
   );
 };
