@@ -14,7 +14,7 @@ const ContainerBox = ({ children, scrollable }: { children: React.ReactNode, scr
           borderRadius: '10px',
           color: 'grey.900',
           p: '38px 60px',
-          overflowY: scrollable ? 'scroll' : 'auto',
+          overflowY: scrollable ? 'auto' : 'auto',
         }}
         fixed
         disableGutters

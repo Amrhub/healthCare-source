@@ -6,9 +6,10 @@ import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
 
 const PrivateRoute = ({ children }: { children: React.ReactElement }) => {
   const dispatch = useAppDispatch();
-  const { isAuthenticated } = useAppSelector((state) => state.user.auth);
+  const { auth: { isAuthenticated }, loading } = useAppSelector((state) => state.user);
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && !(loading === 'pending')) {
+
       dispatch(clearAlert());
     } else {
       dispatch(setAlert({ message: 'You must be logged in to view this page', type: 'error' }));

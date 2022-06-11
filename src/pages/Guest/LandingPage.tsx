@@ -79,7 +79,8 @@ const LandingPage = () => {
   const dispatch = useAppDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { isAuthenticated } = useAppSelector((state) => state.user.auth);
+  const { auth: { isAuthenticated }, loading } = useAppSelector((state) => state.user);
+
   const navigate = useNavigate();
 
   // eslint-disable-next-line unicorn/consistent-function-scoping
@@ -89,10 +90,11 @@ const LandingPage = () => {
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && !(loading === 'pending')) {
       navigate(userRoutes.home);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, loading]);
+
 
   return (
     <>

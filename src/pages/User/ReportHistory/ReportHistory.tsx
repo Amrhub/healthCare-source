@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/system';
-
+import NoDeviceConnected from '../../../Modals/NoDeviceConnected';
 import MyTableRow from './MyTableRow';
 
 export const MyTableCell = styled(TableCell)`
@@ -104,14 +104,16 @@ const rows = [
 
 const ReportHistory = () => {
   return (
-    <Box sx={{ p: 7 }}>
+    <Box sx={{ p: 7, position: 'relative', height: '100%' }}>
+      <NoDeviceConnected />
+
       <Typography component="h5" color="initial" gutterBottom>
         <Typography color="#23B59C" sx={{ display: 'inline-block' }}>
           Note:
         </Typography>
         These are average data
       </Typography>
-      <TableContainer component={Paper} sx={{ maxHeight: '80vh', overflowY: 'scroll' }}>
+      <TableContainer component={Paper} sx={{ maxHeight: '80vh', overflowY: 'auto' }}>
         <Table aria-label="collapsible table">
           <TableHead>
             <TableRow>
