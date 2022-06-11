@@ -348,7 +348,10 @@ const userSlice = createSlice({
       } else {
         state.userInfo = {
           ...payload.userInfo,
-          roleInfo: payload.roleInfo,
+          roleInfo: {
+            ...payload.roleInfo,
+            hasDeviceConnected: !!payload.roleInfo.deviceId,
+          },
         };
         state.auth.token = payload.authorization;
         state.auth.isAuthenticated = true;
@@ -368,7 +371,10 @@ const userSlice = createSlice({
     builder.addCase(userFromToken.fulfilled, (state, { payload }) => {
       state.userInfo = {
         ...payload.userInfo,
-        roleInfo: payload.roleInfo,
+        roleInfo: {
+          ...payload.roleInfo,
+          hasDeviceConnected: !!payload.roleInfo.deviceId
+        },
       };
       state.auth.token = localStorage.getItem('authorization');
       state.auth.isAuthenticated = true;
