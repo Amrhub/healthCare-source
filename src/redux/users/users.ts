@@ -190,15 +190,7 @@ interface RoleDoctorInfo {
   certificates: string[];
 }
 
-interface RolePatientInfo {
-  weight: number;
-  height: number;
-  covid: boolean;
-  smoking: boolean;
-  hypertension: boolean;
-  diabetes: boolean;
-  otherDiseases: string;
-}
+
 
 interface Friendship {
   id: number;
@@ -327,6 +319,8 @@ const userSlice = createSlice({
 
     builder.addCase(createPatient.fulfilled, (state, { payload }) => {
       state.userInfo.roleInfo = {
+        deviceId: payload.deviceId,
+        hasDeviceConnected: !!payload.deviceId,
         weight: parseFloat(payload.weight),
         height: parseFloat(payload.height),
         covid: payload.covid,
