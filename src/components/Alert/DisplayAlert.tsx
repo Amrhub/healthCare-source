@@ -14,6 +14,7 @@ export const DisplayAlert = () => {
         elevation={1}
         severity={type}
         variant="filled"
+
         action={
           <IconButton
             aria-label="close"

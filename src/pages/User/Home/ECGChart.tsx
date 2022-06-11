@@ -33,7 +33,6 @@ const ECGChart = () => {
       if (data.length > 20) {
         setData((prev) => prev.slice(1));
       }
-
     }, 1000);
 
     return () => clearInterval(timeInterval);

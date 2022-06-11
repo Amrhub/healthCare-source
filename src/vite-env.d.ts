@@ -1,6 +1,5 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="vite/client" />
-
 interface RolePatientInfo {
   deviceId: number | null;
   hasDeviceConnected: boolean;
@@ -12,3 +11,4 @@ interface RolePatientInfo {
   diabetes: boolean;
   otherDiseases: string;
 }
+

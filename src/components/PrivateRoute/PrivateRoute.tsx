@@ -9,6 +9,7 @@ const PrivateRoute = ({ children }: { children: React.ReactElement }) => {
   const { auth: { isAuthenticated }, loading } = useAppSelector((state) => state.user);
   useEffect(() => {
     if (isAuthenticated && !(loading === 'pending')) {
+
       dispatch(clearAlert());
     } else {
       dispatch(setAlert({ message: 'You must be logged in to view this page', type: 'error' }));

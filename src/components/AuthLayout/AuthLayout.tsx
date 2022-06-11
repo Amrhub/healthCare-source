@@ -23,6 +23,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { BRAND_NAME } from '../../abstracts/common';
 import MyNavLink from '../../abstracts/NavLink';
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
@@ -109,6 +110,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -139,6 +141,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
 
   const handleLogOut = () => {
     navigate('/');
+
     dispatch(logout());
   };
 
@@ -164,6 +167,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
         handleMenuClose();
       }}>My Profile</MenuItem>
       <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
+
     </Menu>
   );
 

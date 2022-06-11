@@ -276,7 +276,6 @@ const SignUpModal = ({
     return isValid;
   }
 
-
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isFormValid()) return;
@@ -487,6 +486,7 @@ const SignUpModal = ({
                           id="phoneNumber"
                           label="Phone Number"
                           placeholder='+201001234567'
+
                           variant="outlined"
                           value={phoneNumber.value}
                           onChange={(e) => setPhoneNumber((prev) => ({ ...prev, value: e.target.value }))}
@@ -928,7 +928,6 @@ const SignUpModal = ({
                   <Button size='large' startIcon={<ChevronLeft />}
                     onClick={() => setIsFirstStep(true)}
                   >Back</Button>
-
                   <Button type="submit" variant="contained" sx={{ px: 5 }}
                   >
                     Sign Up

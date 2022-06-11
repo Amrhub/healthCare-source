@@ -319,7 +319,6 @@ const userSlice = createSlice({
       state.userInfo.roleInfo = {
         deviceId: payload.deviceId,
         hasDeviceConnected: !!payload.deviceId,
-
         weight: parseFloat(payload.weight),
         height: parseFloat(payload.height),
         covid: payload.covid,
@@ -351,7 +350,6 @@ const userSlice = createSlice({
             ...payload.roleInfo,
             hasDeviceConnected: !!payload.roleInfo.deviceId,
           },
-
         };
         state.auth.token = payload.authorization;
         state.auth.isAuthenticated = true;
@@ -397,7 +395,6 @@ const userSlice = createSlice({
     });
     builder.addCase(logout.pending, (state) => {
       state.loading = 'pending';
-
     });
 
     builder.addCase(likePost.fulfilled, (state, { payload }) => {

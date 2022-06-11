@@ -10,9 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/system';
-
 import NoDeviceConnected from '../../../Modals/NoDeviceConnected';
-
 import MyTableRow from './MyTableRow';
 
 export const MyTableCell = styled(TableCell)`
@@ -108,6 +106,7 @@ const ReportHistory = () => {
   return (
     <Box sx={{ p: 7, position: 'relative', height: '100%' }}>
       <NoDeviceConnected />
+
       <Typography component="h5" color="initial" gutterBottom>
         <Typography color="#23B59C" sx={{ display: 'inline-block' }}>
           Note:

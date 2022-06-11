@@ -80,6 +80,7 @@ const LandingPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { auth: { isAuthenticated }, loading } = useAppSelector((state) => state.user);
+
   const navigate = useNavigate();
 
   // eslint-disable-next-line unicorn/consistent-function-scoping

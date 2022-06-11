@@ -3,6 +3,7 @@ import { Avatar, Box, Grid, Typography } from '@mui/material';
 import { dfCenterCenter } from '../../../abstracts/common.styles';
 import HomePageBG from '../../../assets/homePage/home_header-bg.svg';
 import NoDeviceConnected from '../../../Modals/NoDeviceConnected';
+
 import { useAppSelector } from '../../../redux/configureStore';
 
 import ECGChart from './ECGChart';
@@ -44,6 +45,7 @@ const Home = () => {
         sx={{ height: '80%', justifyContent: 'space-between', position: 'relative' }}
       >
         <NoDeviceConnected />
+
         <Grid
           item
           xs={2}
