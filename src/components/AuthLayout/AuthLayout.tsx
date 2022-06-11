@@ -23,7 +23,6 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import { BRAND_NAME } from '../../abstracts/common';
 import MyNavLink from '../../abstracts/NavLink';
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore';

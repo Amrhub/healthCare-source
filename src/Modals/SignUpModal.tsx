@@ -102,7 +102,6 @@ const SignUpModal = ({
   ) => {
     setProfilePicture(imageList);
   };
-
   const isFormValid = () => {
     let isValid = true;
     // First step validation
@@ -276,6 +275,7 @@ const SignUpModal = ({
     }
     return isValid;
   }
+
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -928,7 +928,6 @@ const SignUpModal = ({
                   <Button size='large' startIcon={<ChevronLeft />}
                     onClick={() => setIsFirstStep(true)}
                   >Back</Button>
-
 
                   <Button type="submit" variant="contained" sx={{ px: 5 }}
                   >

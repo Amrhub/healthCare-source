@@ -94,6 +94,7 @@ const LandingPage = () => {
     }
   }, [isAuthenticated, loading]);
 
+
   return (
     <>
       <LandingPageTop sx={{ minHeight: '802.5px', scrollBehavior: 'smooth' }}>

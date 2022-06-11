@@ -25,6 +25,7 @@ const ECGChart = () => {
   const [data, setData] = useState(data2);
   useEffect(() => {
     if (!hasDeviceConnected) return;
+
     const timeInterval = setInterval(() => {
       setData((prev) => (
         [...prev, { argument: prev[prev.length - 1].argument + 0.2, value: Math.random() * 100 }]
