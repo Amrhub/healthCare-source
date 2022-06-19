@@ -10,6 +10,7 @@ export interface UserOverview {
   id: number;
   name: string;
   profilePic: string;
+  role: string;
 }
 
 const AddFriend = () => {
@@ -53,6 +54,7 @@ const AddFriend = () => {
               userName={`${user.name}`}
               userAvatar={user.profilePic}
               userId={user.id}
+              role={user.role}
               IconButtons={[<IconButton children={<PersonAddIcon color="primary" />} onClick={() => { addFriend({ requesteeId: user.id }) }} key={user.id} />]}
             />
           </Grid>

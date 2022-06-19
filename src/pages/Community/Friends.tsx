@@ -16,7 +16,7 @@ const Friends = () => {
   };
 
   return (
-    <Grid container columnGap={2} rowGap={3}>
+    <Grid container columnSpacing={2} rowGap={3}>
       {
         friends.length > 0 ? (
           friends.map(({ userInfo, id }) => (
@@ -24,6 +24,7 @@ const Friends = () => {
               <FriendCard
                 userName={userInfo.name}
                 userAvatar={userInfo.profilePic}
+                role={userInfo.role}
                 userId={userInfo.id}
                 IconButtons={[<IconButton children={<PersonRemoveIcon color="error" />} key={uuidv4()}
                   onClick={() => { removeFriend(id) }} />]}

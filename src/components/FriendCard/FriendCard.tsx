@@ -1,4 +1,4 @@
-import { Avatar, Typography } from '@mui/material';
+import { Avatar, Chip, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react'
 
@@ -8,8 +8,9 @@ interface FriendCardProps {
   userAvatar: string;
   IconButtons: Array<React.ReactElement>;
   userId: number;
+  role: string;
 }
-const FriendCard = ({ userName, userAvatar, IconButtons, userId }: FriendCardProps) => {
+const FriendCard = ({ userName, userAvatar, IconButtons, userId, role }: FriendCardProps) => {
   return (
     <Box
       sx={{
@@ -27,6 +28,7 @@ const FriendCard = ({ userName, userAvatar, IconButtons, userId }: FriendCardPro
       </MyLink>
       <Typography variant="body1" sx={{ fontWeight: '700', fontSize: '24px' }}>
         {userName}
+        {(/doctor/i).test(role) && <Chip label="Doctor" variant='outlined' color='success' />}
       </Typography>
 
       <Box sx={{ marginLeft: 'auto', display: 'flex', gap: '5px' }}>

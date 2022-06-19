@@ -152,36 +152,7 @@ export const fetchFriendships = createAsyncThunk(
   },
 );
 
-export const likePost = createAsyncThunk(
-  'users/likePost',
-  async ({ postId, userId }: { userId: number; postId: number }) => {
-    const response = await fetch(`${baseUrl}${apiVersion}likes`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ post_id: postId, user_id: userId }),
-    });
-    return await response.json();
-  },
-);
 
-export const unlikePost = createAsyncThunk('users/unlikePost', async (likeId: number) => {
-  await fetch(`${baseUrl}${apiVersion}likes/${likeId}`, {
-    method: 'DELETE',
-  });
-  return { likeId };
-});
-
-export const getPostsUserLike = createAsyncThunk(
-  'users/getPostsUserLike',
-  async (userId: number) => {
-    const response = await fetch(
-      `${baseUrl}${apiVersion}likes/posts_user_likes?user_id=${userId}`,
-    );
-    return await response.json();
-  },
-);
 
 interface RoleDoctorInfo {
   specialization: string;
@@ -199,6 +170,7 @@ interface Friendship {
     id: number;
     name: string;
     profilePic: string;
+    role: string;
   };
 }
 
@@ -249,7 +221,6 @@ const userSlice = createSlice({
       age: 0,
       roleInfo: {} as RoleInfo,
     },
-    likedPosts: [] as { likeId: number; postId: number }[],
     friends,
     loading: 'idle' as Loading,
     errors: '',
@@ -395,20 +366,6 @@ const userSlice = createSlice({
     });
     builder.addCase(logout.pending, (state) => {
       state.loading = 'pending';
-    });
-
-    builder.addCase(likePost.fulfilled, (state, { payload }) => {
-      state.likedPosts.push(payload);
-    });
-
-    builder.addCase(unlikePost.fulfilled, (state, { payload }) => {
-      state.likedPosts = state.likedPosts.filter(
-        (post) => post.likeId !== payload.likeId,
-      );
-    });
-
-    builder.addCase(getPostsUserLike.fulfilled, (state, { payload }) => {
-      state.likedPosts = payload;
     });
 
     builder.addCase(makeFriendship.fulfilled, (state, { payload }) => {

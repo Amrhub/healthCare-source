@@ -26,6 +26,7 @@ const FriendRequests = () => {
                 userName={userInfo.name}
                 userAvatar={userInfo.profilePic}
                 userId={userInfo.id}
+                role={userInfo.role}
                 IconButtons={
                   requester_id === currentUserId ? (
                     [<IconButton children={<PersonAddDisabledIcon color="error" />}
