@@ -4,6 +4,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import ChatIcon from '@mui/icons-material/Chat';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
 import GroupsIcon from '@mui/icons-material/Groups';
 import HomeSharpIcon from '@mui/icons-material/HomeSharp';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -176,7 +177,8 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     { text: 'Home', component: <HomeSharpIcon />, path: userRoutes.home },
     { text: 'Profile', component: <PersonIcon />, path: userRoutes.profile.main },
     { text: 'History', component: <HistoryToggleOff />, path: userRoutes.reportHistory },
-    { text: 'Community', component: <GroupsIcon />, path: userRoutes.community.index },
+    { text: 'Community', component: <ConnectWithoutContactIcon />, path: userRoutes.community.index },
+    { text: 'Patients', component: <GroupsIcon />, path: userRoutes.myPatients.index },
     { text: 'Stories', component: <AutoStories />, path: userRoutes.stories.index },
     { text: 'Chat', component: <ChatIcon />, path: userRoutes.chat },
     {

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Navigate } from 'react-router-dom';
 
-import { clearAlert, setAlert } from '../../redux/alert/alertSlice';
+import { hideAlert, setAlert } from '../../redux/alert/alertSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
 
 const PrivateRoute = ({ children }: { children: React.ReactElement }) => {
@@ -10,7 +10,7 @@ const PrivateRoute = ({ children }: { children: React.ReactElement }) => {
   useEffect(() => {
     if (isAuthenticated && !(loading === 'pending')) {
 
-      dispatch(clearAlert());
+      dispatch(hideAlert());
     } else {
       dispatch(setAlert({ message: 'You must be logged in to view this page', type: 'error' }));
     }

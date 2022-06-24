@@ -1,7 +1,7 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { Alert, IconButton, Fade } from '@mui/material';
 
-import { clearAlert } from '../../redux/alert/alertSlice';
+import { hideAlert } from '../../redux/alert/alertSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
 
 export const DisplayAlert = () => {
@@ -20,7 +20,7 @@ export const DisplayAlert = () => {
             aria-label="close"
             color="inherit"
             size="small"
-            onClick={() => dispatch(clearAlert())}
+            onClick={() => dispatch(hideAlert())}
           >
             <CloseIcon fontSize="inherit" />
           </IconButton>

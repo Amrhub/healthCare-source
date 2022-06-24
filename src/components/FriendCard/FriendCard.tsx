@@ -28,7 +28,7 @@ const FriendCard = ({ userName, userAvatar, IconButtons, userId, role }: FriendC
       </MyLink>
       <Typography variant="body1" sx={{ fontWeight: '700', fontSize: '24px' }}>
         {userName}
-        {(/doctor/i).test(role) && <Chip label="Doctor" variant='outlined' color='success' />}
+        {(/doctor/i).test(role) && <Chip label="Doctor" variant='outlined' color='success' size="small" sx={{ display: 'flex', width: 'max-content', fontSize: '12px' }} />}
       </Typography>
 
       <Box sx={{ marginLeft: 'auto', display: 'flex', gap: '5px' }}>

@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { apiVersion, baseUrl } from '../configureStore';
 
@@ -152,14 +152,80 @@ export const fetchFriendships = createAsyncThunk(
   },
 );
 
+export const fetchConsultations = createAsyncThunk(
+  'users/fetchConsultations',
+  async (doctor_id: number) => {
+    const response = await fetch(
+      `${baseUrl}${apiVersion}observations?doctor_id=${doctor_id}`
+    )
+    return await response.json();
+  }
+)
 
+export const fetchConsultants = createAsyncThunk(
+  'users/fetchConsultants',
+  async (patient_id: number | string) => {
+    const response = await fetch(
+      `${baseUrl}${apiVersion}observations/my_consultants?patient_id=${patient_id}`
+    );
+    return await response.json();
+  }
 
-interface RoleDoctorInfo {
-  specialization: string;
-  experience: number;
-  salary: number;
-  certificates: string[];
-}
+)
+
+export const bookConsultation = createAsyncThunk(
+  'users/bookConsultation',
+  async ({ doctor_id, patient_id }: { doctor_id: number | string, patient_id: string | number }) => {
+    const response = await fetch(
+      `${baseUrl}${apiVersion}observations`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ doctor_id, patient_id })
+      }
+    )
+
+    return await response.json();
+  }
+)
+
+export const acceptConsultation = createAsyncThunk(
+  'users/acceptConsultation',
+  async (consultationId: number) => {
+    const response = await fetch(
+      `${baseUrl}${apiVersion}observations/${consultationId}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: 'accepted' })
+      }
+    )
+    if (response.ok) return consultationId;
+    return {
+      error: 'Something went wrong x.x'
+    }
+  }
+)
+
+export const rejectConsultation = createAsyncThunk(
+  'users/rejectConsultation',
+  async (consultationId: number) => {
+    const response = await fetch(
+      `${baseUrl}${apiVersion}observations/${consultationId}`,
+      {
+        method: 'DELETE',
+      }
+    )
+    if (response.ok) return consultationId;
+    return {
+      error: 'Something went wrong x.x'
+    }
+  }
+)
 
 interface Friendship {
   id: number;
@@ -234,10 +300,12 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(createDoctor.fulfilled, (state, { payload }) => {
       state.userInfo.roleInfo = {
+        type: 'doctor',
         specialization: payload.specialization,
         experience: payload.years_experience,
         salary: payload.salary,
         certificates: payload.certificates,
+        consultations: []
       };
       state.isReferenceCreated = true;
       state.userInfo.referenceId = payload.id;
@@ -288,6 +356,7 @@ const userSlice = createSlice({
 
     builder.addCase(createPatient.fulfilled, (state, { payload }) => {
       state.userInfo.roleInfo = {
+        type: 'patient',
         deviceId: payload.deviceId,
         hasDeviceConnected: !!payload.deviceId,
         weight: parseFloat(payload.weight),
@@ -297,6 +366,7 @@ const userSlice = createSlice({
         diabetes: payload.diabetes,
         otherDiseases: payload.other_diseases_detail,
         smoking: payload.smoking,
+        consultants: []
       };
       state.userInfo.referenceId = payload.id;
       state.isReferenceCreated = true;
@@ -320,6 +390,7 @@ const userSlice = createSlice({
           roleInfo: {
             ...payload.roleInfo,
             hasDeviceConnected: !!payload.roleInfo.deviceId,
+            type: payload.userInfo.role
           },
         };
         state.auth.token = payload.authorization;
@@ -342,6 +413,7 @@ const userSlice = createSlice({
         ...payload.userInfo,
         roleInfo: {
           ...payload.roleInfo,
+          type: payload.userInfo.role,
           hasDeviceConnected: !!payload.roleInfo.deviceId
         },
       };
@@ -401,6 +473,56 @@ const userSlice = createSlice({
         ...payload,
       };
     });
+
+    builder.addCase(fetchConsultations.fulfilled, (state, { payload }) => {
+      if (state.userInfo.roleInfo.type === "patient") return;
+      state.userInfo.roleInfo = {
+        ...state.userInfo.roleInfo,
+        consultations: payload
+      }
+    });
+
+    builder.addCase(fetchConsultants.fulfilled, (state, { payload }) => {
+      if (state.userInfo.roleInfo.type === "doctor") return;
+      state.userInfo.roleInfo = {
+        ...state.userInfo.roleInfo,
+        consultants: payload
+      }
+    });
+
+    builder.addCase(acceptConsultation.fulfilled, (state, { payload }) => {
+      if (Object.keys(payload).includes("error")) {
+        const { error } = payload as { error: string };
+        state.errors = error;
+        return;
+      }
+      if (state.userInfo.roleInfo.type === 'patient') return;
+      const { consultations } = state.userInfo.roleInfo;
+      const indexOfConsultation = consultations.findIndex(consultation => consultation.id === payload)
+      state.userInfo.roleInfo.consultations[indexOfConsultation] = {
+        ...state.userInfo.roleInfo.consultations[indexOfConsultation],
+        status: 'accepted'
+      }
+    });
+
+    builder.addCase(rejectConsultation.fulfilled, (state, { payload }) => {
+      if (Object.keys(payload).includes("error")) {
+        const { error } = payload as { error: string };
+        state.errors = error;
+        return;
+      }
+      if (state.userInfo.roleInfo.type === 'patient')
+        state.userInfo.roleInfo.consultants = state.userInfo.roleInfo.consultants.filter(c => c.id !== payload);
+      if (state.userInfo.roleInfo.type === 'doctor')
+        state.userInfo.roleInfo.consultations = state.userInfo.roleInfo.consultations.filter(v => v.id !== payload);
+    })
+
+    builder.addCase(bookConsultation.fulfilled, (state, { payload }: PayloadAction<Consultations>) => {
+      if (state.userInfo.roleInfo.type === 'patient')
+        state.userInfo.roleInfo.consultants = [...state.userInfo.roleInfo.consultants, payload]
+      console.log('🚀 ~ file: users.ts ~ line 520 ~ builder.addCase ~ state.userInfo.roleInfo.type', state.userInfo.roleInfo.type)
+      console.log('🚀 ~ file: users.ts ~ line 522 ~ builder.addCase ~ payload', payload)
+    })
   },
 });
 

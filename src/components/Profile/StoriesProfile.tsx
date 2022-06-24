@@ -55,7 +55,7 @@ const StoriesProfile = ({ mainUser, userId }: IProps) => {
       <Box sx={{ textAlign: 'left', mt: 2, color: 'primary.main' }}>
         {mainUser ? (
           <Typography sx={{ fontWeight: 700, fontSize: '24px', mt: '10px' }}>
-            My Recent Stories
+            Recent Stories
           </Typography>
         ) : (
           <Typography sx={{ fontWeight: 700, fontSize: '24px', mt: '10px' }}>

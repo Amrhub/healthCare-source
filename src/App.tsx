@@ -7,7 +7,7 @@ import GuestLayout from './components/GuestLayout/GuestLayout';
 import LoadingScreen from './Modals/LoadingScreen';
 import { useAppDispatch, useAppSelector } from './redux/configureStore';
 import { fetchStories, getPostsUserLike } from './redux/stories/storySlice';
-import { userFromToken } from './redux/users/users';
+import { fetchConsultants, fetchConsultations, userFromToken } from './redux/users/users';
 import Routes from './Routes/Route';
 
 export const theme = createTheme({
@@ -81,6 +81,11 @@ const App = () => {
       dispatch(userFromToken(token));
     } else {
       dispatch(getPostsUserLike(userId));
+      if (userInfo.role === "doctor")
+        dispatch(fetchConsultations(parseInt(userInfo.referenceId)));
+
+      if (userInfo.role === "patient")
+        dispatch(fetchConsultants(parseInt(userInfo.referenceId)));
     }
   }, [dispatch, localStorage, isAuthenticated]);
 
