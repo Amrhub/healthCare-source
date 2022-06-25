@@ -108,6 +108,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const { user } = useAppSelector((state) => state);
+  const currentUserRole = user.userInfo.role;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -172,21 +173,40 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     </Menu>
   );
 
+  const getUserSideBar = () => {
+    if (currentUserRole === 'doctor') {
+      return (
+        [
+          { text: 'Home', component: <HomeSharpIcon />, path: userRoutes.home },
+          { text: 'Profile', component: <PersonIcon />, path: userRoutes.profile.main },
+          { text: 'Community', component: <ConnectWithoutContactIcon />, path: userRoutes.community.index },
+          { text: 'Patients', component: <GroupsIcon />, path: userRoutes.myPatients.index },
+          { text: 'Stories', component: <AutoStories />, path: userRoutes.stories.index },
+          { text: 'Chat', component: <ChatIcon />, path: userRoutes.chat },
 
-  const userSideBar = [
-    { text: 'Home', component: <HomeSharpIcon />, path: userRoutes.home },
-    { text: 'Profile', component: <PersonIcon />, path: userRoutes.profile.main },
-    { text: 'History', component: <HistoryToggleOff />, path: userRoutes.reportHistory },
-    { text: 'Community', component: <ConnectWithoutContactIcon />, path: userRoutes.community.index },
-    { text: 'Patients', component: <GroupsIcon />, path: userRoutes.myPatients.index },
-    { text: 'Stories', component: <AutoStories />, path: userRoutes.stories.index },
-    { text: 'Chat', component: <ChatIcon />, path: userRoutes.chat },
-    {
-      text: 'Membership',
-      component: <StoreIcon />,
-      path: userRoutes.store,
-    },
-  ];
+        ]
+      );
+    } else if (currentUserRole === 'patient') {
+      return [
+        { text: 'Home', component: <HomeSharpIcon />, path: userRoutes.home },
+        { text: 'Profile', component: <PersonIcon />, path: userRoutes.profile.main },
+        { text: 'History', component: <HistoryToggleOff />, path: userRoutes.reportHistory },
+        { text: 'Community', component: <ConnectWithoutContactIcon />, path: userRoutes.community.index },
+        { text: 'Stories', component: <AutoStories />, path: userRoutes.stories.index },
+        { text: 'Chat', component: <ChatIcon />, path: userRoutes.chat },
+        {
+          text: 'Membership',
+          component: <StoreIcon />,
+          path: userRoutes.store,
+        },
+      ]
+    } else {
+      return []
+    }
+    ;
+  }
+
+  const userSideBar = getUserSideBar();
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
