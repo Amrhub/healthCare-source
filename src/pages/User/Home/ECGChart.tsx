@@ -12,8 +12,10 @@ const ECGChart = () => {
   const [data, setData] = useState([]);
   const [lastDataTime, setLastDataTime] = useState('');
   const [numberOfAttempts, setNumberOfAttempts] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchLastECGData = async () => {
+    setIsLoading(true);
     if (!hasDeviceConnected) return;
     const response = await fetch(`${baseUrl}${apiVersion}device_data/${deviceId}`);
     const responseData = await response.json();
@@ -29,6 +31,7 @@ const ECGChart = () => {
         setNumberOfAttempts(prev => prev + 1);
       }
     }
+    setIsLoading(false);
   }
   useEffect(() => {
     if (!hasDeviceConnected) return;

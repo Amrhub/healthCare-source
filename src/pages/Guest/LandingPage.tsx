@@ -4,7 +4,7 @@ import { Button, Grid, Stack, TextField, Typography } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Box, styled } from '@mui/system';
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 import landingPageBG from '/src/assets/landingPage/Card.svg';
@@ -80,6 +80,9 @@ const LandingPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { auth: { isAuthenticated }, loading } = useAppSelector((state) => state.user);
+  const location = useLocation();
+  const locationState = location?.state as any;
+  const from = locationState ? locationState?.from : userRoutes.home;
 
   const navigate = useNavigate();
 
@@ -91,7 +94,7 @@ const LandingPage = () => {
 
   useEffect(() => {
     if (isAuthenticated && !(loading === 'pending')) {
-      navigate(userRoutes.home);
+      navigate(from, { replace: true });
     }
   }, [isAuthenticated, loading]);
 

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 
 import { hideAlert, setAlert } from '../../redux/alert/alertSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
 const PrivateRoute = ({ children }: { children: React.ReactElement }) => {
   const dispatch = useAppDispatch();
   const { auth: { isAuthenticated }, loading } = useAppSelector((state) => state.user);
+  const location = useLocation();
   useEffect(() => {
     if (isAuthenticated && !(loading === 'pending')) {
 
@@ -17,7 +18,7 @@ const PrivateRoute = ({ children }: { children: React.ReactElement }) => {
   }, [isAuthenticated, dispatch])
 
   return (
-    isAuthenticated ? children : <Navigate to="/" />
+    isAuthenticated ? children : <Navigate to="/" state={{ from: location }} replace />
   )
 }
 

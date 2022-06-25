@@ -2,12 +2,13 @@ import { Avatar, Button, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
 
+import PatientInformationModal from '../../Modals/PatientInformationModal';
 import SignUpModal from '../../Modals/SignUpModal';
 import { ProfilePropsFriendRequest } from '../../pages/Profile/Profile'
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
 import { acceptFriendship, bookConsultation, cancelFriendship, fetchConsultants, makeFriendship, rejectConsultation, UserGeneralInfo } from '../../redux/users/users';
 interface IProps {
-  user: UserGeneralInfo;
+  user: UserGeneralInfo & { roleInfo: PatientInformation };
   mainUser: boolean;
   friend: boolean;
   friendRequest: ProfilePropsFriendRequest;
@@ -92,6 +93,11 @@ const BioProfile = ({
 
   return (
     <>
+      {
+        canSeePatientInfo && (
+          <PatientInformationModal open={openPatientInfo} handleClose={() => setOpenPatientInfo(false)} user={user} />
+        )
+      }
       <Box
         sx={{
           display: 'flex',
@@ -156,7 +162,15 @@ const BioProfile = ({
           </Grid>
         </Grid>
         {
-          canSeePatientInfo && <Button color='info' variant="contained" sx={{ width: '100%', mt: 'auto' }}>Patient Information</Button>
+          canSeePatientInfo &&
+          <Button
+            color='info'
+            variant="contained"
+            sx={{ width: '100%', mt: 'auto' }}
+            onClick={() => setOpenPatientInfo(true)}
+          >
+            Patient Information
+          </Button>
         }
         {
           (isConsultationRequestAccepted) ?
@@ -189,7 +203,7 @@ const BioProfile = ({
                 bgcolor: 'grey.200',
                 color: '#000',
                 width: '100%',
-                mt: (canRequestConsultation && canSeePatientInfo) ? 1 : 'auto',
+                mt: (canRequestConsultation || canSeePatientInfo) ? 1 : 'auto',
                 mb: '10px',
                 '&:hover': {
                   bgcolor: 'primary.main',
@@ -230,7 +244,7 @@ const BioProfile = ({
                 bgcolor: 'red',
                 color: '#fff',
                 width: '100%',
-                mt: (canRequestConsultation && canSeePatientInfo) ? 1 : 'auto',
+                mt: (canRequestConsultation || canSeePatientInfo) ? 1 : 'auto',
                 '&:hover': {
                   bgcolor: '#940000',
                 },
@@ -279,7 +293,7 @@ const BioProfile = ({
               bgcolor: 'primary.main',
               color: '#fff',
               px: '135px',
-              mt: (canRequestConsultation && canSeePatientInfo) ? 1 : 'auto',
+              mt: (canRequestConsultation || canSeePatientInfo) ? 1 : 'auto',
 
               '&:hover': {
                 bgcolor: 'primary.dark',

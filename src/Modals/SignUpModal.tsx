@@ -19,7 +19,8 @@ import { setAlert } from '../redux/alert/alertSlice';
 import { useAppDispatch, useAppSelector } from '../redux/configureStore';
 import { createDoctor, createPatient, createUser, updateUser } from '../redux/users/users';
 import { DATEFORMAT, formatDate } from '../utils/helpers/helpers';
-const ModalContainer = styled(Box)(({ theme }) => ({
+
+export const ModalContainer = styled(Box)(({ theme }) => ({
   marginX: 'auto',
   textAlign: 'center',
   backgroundColor: 'white',

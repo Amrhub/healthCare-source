@@ -24,14 +24,16 @@ export const MyTableCell = styled(TableCell)`
   text-align: center;
 `;
 
-const ReportHistory = () => {
+const ReportHistory = ({ patientDeviceId }: { patientDeviceId?: number }) => {
   const [rows, setRows] = useState<Row[]>();
   const { hasDeviceConnected, deviceId } = useAppSelector(state => state.user.userInfo.roleInfo as RolePatientInfo)
   const [isLoading, setIsLoading] = useState(true && hasDeviceConnected);
 
   const fetchData = async () => {
     setIsLoading(true);
-    const response = await fetch(`${baseUrl}${apiVersion}device_data/show_avg_hourly_data?device_id=${deviceId}`);
+    const response = await fetch(
+      `${baseUrl}${apiVersion}device_data/show_avg_hourly_data?device_id=${deviceId || patientDeviceId}`
+    );
     const data = await response.json();
     setRows(data);
     setIsLoading(false);
@@ -43,7 +45,7 @@ const ReportHistory = () => {
 
   return (
     <Box sx={{ p: 7, position: 'relative', height: '100%' }}>
-      <NoDeviceConnected />
+      {!patientDeviceId && <NoDeviceConnected />}
 
       <Typography component="h5" color="initial" gutterBottom>
         <Typography color="#23B59C" sx={{ display: 'inline-block' }}>
@@ -54,7 +56,7 @@ const ReportHistory = () => {
       {isLoading && <LoadingScreen />}
       {
         rows ? (
-          <TableContainer component={Paper} sx={{ maxHeight: '80vh', overflowY: 'auto' }}>
+          <TableContainer component={Paper} sx={{ maxHeight: !patientDeviceId ? '80vh' : '60vh', overflowY: 'auto' }}>
             <Table aria-label="collapsible table">
               <TableHead>
                 <TableRow>

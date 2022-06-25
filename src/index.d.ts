@@ -21,6 +21,18 @@ interface RolePatientInfo {
   consultants: Consultations[];
 }
 
+interface PatientInformation {
+  covid: boolean;
+  smoking: boolean;
+  weight: string;
+  height: string;
+  diabetes: boolean;
+  hypertension: boolean;
+  other_diseases_detail: string | null;
+  device_id: number;
+  id: number;
+}
+
 interface Consultations {
   id: number,
   doctor_id: number,
