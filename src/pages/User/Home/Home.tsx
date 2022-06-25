@@ -3,7 +3,6 @@ import { Avatar, Box, Grid, Typography } from '@mui/material';
 import { dfCenterCenter } from '../../../abstracts/common.styles';
 import HomePageBG from '../../../assets/homePage/home_header-bg.svg';
 import NoDeviceConnected from '../../../Modals/NoDeviceConnected';
-
 import { useAppSelector } from '../../../redux/configureStore';
 
 import ECGChart from './ECGChart';
@@ -57,7 +56,7 @@ const Home = () => {
         >
           <HealthCards />
         </Grid>
-        <Grid item xs={9.6}>
+        <Grid item xs={9.6} sx={{ display: 'flex', position: 'relative' }}>
           <ECGChart />
         </Grid>
       </Grid>

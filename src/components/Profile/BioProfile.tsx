@@ -6,7 +6,6 @@ import SignUpModal from '../../Modals/SignUpModal';
 import { ProfilePropsFriendRequest } from '../../pages/Profile/Profile'
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
 import { acceptFriendship, bookConsultation, cancelFriendship, fetchConsultants, makeFriendship, rejectConsultation, UserGeneralInfo } from '../../redux/users/users';
-
 interface IProps {
   user: UserGeneralInfo;
   mainUser: boolean;
@@ -25,10 +24,13 @@ const BioProfile = ({
   const dispatch = useAppDispatch();
   const { id: userId, role: currentUserRole, referenceId: currentUserReferenceId } = useAppSelector(state => state.user.userInfo)
   const { consultants } = useAppSelector(state => state.user.userInfo.roleInfo as RolePatientInfo);
+  const { consultations } = useAppSelector(state => state.user.userInfo.roleInfo as RoleDoctorInfo);
   const pendingFriendship = useAppSelector(state => state.user.friends.pending)
   const acceptedFriendship = useAppSelector(state => state.user.friends.accepted)
   const canRequestConsultation = !mainUser && currentUserRole === "patient" && user.role === "doctor";
-
+  const canSeePatientInfo =
+    !mainUser && currentUserRole === "doctor" && user.role === "patient" && consultations.some(c => c.patient_id === parseInt(user.referenceId));
+  const [openPatientInfo, setOpenPatientInfo] = useState(false);
 
   const isConsultationRequestPendingChecker = () => {
     if (!canRequestConsultation) return false;
@@ -154,6 +156,9 @@ const BioProfile = ({
           </Grid>
         </Grid>
         {
+          canSeePatientInfo && <Button color='info' variant="contained" sx={{ width: '100%', mt: 'auto' }}>Patient Information</Button>
+        }
+        {
           (isConsultationRequestAccepted) ?
             (<Button sx={{ color: 'white', width: '100%', mt: 'auto' }}
               variant='contained'
@@ -184,7 +189,7 @@ const BioProfile = ({
                 bgcolor: 'grey.200',
                 color: '#000',
                 width: '100%',
-                mt: canRequestConsultation ? 1 : 'auto',
+                mt: (canRequestConsultation && canSeePatientInfo) ? 1 : 'auto',
                 mb: '10px',
                 '&:hover': {
                   bgcolor: 'primary.main',
@@ -208,7 +213,7 @@ const BioProfile = ({
               bgcolor: 'red',
               color: '#fff',
               width: '100%',
-              mt: canRequestConsultation ? 1 : 'auto',
+              mt: (canRequestConsultation || canSeePatientInfo) ? 1 : 'auto',
               '&:hover': {
                 bgcolor: '#940000',
               },
@@ -225,7 +230,7 @@ const BioProfile = ({
                 bgcolor: 'red',
                 color: '#fff',
                 width: '100%',
-                mt: canRequestConsultation ? 1 : 'auto',
+                mt: (canRequestConsultation && canSeePatientInfo) ? 1 : 'auto',
                 '&:hover': {
                   bgcolor: '#940000',
                 },
@@ -274,7 +279,7 @@ const BioProfile = ({
               bgcolor: 'primary.main',
               color: '#fff',
               px: '135px',
-              mt: canRequestConsultation ? 1 : 'auto',
+              mt: (canRequestConsultation && canSeePatientInfo) ? 1 : 'auto',
 
               '&:hover': {
                 bgcolor: 'primary.dark',

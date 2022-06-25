@@ -10,7 +10,12 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/system';
+import { useEffect, useState } from 'react';
+
+import LoadingScreen from '../../../Modals/LoadingScreen';
 import NoDeviceConnected from '../../../Modals/NoDeviceConnected';
+import { apiVersion, baseUrl, useAppSelector } from '../../../redux/configureStore';
+
 import MyTableRow from './MyTableRow';
 
 export const MyTableCell = styled(TableCell)`
@@ -19,90 +24,23 @@ export const MyTableCell = styled(TableCell)`
   text-align: center;
 `;
 
-const rows = [
-  {
-    date: '2022-01-05',
-    heartRate: '84',
-    temperature: '36.5',
-    bloodOxygen: '92',
-    history: [
-      {
-        time: '12 AM',
-        heartRate: '84',
-        temperature: '36.5',
-        bloodOxygen: '92',
-      },
-      {
-        time: '1 AM',
-        heartRate: '84',
-        temperature: '36.5',
-        bloodOxygen: '92',
-      },
-    ],
-  },
-  {
-    date: '2022-01-06',
-    heartRate: '84',
-    temperature: '36.5',
-    bloodOxygen: '92',
-    history: [
-      {
-        time: '12 AM',
-        heartRate: '84',
-        temperature: '36.5',
-        bloodOxygen: '92',
-      },
-      {
-        time: '1 AM',
-        heartRate: '84',
-        temperature: '36.5',
-        bloodOxygen: '92',
-      },
-    ],
-  },
-  {
-    date: '2022-01-07',
-    heartRate: '84',
-    temperature: '36.5',
-    bloodOxygen: '92',
-    history: [
-      {
-        time: '12 AM',
-        heartRate: '84',
-        temperature: '36.5',
-        bloodOxygen: '92',
-      },
-      {
-        time: '1 AM',
-        heartRate: '84',
-        temperature: '36.5',
-        bloodOxygen: '92',
-      },
-    ],
-  },
-  {
-    date: '2022-01-08',
-    heartRate: '84',
-    temperature: '36.5',
-    bloodOxygen: '92',
-    history: [
-      {
-        time: '12 AM',
-        heartRate: '84',
-        temperature: '36.5',
-        bloodOxygen: '92',
-      },
-      {
-        time: '1 AM',
-        heartRate: '84',
-        temperature: '36.5',
-        bloodOxygen: '92',
-      },
-    ],
-  },
-];
-
 const ReportHistory = () => {
+  const [rows, setRows] = useState<Row[]>();
+  const { hasDeviceConnected, deviceId } = useAppSelector(state => state.user.userInfo.roleInfo as RolePatientInfo)
+  const [isLoading, setIsLoading] = useState(true && hasDeviceConnected);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    const response = await fetch(`${baseUrl}${apiVersion}device_data/show_avg_hourly_data?device_id=${deviceId}`);
+    const data = await response.json();
+    setRows(data);
+    setIsLoading(false);
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <Box sx={{ p: 7, position: 'relative', height: '100%' }}>
       <NoDeviceConnected />
@@ -113,24 +51,33 @@ const ReportHistory = () => {
         </Typography>
         These are average data
       </Typography>
-      <TableContainer component={Paper} sx={{ maxHeight: '80vh', overflowY: 'auto' }}>
-        <Table aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <TableCell />
-              <MyTableCell>Date</MyTableCell>
-              <MyTableCell>Heart Rate (BPM)</MyTableCell>
-              <MyTableCell>Temperature (c)</MyTableCell>
-              <MyTableCell>Blood Oxygen (%)</MyTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <MyTableRow key={row.date} row={row} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      {isLoading && <LoadingScreen />}
+      {
+        rows ? (
+          <TableContainer component={Paper} sx={{ maxHeight: '80vh', overflowY: 'auto' }}>
+            <Table aria-label="collapsible table">
+              <TableHead>
+                <TableRow>
+                  <TableCell />
+                  <MyTableCell>Date</MyTableCell>
+                  <MyTableCell>Heart Rate (BPM)</MyTableCell>
+                  <MyTableCell>Temperature (c)</MyTableCell>
+                  <MyTableCell>Blood Oxygen (%)</MyTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => (
+                  <MyTableRow key={row.date} row={row} />
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ) : (
+          <Typography component="h5" color="initial" gutterBottom>
+            No data was registered, please check your device
+          </Typography>
+        )
+      }
     </Box>
   );
 };

@@ -13,20 +13,8 @@ import {
 import { Box } from '@mui/system';
 import { useState } from 'react';
 
-interface RowProp {
-  date: string;
-  heartRate: string;
-  temperature: string;
-  bloodOxygen: string;
-  history: {
-    time: string;
-    heartRate: string;
-    temperature: string;
-    bloodOxygen: string;
-  }[];
-}
 
-const MyTableRow = ({ row }: { row: RowProp }) => {
+const MyTableRow = ({ row }: { row: Row }) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -40,9 +28,9 @@ const MyTableRow = ({ row }: { row: RowProp }) => {
         <TableCell component="th" scope="row" align="center">
           {row.date}
         </TableCell>
-        <TableCell align="center">{row.heartRate}</TableCell>
+        <TableCell align="center">{row.heart_rate}</TableCell>
         <TableCell align="center">{row.temperature}</TableCell>
-        <TableCell align="center">{row.bloodOxygen}</TableCell>
+        <TableCell align="center">{row.spo2}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -71,9 +59,9 @@ const MyTableRow = ({ row }: { row: RowProp }) => {
                       <TableCell component="th" scope="row" align="center">
                         {historyRow.time}
                       </TableCell>
-                      <TableCell align="center">{historyRow.heartRate}</TableCell>
+                      <TableCell align="center">{historyRow.heart_rate}</TableCell>
                       <TableCell align="center">{historyRow.temperature}</TableCell>
-                      <TableCell align="center">{historyRow.bloodOxygen}</TableCell>
+                      <TableCell align="center">{historyRow.spo2}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

@@ -34,3 +34,17 @@ interface Consultations {
     profilePic?: string;
   }
 }
+
+interface History {
+  time: string;
+  heart_rate: number;
+  temperature: number;
+  spo2: number;
+}
+interface Row {
+  date: string;
+  heart_rate: number;
+  temperature: number;
+  spo2: number;
+  history: History[];
+}
