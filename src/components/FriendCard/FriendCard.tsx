@@ -24,7 +24,7 @@ const FriendCard = ({ userName, userAvatar, IconButtons, userId, role }: FriendC
       }}
     >
       <MyLink to={`/user/profile/${userId}`}>
-        <Avatar src={userAvatar} sx={{ width: { md: '80px' }, height: { md: '80px' } }} />
+        <Avatar src={userAvatar} sx={{ width: { md: '80px' }, height: { md: '80px' } }} component="p" />
       </MyLink>
       <Typography variant="body1" sx={{ fontWeight: '700', fontSize: '24px' }}>
         {userName}
