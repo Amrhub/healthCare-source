@@ -7,8 +7,10 @@ import SignUpModal from '../../Modals/SignUpModal';
 import { ProfilePropsFriendRequest } from '../../pages/Profile/Profile'
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
 import { acceptFriendship, bookConsultation, cancelFriendship, fetchConsultants, makeFriendship, rejectConsultation, UserGeneralInfo } from '../../redux/users/users';
+
+export type UserInfo = UserGeneralInfo & { roleInfo: PatientInformation };
 interface IProps {
-  user: UserGeneralInfo & { roleInfo: PatientInformation };
+  user: UserInfo;
   mainUser: boolean;
   friend: boolean;
   friendRequest: ProfilePropsFriendRequest;
