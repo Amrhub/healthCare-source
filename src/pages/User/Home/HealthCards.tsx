@@ -79,6 +79,9 @@ const HealthCards = () => {
 
     if (data.spo2 < 92 && data.temperature > 38)
       setDiseasePrediction("You have covid-19 syndromes");
+
+    if (data.spo2 < 87)
+      setDiseasePrediction("You have Hypoxemia, please contact your doctor, Hypoxemia is a low blood oxygen below average level");
   }
 
   const handlePopoverClose = () => {

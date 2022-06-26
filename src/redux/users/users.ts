@@ -440,9 +440,6 @@ const userSlice = createSlice({
     builder.addCase(logout.pending, (state) => {
       state.loading = 'pending';
     });
-    builder.addCase(logout.pending, (state) => {
-      state.loading = 'pending';
-    });
 
     builder.addCase(makeFriendship.fulfilled, (state, { payload }) => {
       state.friends.pending.push(payload);
@@ -524,8 +521,6 @@ const userSlice = createSlice({
     builder.addCase(bookConsultation.fulfilled, (state, { payload }: PayloadAction<Consultations>) => {
       if (state.userInfo.roleInfo.type === 'patient')
         state.userInfo.roleInfo.consultants = [...state.userInfo.roleInfo.consultants, payload]
-      console.log('🚀 ~ file: users.ts ~ line 520 ~ builder.addCase ~ state.userInfo.roleInfo.type', state.userInfo.roleInfo.type)
-      console.log('🚀 ~ file: users.ts ~ line 522 ~ builder.addCase ~ payload', payload)
     })
   },
 });

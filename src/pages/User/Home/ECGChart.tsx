@@ -1,9 +1,10 @@
 
 
 import { ArgumentAxis, Chart, SplineSeries, ValueAxis } from '@devexpress/dx-react-chart-material-ui';
-import { Backdrop, Button, CircularProgress, Typography } from '@mui/material';
+import { Backdrop, Button, Typography } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import { useEffect, useState } from 'react';
+
 import { apiVersion, baseUrl, useAppSelector } from '../../../redux/configureStore';
 
 const ECGChart = ({ patientDeviceId }: { patientDeviceId?: number }) => {
@@ -11,6 +12,7 @@ const ECGChart = ({ patientDeviceId }: { patientDeviceId?: number }) => {
   const [data, setData] = useState([]);
   const [lastDataTime, setLastDataTime] = useState('');
   const [numberOfAttempts, setNumberOfAttempts] = useState(0);
+  const ecgSample = 140;
 
   const fetchLastECGData = async () => {
     if (!hasDeviceConnected && !patientDeviceId) return;
@@ -32,14 +34,14 @@ const ECGChart = ({ patientDeviceId }: { patientDeviceId?: number }) => {
   }
   useEffect(() => {
     if (!hasDeviceConnected && !patientDeviceId) return;
-    if (numberOfAttempts >= 10) return;
+    if (numberOfAttempts >= 20) return;
 
 
     const timeInterval = setInterval(() => {
-      if (numberOfAttempts >= 10) clearInterval(timeInterval);
+      if (numberOfAttempts >= 20) clearInterval(timeInterval);
       fetchLastECGData();
 
-      if (data.length > 20) {
+      if (data.length > (20 * ecgSample)) {
         setData((prev) => prev.slice(1));
       }
     }, 1000);
@@ -49,14 +51,14 @@ const ECGChart = ({ patientDeviceId }: { patientDeviceId?: number }) => {
 
   return (
     <>
-      {
-        (numberOfAttempts > 0 && numberOfAttempts < 10) &&
+      {/* {
+        (numberOfAttempts > 0 && numberOfAttempts < 20) &&
         <Typography color="red" sx={{ position: 'absolute', zIndex: '999', left: '50%', transform: 'translateX(-50%)', mt: 2, bgcolor: 'white' }} align="center">
           There is no new data trying to fetch data from server...
           <br />
           <CircularProgress color="primary" />
         </Typography>
-      }
+      } */}
       <Paper sx={{ height: '100%', width: '100%', position: 'relative' }}>
 
         <Chart data={data}>
@@ -64,7 +66,7 @@ const ECGChart = ({ patientDeviceId }: { patientDeviceId?: number }) => {
           <ValueAxis />
           <SplineSeries valueField="value" argumentField="argument" color="#4264D0" />
         </Chart>
-        <Backdrop open={(data.length === 0 && hasDeviceConnected) || numberOfAttempts >= 10} sx={{ position: 'absolute', backdropFilter: 'blur(2000px)', zIndex: '200' }} >
+        <Backdrop open={(data.length === 0 && hasDeviceConnected) || numberOfAttempts >= 20} sx={{ position: 'absolute', backdropFilter: 'blur(2000px)', zIndex: '200' }} >
           <Typography variant="h4" color="white" sx={{ display: 'flex' }} flexDirection="column">
             No live data available, please connect to the device and try again.
             <br />

@@ -8,11 +8,11 @@ import logo from '../../assets/landingPage/Logo.png';
 import myTheme, { CustomBackToTop } from './extraComponentsTheme';
 
 const FooterLayout = () => {
-  
+
   const FooterItem = styled(Typography)`
     color: ${({ theme }) => theme.palette.text.primary};
     font-weight: 700;
-  `; 
+  `;
 
   return (
     <StyledProvider theme={myTheme}>
@@ -32,12 +32,12 @@ const FooterLayout = () => {
             />
           </Footer.Item>
           <Footer.Item href="#">
-            <NavLink to="/about/about-us" style={{ textDecoration: 'none' }}>
+            <NavLink to="#" style={{ textDecoration: 'none' }}>
               <FooterItem variant="h6">About Us</FooterItem>
             </NavLink>
           </Footer.Item>
           <Footer.Item href="#">
-            <NavLink to="/about/our-team" style={{ textDecoration: 'none' }}>
+            <NavLink to="#" style={{ textDecoration: 'none' }}>
               <FooterItem variant="h6">Our Team</FooterItem>
             </NavLink>
           </Footer.Item>
