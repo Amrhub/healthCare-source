@@ -4,6 +4,10 @@ export const userRoutes = {
     main: '/user/profile/main',
     community: '/user/profile/:userId',
   },
+  myPatients: {
+    index: '/user/my-patients',
+    request: '/user/my-patients/request'
+  },
   reportHistory: '/user/report-history',
   community: {
     index: '/user/community',

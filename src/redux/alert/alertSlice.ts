@@ -20,13 +20,11 @@ const alertSlice = createSlice({
       state.type = action.payload.type;
       state.open = true;
     },
-    clearAlert: (state) => {
+    hideAlert: (state) => {
       state.open = false;
-      state.message = '';
-      state.type = undefined;
-    },
+    }
   },
 });
 
-export const { clearAlert, setAlert } = alertSlice.actions;
+export const { setAlert, hideAlert } = alertSlice.actions;
 export const alertReducer = alertSlice.reducer;

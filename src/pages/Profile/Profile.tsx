@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 
-import BioProfile from '../../components/Profile/BioProfile';
+import BioProfile, { UserInfo } from '../../components/Profile/BioProfile';
 import StoriesProfile from '../../components/Profile/StoriesProfile';
 import { UserGeneralInfo } from '../../redux/users/users';
 
@@ -28,7 +28,7 @@ const Profile = ({
   return (
     <Box sx={{ display: 'flex', gap: '50px' }}>
       <BioProfile
-        user={mainUser ? mainUserInfo as UserGeneralInfo : visitedUser as UserGeneralInfo}
+        user={mainUser ? mainUserInfo as UserInfo : visitedUser as UserInfo}
         mainUser={mainUser}
         friend={friend}
         friendRequest={friendRequest}

@@ -4,12 +4,14 @@ import PrivateRoute from '../components/PrivateRoute/PrivateRoute';
 import Chat from '../pages/Chat/Chat';
 import Community from '../pages/Community/Community';
 import LandingPage from '../pages/Guest/LandingPage';
+import MyPatients from '../pages/MyPatients/MyPatients';
 import ProfileCommunityUser from '../pages/Profile/ProfileCommunityUser';
 import ProfileMainUser from '../pages/Profile/ProfileMainUser';
 import Store from '../pages/Store/Store';
 import Stories from '../pages/Stories/Stories';
 import Home from '../pages/User/Home/Home';
 import ReportHistory from '../pages/User/ReportHistory/ReportHistory';
+
 
 import { guestRoutes, userRoutes } from './Routes';
 
@@ -19,6 +21,7 @@ const index = () => {
       {/* Guests Routes */}
       <Route path={guestRoutes.home} element={<LandingPage />} />
       {/* User Routes */}
+      {/* 1- Patients Routes */}
       <Route path={userRoutes.home} element={
         <PrivateRoute>
           <Home />
@@ -66,6 +69,13 @@ const index = () => {
           <Community />
         </PrivateRoute>
       } />
+      {/* 2- Patients Routes */}
+      <Route path={`${userRoutes.myPatients.index}/*`} element={
+        <PrivateRoute>
+          <MyPatients />
+        </PrivateRoute>
+      } />
+
     </Routes>
   );
 };

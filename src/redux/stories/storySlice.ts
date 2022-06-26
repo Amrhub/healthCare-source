@@ -50,6 +50,41 @@ export const fetchUserStories = createAsyncThunk(
   },
 );
 
+export const getPostsUserLike = createAsyncThunk(
+  'users/getPostsUserLike',
+  async (userId: number) => {
+    const response = await fetch(
+      `${baseUrl}${apiVersion}likes/posts_user_likes?user_id=${userId}`,
+    );
+    return await response.json();
+  },
+);
+
+export const likePost = createAsyncThunk(
+  'users/likePost',
+  async ({ postId, userId }: { userId: number; postId: number }) => {
+    const response = await fetch(`${baseUrl}${apiVersion}likes`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ post_id: postId, user_id: userId }),
+    });
+    return await response.json();
+  },
+);
+
+export const unlikePost = createAsyncThunk('users/unlikePost', async ({ likeId, postId }: { likeId: number, postId: number }) => {
+  const result = await fetch(`${baseUrl}${apiVersion}likes/${likeId}`, {
+    method: 'DELETE',
+  });
+  if (!result.ok) return { error: true }
+  return { postId };
+
+
+});
+
+
 interface UpdateStoryPayload {
   id: number;
   content: string;
@@ -81,6 +116,7 @@ const storySlice = createSlice({
     stories: [] as StoryType[],
     myStories: [] as StoryType[],
     profileStories: [] as StoryType[],
+    likedPosts: [] as { likeId: number; postId: number }[],
     loading: false,
     error: null,
   },
@@ -200,6 +236,29 @@ const storySlice = createSlice({
         state.profileStories = payload;
       },
     );
+
+    builder.addCase(getPostsUserLike.fulfilled, (state, { payload }) => {
+      state.likedPosts = payload;
+    });
+
+    builder.addCase(likePost.fulfilled, (state, { payload }) => {
+      state.likedPosts.push(payload);
+      const index = state.stories.findIndex((story) => story.id === payload.postId);
+      const myIndex = state.myStories.findIndex(story => story.id === payload.postId);
+      state.stories[index].likesCounter += 1;
+      if (myIndex === -1) return;
+      state.myStories[myIndex].likesCounter += 1;
+    });
+
+    builder.addCase(unlikePost.fulfilled, (state, { payload }) => {
+      if (payload?.error) return;
+      state.likedPosts = state.likedPosts.filter(likedPost => likedPost.postId !== payload.postId);
+      const index = state.stories.findIndex((story) => story.id === payload.postId);
+      const myIndex = state.myStories.findIndex(story => story.id === payload.postId);
+      state.stories[index].likesCounter -= 1;
+      if (myIndex === -1) return;
+      state.myStories[myIndex].likesCounter -= 1;
+    });
   },
 });
 

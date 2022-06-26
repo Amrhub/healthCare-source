@@ -1,14 +1,16 @@
 import { Avatar, Button, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
+import PatientInformationModal from '../../Modals/PatientInformationModal';
 import SignUpModal from '../../Modals/SignUpModal';
 import { ProfilePropsFriendRequest } from '../../pages/Profile/Profile'
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
-import { acceptFriendship, cancelFriendship, makeFriendship, UserGeneralInfo } from '../../redux/users/users';
+import { acceptFriendship, bookConsultation, cancelFriendship, fetchConsultants, makeFriendship, rejectConsultation, UserGeneralInfo } from '../../redux/users/users';
 
+export type UserInfo = UserGeneralInfo & { roleInfo: PatientInformation };
 interface IProps {
-  user: UserGeneralInfo;
+  user: UserInfo;
   mainUser: boolean;
   friend: boolean;
   friendRequest: ProfilePropsFriendRequest;
@@ -23,12 +25,42 @@ const BioProfile = ({
 }: IProps) => {
   const [modalOpen, setModalOpen] = useState(false);
   const dispatch = useAppDispatch();
-  const userId = useAppSelector(state => state.user.userInfo.id)
+  const { id: userId, role: currentUserRole, referenceId: currentUserReferenceId } = useAppSelector(state => state.user.userInfo)
+  const { consultants } = useAppSelector(state => state.user.userInfo.roleInfo as RolePatientInfo);
+  const { consultations } = useAppSelector(state => state.user.userInfo.roleInfo as RoleDoctorInfo);
   const pendingFriendship = useAppSelector(state => state.user.friends.pending)
   const acceptedFriendship = useAppSelector(state => state.user.friends.accepted)
+  const canRequestConsultation = !mainUser && currentUserRole === "patient" && user.role === "doctor";
+  const canSeePatientInfo =
+    !mainUser && currentUserRole === "doctor" && user.role === "patient" && consultations.some(c => c.patient_id === parseInt(user.referenceId));
+  const [openPatientInfo, setOpenPatientInfo] = useState(false);
+
+  const isConsultationRequestPendingChecker = () => {
+    if (!canRequestConsultation) return false;
+    return consultants.some(consultant => consultant.doctor_id === parseInt(user.referenceId))
+  }
+
+  const isConsultationRequestAcceptedChecker = () => {
+    if (!canRequestConsultation) return false;
+    return consultants.some(consultant => (consultant.doctor_id === parseInt(user.referenceId) && consultant.status === 'accepted'))
+  }
+
+  const [isConsultationRequestPending, setIsConsultationRequestPending] = useState(isConsultationRequestPendingChecker());
+  const [isConsultationRequestAccepted, setIsConsultationRequestAccepted] = useState(isConsultationRequestAcceptedChecker());
 
   const handleModalOpen = () => setModalOpen(true);
   const handleModalClose = () => setModalOpen(false);
+
+  useEffect(() => {
+    if (currentUserRole === 'patient') {
+      dispatch(fetchConsultants(currentUserReferenceId))
+    }
+  }, [])
+
+  useEffect(() => {
+    setIsConsultationRequestAccepted(isConsultationRequestAcceptedChecker());
+    setIsConsultationRequestPending(isConsultationRequestPendingChecker());
+  }, [consultants])
 
   const getFriendshipId = ({ userId, user2Id }: { userId: number, user2Id: number }) => {
     return pendingFriendship.find(friendship => (
@@ -50,6 +82,11 @@ const BioProfile = ({
     if (friendship?.id) dispatch(acceptFriendship(friendship.id));
   }
 
+  const cancelConsultationHandler = () => {
+    const consultationId = consultants.find(c => c.doctor_id === parseInt(user.referenceId))?.id;
+    dispatch(rejectConsultation(consultationId as number));
+  }
+
   const rejectFriendHandler = () => {
     const friendship = getFriendshipId({ userId, user2Id: user.id });
 
@@ -58,6 +95,11 @@ const BioProfile = ({
 
   return (
     <>
+      {
+        canSeePatientInfo && (
+          <PatientInformationModal open={openPatientInfo} handleClose={() => setOpenPatientInfo(false)} user={user} />
+        )
+      }
       <Box
         sx={{
           display: 'flex',
@@ -121,6 +163,40 @@ const BioProfile = ({
             <Typography>{user.gender}</Typography>
           </Grid>
         </Grid>
+        {
+          canSeePatientInfo &&
+          <Button
+            color='info'
+            variant="contained"
+            sx={{ width: '100%', mt: 'auto' }}
+            onClick={() => setOpenPatientInfo(true)}
+          >
+            Patient Information
+          </Button>
+        }
+        {
+          (isConsultationRequestAccepted) ?
+            (<Button sx={{ color: 'white', width: '100%', mt: 'auto' }}
+              variant='contained'
+              color='error'
+              onClick={cancelConsultationHandler}
+            >Remove Consultant</Button>) :
+            (isConsultationRequestPending ?
+              (<Button sx={{ color: 'white', width: '100%', mt: 'auto' }}
+                variant='contained'
+                color='error'
+                onClick={cancelConsultationHandler}
+              >Cancel Consultation Request</Button>) :
+              (
+                canRequestConsultation &&
+                <Button sx={{ color: 'white', width: '100%', mt: 'auto' }}
+                  variant='contained'
+                  color='secondary'
+                  onClick={() => { dispatch(bookConsultation({ doctor_id: user.referenceId, patient_id: currentUserReferenceId })) }}
+
+                >Request Consultation</Button>
+              ))
+        }
         {mainUser ? (
           <>
             <Button
@@ -129,7 +205,7 @@ const BioProfile = ({
                 bgcolor: 'grey.200',
                 color: '#000',
                 width: '100%',
-                mt: 'auto',
+                mt: (canRequestConsultation || canSeePatientInfo) ? 1 : 'auto',
                 mb: '10px',
                 '&:hover': {
                   bgcolor: 'primary.main',
@@ -153,7 +229,7 @@ const BioProfile = ({
               bgcolor: 'red',
               color: '#fff',
               width: '100%',
-              mt: 'auto',
+              mt: (canRequestConsultation || canSeePatientInfo) ? 1 : 'auto',
               '&:hover': {
                 bgcolor: '#940000',
               },
@@ -170,7 +246,7 @@ const BioProfile = ({
                 bgcolor: 'red',
                 color: '#fff',
                 width: '100%',
-                mt: 'auto',
+                mt: (canRequestConsultation || canSeePatientInfo) ? 1 : 'auto',
                 '&:hover': {
                   bgcolor: '#940000',
                 },
@@ -180,7 +256,7 @@ const BioProfile = ({
               Cancel Request
             </Button>
           ) :
-            (<Box sx={{ display: 'flex', gap: '2px', mt: 'auto' }}>
+            (<Box sx={{ display: 'flex', gap: '2px', mt: canRequestConsultation ? 1 : 'auto' }}>
               <Button
                 variant="contained"
                 sx={{
@@ -219,7 +295,7 @@ const BioProfile = ({
               bgcolor: 'primary.main',
               color: '#fff',
               px: '135px',
-              mt: 'auto',
+              mt: (canRequestConsultation || canSeePatientInfo) ? 1 : 'auto',
 
               '&:hover': {
                 bgcolor: 'primary.dark',

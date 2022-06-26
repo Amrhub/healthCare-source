@@ -4,8 +4,7 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import { Box, Button, Divider, Typography } from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
-import { decrementLikesCounter, incrementLikesCounter } from '../../redux/stories/storySlice';
-import { likePost, unlikePost } from '../../redux/users/users';
+import { likePost, unlikePost, getPostsUserLike } from '../../redux/stories/storySlice';
 
 
 interface IProps {
@@ -17,7 +16,7 @@ interface IProps {
 
 const StoryFooter = ({ likesCounter, commentsCounter, postId, setStoryShowModalOpen }: IProps) => {
   const user = useAppSelector(state => state.user);
-  const { likedPosts } = user;
+  const { likedPosts } = useAppSelector(state => state.posts);
   const dispatch = useAppDispatch();
 
   const isLiked = () => {
@@ -28,12 +27,12 @@ const StoryFooter = ({ likesCounter, commentsCounter, postId, setStoryShowModalO
     if (isLiked()) {
       const like = likedPosts.find(likedPost => likedPost.postId === postId)
       if (like) {
-        dispatch(unlikePost(like.likeId))
-        dispatch(decrementLikesCounter(postId));
+        dispatch(unlikePost({ likeId: like.likeId, postId }))
+        dispatch(getPostsUserLike(user.userInfo.id))
       }
     } else {
       dispatch(likePost({ userId: user.userInfo.id, postId }));
-      dispatch(incrementLikesCounter(postId));
+      dispatch(getPostsUserLike(user.userInfo.id))
     }
   }
 

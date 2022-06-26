@@ -1,4 +1,3 @@
-import { TextField } from '@mui/material';
 import { Box, styled } from '@mui/system';
 
 import MyNavLink from '../../abstracts/NavLink';
@@ -21,7 +20,6 @@ const ContainerBoxNav = ({ children }: { children: any }) => {
       className="boxContainerNav"
     >
       {children}
-      <TextField sx={{ marginInlineStart: 'auto' }} placeholder="Search" size="small" />
     </Box>
   );
 };

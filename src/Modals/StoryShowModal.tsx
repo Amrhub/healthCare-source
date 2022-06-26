@@ -1,6 +1,6 @@
 import { Close, SendSharp } from '@mui/icons-material';
 import { Modal, Grid, Stack, Avatar, Typography, TextField, IconButton } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import StoryFooter from '../components/Story/StoryFooter';
 import { createComment, fetchComments } from '../redux/comments/commentSlice';
@@ -21,7 +21,7 @@ const gridItemSpacing = {
 const StoryShowModal = ({ story, open, setOpen }: IProps) => {
   const dispatch = useAppDispatch();
   const { comments } = useAppSelector(state => state.comments);
-  const userId = useAppSelector(state => state.user.userInfo.id);
+  const { profilePic, id: userId } = useAppSelector(state => state.user.userInfo);
   const [comment, setComment] = useState('');
 
   useEffect(() => {
@@ -74,7 +74,7 @@ const StoryShowModal = ({ story, open, setOpen }: IProps) => {
                     <Avatar src={comment.user.profilePic} alt="Avatar" />
                     <Stack sx={{ bgcolor: 'grey.100', py: 2, px: 2.5, borderRadius: '10px' }}>
                       <Typography variant="subtitle1" sx={{ fontWeight: '700' }}>{comment.user.name}</Typography>
-                      <Typography variant="body1">{comment.content}</Typography>
+                      <Typography variant="body1" component="pre">{comment.content}</Typography>
                     </Stack>
                   </Stack>
                 ))
@@ -84,7 +84,7 @@ const StoryShowModal = ({ story, open, setOpen }: IProps) => {
             </Stack>
             <form style={{ marginTop: 'auto', paddingBlock: '12px' }} onSubmit={handleSubmit}>
               <Stack columnGap={2} direction="row" alignItems="center">
-                <Avatar src={story.user.profilePic} alt="Avatar" />
+                <Avatar src={profilePic} alt="Avatar" />
                 <TextField fullWidth placeholder='Write a comment....'
                   variant="outlined" size='small' sx={{ bgcolor: 'grey.100' }} required
                   value={comment} onChange={e => setComment(e.target.value)}

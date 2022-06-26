@@ -1,5 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Divider, IconButton } from '@mui/material';
+import { Box, Divider, IconButton, TextField } from '@mui/material';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -8,20 +8,18 @@ import ContainerBox from '../../layouts/ContainerBox/ContainerBox';
 import ContainerBoxNav, {
   ContainerBoxNavLink,
 } from '../../layouts/ContainerBox/ContainerBoxNav';
-import { useAppSelector } from '../../redux/configureStore';
 import { userRoutes } from '../../Routes/Routes';
 
 import AllStories from './AllStories';
 import MyStories from './MyStories';
 
 const Stories = () => {
-  const user = useAppSelector((state) => state.user.userInfo);
   const [openModal, setOpenModal] = useState(false);
   const [storyContent, setStoryContent] = useState('');
   const [storyCategory, setStoryCategory] = useState('');
   const [storyId, setStoryId] = useState<number>();
+  const [categorySearch, setCategorySearch] = useState('');
   const location = useLocation();
-
 
   const handleEditStory = (content: string, category: string, storyId: number) => {
     setStoryContent(content);
@@ -41,9 +39,9 @@ const Stories = () => {
 
     switch (pathname) {
       case userRoutes.stories.index:
-        return <AllStories />;
+        return <AllStories search={categorySearch} />;
       case userRoutes.stories.myStories:
-        return <MyStories handleEditStory={handleEditStory} />;
+        return <MyStories handleEditStory={handleEditStory} search={categorySearch} />;
       default:
         return null;
     }
@@ -59,6 +57,7 @@ const Stories = () => {
           <ContainerBoxNavLink to={userRoutes.stories.myStories}>
             My Stories
           </ContainerBoxNavLink>
+          <TextField sx={{ marginInlineStart: 'auto' }} placeholder="covid-19" label="story category" size="small" onChange={e => setCategorySearch(e.target.value)} value={categorySearch} />
         </ContainerBoxNav>
         <Divider
           sx={{

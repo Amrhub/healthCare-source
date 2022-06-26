@@ -1,51 +1,80 @@
 
 
 import { ArgumentAxis, Chart, SplineSeries, ValueAxis } from '@devexpress/dx-react-chart-material-ui';
+import { Backdrop, Button, CircularProgress, Typography } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import { useEffect, useState } from 'react';
+import { apiVersion, baseUrl, useAppSelector } from '../../../redux/configureStore';
 
-import { useAppSelector } from '../../../redux/configureStore';
+const ECGChart = ({ patientDeviceId }: { patientDeviceId?: number }) => {
+  const { hasDeviceConnected, deviceId } = useAppSelector(state => state.user.userInfo.roleInfo as RolePatientInfo);
+  const [data, setData] = useState([]);
+  const [lastDataTime, setLastDataTime] = useState('');
+  const [numberOfAttempts, setNumberOfAttempts] = useState(0);
 
-const data2 = [
-  { argument: 1, value: 40 },
-  { argument: 1.2, value: 50 },
-  { argument: 1.4, value: 30 },
-  { argument: 1.6, value: 50 },
-  { argument: 1.7, value: 40 },
-  { argument: 1.8, value: 50 },
-  { argument: 1.9, value: 40 },
-  { argument: 2, value: 50 },
-  { argument: 2.2, value: 40 },
-  { argument: 2.4, value: 50 },
-  { argument: 2.6, value: 42 },
-];
+  const fetchLastECGData = async () => {
+    if (!hasDeviceConnected && !patientDeviceId) return;
+    const response = await fetch(`${baseUrl}${apiVersion}device_data/${deviceId || patientDeviceId}`);
+    const responseData = await response.json();
 
-const ECGChart = () => {
-  const { hasDeviceConnected } = useAppSelector(state => state.user.userInfo.roleInfo as RolePatientInfo);
-  const [data, setData] = useState(data2);
+    if (lastDataTime == '') {
+      setLastDataTime(responseData.created_at);
+      setData(responseData.ecg.map((ecg: any, index: number) => ({ argument: index + 1, value: ecg })));
+    } else {
+      if (responseData.created_at != lastDataTime) {
+        setNumberOfAttempts(0);
+        setData(responseData.ecg.map((ecg: any, index: number) => ({ argument: index + data.length, value: ecg })));
+        setLastDataTime(responseData.created_at);
+      } else {
+        setNumberOfAttempts(prev => prev + 1);
+      }
+    }
+  }
   useEffect(() => {
-    if (!hasDeviceConnected) return;
+    if (!hasDeviceConnected && !patientDeviceId) return;
+    if (numberOfAttempts >= 10) return;
+
 
     const timeInterval = setInterval(() => {
-      setData((prev) => (
-        [...prev, { argument: prev[prev.length - 1].argument + 0.2, value: Math.random() * 100 }]
-      ));
+      if (numberOfAttempts >= 10) clearInterval(timeInterval);
+      fetchLastECGData();
+
       if (data.length > 20) {
         setData((prev) => prev.slice(1));
       }
     }, 1000);
 
     return () => clearInterval(timeInterval);
-  }, [data])
+  }, [data, numberOfAttempts])
 
   return (
-    <Paper sx={{ height: '100%' }}>
-      <Chart data={data}>
-        <ArgumentAxis />
-        <ValueAxis />
-        <SplineSeries valueField="value" argumentField="argument" color="#4264D0" />
-      </Chart>
-    </Paper>
+    <>
+      {
+        (numberOfAttempts > 0 && numberOfAttempts < 10) &&
+        <Typography color="red" sx={{ position: 'absolute', zIndex: '999', left: '50%', transform: 'translateX(-50%)', mt: 2, bgcolor: 'white' }} align="center">
+          There is no new data trying to fetch data from server...
+          <br />
+          <CircularProgress color="primary" />
+        </Typography>
+      }
+      <Paper sx={{ height: '100%', width: '100%', position: 'relative' }}>
+
+        <Chart data={data}>
+          <ArgumentAxis />
+          <ValueAxis />
+          <SplineSeries valueField="value" argumentField="argument" color="#4264D0" />
+        </Chart>
+        <Backdrop open={(data.length === 0 && hasDeviceConnected) || numberOfAttempts >= 10} sx={{ position: 'absolute', backdropFilter: 'blur(2000px)', zIndex: '200' }} >
+          <Typography variant="h4" color="white" sx={{ display: 'flex' }} flexDirection="column">
+            No live data available, please connect to the device and try again.
+            <br />
+            After connecting to the device, you can start reading data by pressing the start button.
+            <br />
+            <Button variant='contained' sx={{ mx: 'auto' }} onClick={() => setNumberOfAttempts(0)}>Start</Button>
+          </Typography>
+        </Backdrop>
+      </Paper>
+    </>
   );
 };
 
