@@ -11,11 +11,9 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/system';
 import { useEffect, useState } from 'react';
-
 import LoadingScreen from '../../../Modals/LoadingScreen';
 import NoDeviceConnected from '../../../Modals/NoDeviceConnected';
 import { apiVersion, baseUrl, useAppSelector } from '../../../redux/configureStore';
-
 import MyTableRow from './MyTableRow';
 
 export const MyTableCell = styled(TableCell)`

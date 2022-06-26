@@ -227,6 +227,7 @@ export const rejectConsultation = createAsyncThunk(
   }
 )
 
+
 interface Friendship {
   id: number;
   status: 'pending' | 'accepted' | 'blocked';
@@ -435,6 +436,9 @@ const userSlice = createSlice({
       state.auth.isAuthenticated = false;
       localStorage.removeItem('authorization');
       state.loading = 'idle';
+    });
+    builder.addCase(logout.pending, (state) => {
+      state.loading = 'pending';
     });
     builder.addCase(logout.pending, (state) => {
       state.loading = 'pending';

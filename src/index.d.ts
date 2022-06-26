@@ -9,6 +9,7 @@ interface RoleDoctorInfo {
 
 interface RolePatientInfo {
   type: 'patient'
+
   deviceId: number | null;
   hasDeviceConnected: boolean;
   weight: number;
@@ -60,3 +61,4 @@ interface Row {
   spo2: number;
   history: History[];
 }
+

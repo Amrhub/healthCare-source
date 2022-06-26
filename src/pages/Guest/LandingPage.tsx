@@ -84,6 +84,7 @@ const LandingPage = () => {
   const locationState = location?.state as any;
   const from = locationState ? locationState?.from : userRoutes.home;
 
+
   const navigate = useNavigate();
 
   // eslint-disable-next-line unicorn/consistent-function-scoping

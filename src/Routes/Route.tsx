@@ -75,6 +75,7 @@ const index = () => {
           <MyPatients />
         </PrivateRoute>
       } />
+
     </Routes>
   );
 };

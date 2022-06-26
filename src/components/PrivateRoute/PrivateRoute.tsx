@@ -12,6 +12,7 @@ const PrivateRoute = ({ children }: { children: React.ReactElement }) => {
     if (isAuthenticated && !(loading === 'pending')) {
 
       dispatch(hideAlert());
+
     } else {
       dispatch(setAlert({ message: 'You must be logged in to view this page', type: 'error' }));
     }

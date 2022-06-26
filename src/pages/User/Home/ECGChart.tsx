@@ -4,7 +4,6 @@ import { ArgumentAxis, Chart, SplineSeries, ValueAxis } from '@devexpress/dx-rea
 import { Backdrop, Button, CircularProgress, Typography } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import { useEffect, useState } from 'react';
-
 import { apiVersion, baseUrl, useAppSelector } from '../../../redux/configureStore';
 
 const ECGChart = ({ patientDeviceId }: { patientDeviceId?: number }) => {
@@ -34,6 +33,7 @@ const ECGChart = ({ patientDeviceId }: { patientDeviceId?: number }) => {
   useEffect(() => {
     if (!hasDeviceConnected && !patientDeviceId) return;
     if (numberOfAttempts >= 10) return;
+
 
     const timeInterval = setInterval(() => {
       if (numberOfAttempts >= 10) clearInterval(timeInterval);
