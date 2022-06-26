@@ -7,18 +7,17 @@ import { useEffect, useState } from 'react';
 
 import { apiVersion, baseUrl, useAppSelector } from '../../../redux/configureStore';
 
-const ECGChart = () => {
+const ECGChart = ({ patientDeviceId }: { patientDeviceId?: number }) => {
   const { hasDeviceConnected, deviceId } = useAppSelector(state => state.user.userInfo.roleInfo as RolePatientInfo);
   const [data, setData] = useState([]);
   const [lastDataTime, setLastDataTime] = useState('');
   const [numberOfAttempts, setNumberOfAttempts] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
 
   const fetchLastECGData = async () => {
-    setIsLoading(true);
-    if (!hasDeviceConnected) return;
-    const response = await fetch(`${baseUrl}${apiVersion}device_data/${deviceId}`);
+    if (!hasDeviceConnected && !patientDeviceId) return;
+    const response = await fetch(`${baseUrl}${apiVersion}device_data/${deviceId || patientDeviceId}`);
     const responseData = await response.json();
+
     if (lastDataTime == '') {
       setLastDataTime(responseData.created_at);
       setData(responseData.ecg.map((ecg: any, index: number) => ({ argument: index + 1, value: ecg })));
@@ -31,10 +30,9 @@ const ECGChart = () => {
         setNumberOfAttempts(prev => prev + 1);
       }
     }
-    setIsLoading(false);
   }
   useEffect(() => {
-    if (!hasDeviceConnected) return;
+    if (!hasDeviceConnected && !patientDeviceId) return;
     if (numberOfAttempts >= 10) return;
 
     const timeInterval = setInterval(() => {
@@ -59,7 +57,7 @@ const ECGChart = () => {
           <CircularProgress color="primary" />
         </Typography>
       }
-      <Paper sx={{ width: '100%', position: 'relative' }}>
+      <Paper sx={{ height: '100%', width: '100%', position: 'relative' }}>
 
         <Chart data={data}>
           <ArgumentAxis />

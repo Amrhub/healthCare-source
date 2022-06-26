@@ -8,13 +8,15 @@ import { getMyStories } from '../../redux/stories/storySlice';
 
 const MyStories = ({
   handleEditStory,
+  search
 }: {
   handleEditStory: (content: string, category: string, storyId: number) => void;
+  search?: string;
   isProfileView?: boolean;
 }) => {
   const stories = useAppSelector((state) => state.posts.myStories);
-  const dispatch = useAppDispatch();
   const currentUserId = useAppSelector((state) => state.user.userInfo.id);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getMyStories(currentUserId));

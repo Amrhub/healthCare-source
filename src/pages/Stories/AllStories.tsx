@@ -5,7 +5,7 @@ import Story from '../../components/Story/Story';
 import { useAppSelector } from '../../redux/configureStore';
 import { StoryType } from '../../redux/stories/storySlice';
 
-const AllStories = ({ posts }: { posts?: StoryType[] }) => {
+const AllStories = ({ posts, search }: { posts?: StoryType[], search?: string }) => {
   const { stories } = useAppSelector((state) => state.posts);
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>

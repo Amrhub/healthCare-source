@@ -52,6 +52,7 @@ const Home = () => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
+            position: 'relative',
           }}
         >
           <HealthCards />

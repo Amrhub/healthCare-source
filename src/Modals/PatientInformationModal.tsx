@@ -1,9 +1,10 @@
 import { Close } from '@mui/icons-material'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
-import { Modal, IconButton, Tab, Typography } from '@mui/material'
+import { Modal, IconButton, Tab, Typography, Stack } from '@mui/material'
 import { Box } from '@mui/system'
 import { useEffect, useState } from 'react'
 
+import ECGChart from '../pages/User/Home/ECGChart'
 import ReportHistory from '../pages/User/ReportHistory/ReportHistory'
 import { apiVersion, baseUrl } from '../redux/configureStore'
 import { UserGeneralInfo } from '../redux/users/users'
@@ -59,7 +60,8 @@ const PatientInformationModal = ({ open, handleClose, user }: IProps) => {
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               <Tab label="Patient Information" value="1" />
               <Tab label="Medical History" value="2" />
-              <Tab label="Last Location" value="3" />
+              <Tab label="ECG" value="3" />
+              <Tab label="Last Location" value="4" />
             </TabList>
           </Box>
           <TabPanel value="1">
@@ -77,12 +79,25 @@ const PatientInformationModal = ({ open, handleClose, user }: IProps) => {
               <Typography color="textPrimary" sx={{ m: 'auto', textAlign: 'left' }}>
                 device id: {user.roleInfo.device_id}
                 <br />
-                patient: {user.firstName} {user.lastName}
+                patient name: {user.firstName} {user.lastName}
                 <ReportHistory patientDeviceId={user.roleInfo.device_id} />
               </Typography>
             }
           </TabPanel>
-          <TabPanel value="3">
+          <TabPanel value="3" sx={{ height: '100%', width: '100%' }}>
+            <Typography color="textPrimary" sx={{ m: 'auto', textAlign: 'left' }}>
+              device id: {user.roleInfo.device_id}
+              <br />
+              patient name: {user.firstName} {user.lastName}
+              <br />
+              <b>Patient needs to be connected to the device</b>
+            </Typography>
+
+            <Stack sx={{ height: '80%', width: '100%', position: 'relative' }}>
+              <ECGChart patientDeviceId={user.roleInfo.device_id} />
+            </Stack>
+          </TabPanel>
+          <TabPanel value="4">
             {
               address ? (
                 <Typography variant="h5" color="textPrimary" sx={{ m: 'auto', textAlign: 'center' }}>
