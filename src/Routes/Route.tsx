@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import PrivateRoute from '../components/PrivateRoute/PrivateRoute';
 import DeviceCategory from '../pages/Admin/DeviceCategory';
+import DevicesConnection from '../pages/Admin/DevicesConnection';
 import Chat from '../pages/Chat/Chat';
 import Community from '../pages/Community/Community';
 import LandingPage from '../pages/Guest/LandingPage';
@@ -80,6 +81,10 @@ const index = () => {
       <Route path={adminRoutes.deviceCategory} element={
         <PrivateRoute>
           <DeviceCategory />
+        </PrivateRoute>} />
+      <Route path={adminRoutes.devices} element={
+        <PrivateRoute>
+          <DevicesConnection />
         </PrivateRoute>} />
     </Routes>
   );

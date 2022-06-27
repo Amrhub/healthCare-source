@@ -44,4 +44,4 @@ const deviceSlice = createSlice({
   }
 })
 
-export const deviceReducer = deviceSlice.reducer
+export const deviceCategoriesReducer = deviceSlice.reducer
