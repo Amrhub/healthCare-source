@@ -13,6 +13,7 @@ const ECGChart = ({ patientDeviceId }: { patientDeviceId?: number }) => {
   const [lastDataTime, setLastDataTime] = useState('');
   const [numberOfAttempts, setNumberOfAttempts] = useState(0);
   const ecgSample = 140;
+  const maxNumberOfAttempts = 10;
 
   const fetchLastECGData = async () => {
     if (!hasDeviceConnected && !patientDeviceId) return;
@@ -34,11 +35,11 @@ const ECGChart = ({ patientDeviceId }: { patientDeviceId?: number }) => {
   }
   useEffect(() => {
     if (!hasDeviceConnected && !patientDeviceId) return;
-    if (numberOfAttempts >= 20) return;
+    if (numberOfAttempts >= maxNumberOfAttempts) return;
 
 
     const timeInterval = setInterval(() => {
-      if (numberOfAttempts >= 20) clearInterval(timeInterval);
+      if (numberOfAttempts >= maxNumberOfAttempts) clearInterval(timeInterval);
       fetchLastECGData();
 
       if (data.length > (20 * ecgSample)) {
@@ -52,7 +53,7 @@ const ECGChart = ({ patientDeviceId }: { patientDeviceId?: number }) => {
   return (
     <>
       {/* {
-        (numberOfAttempts > 0 && numberOfAttempts < 20) &&
+        (numberOfAttempts > 0 && numberOfAttempts < maxNumberOfAttempts) &&
         <Typography color="red" sx={{ position: 'absolute', zIndex: '999', left: '50%', transform: 'translateX(-50%)', mt: 2, bgcolor: 'white' }} align="center">
           There is no new data trying to fetch data from server...
           <br />
@@ -66,13 +67,13 @@ const ECGChart = ({ patientDeviceId }: { patientDeviceId?: number }) => {
           <ValueAxis />
           <SplineSeries valueField="value" argumentField="argument" color="#4264D0" />
         </Chart>
-        <Backdrop open={(data.length === 0 && hasDeviceConnected) || numberOfAttempts >= 20} sx={{ position: 'absolute', backdropFilter: 'blur(2000px)', zIndex: '200' }} >
+        <Backdrop open={(data.length === 0 && hasDeviceConnected) || numberOfAttempts >= maxNumberOfAttempts} sx={{ position: 'absolute', backdropFilter: 'blur(2000px)', zIndex: '200' }} >
           <Typography variant="h4" color="white" sx={{ display: 'flex' }} flexDirection="column">
             No live data available, please connect to the device and try again.
             <br />
             After connecting to the device, you can start reading data by pressing the start button.
             <br />
-            <Button variant='contained' sx={{ mx: 'auto' }} onClick={() => setNumberOfAttempts(0)}>Start</Button>
+            <Button variant='contained' sx={{ mx: 'auto' }} onClick={() => setNumberOfAttempts(0)} size="large">Start</Button>
           </Typography>
         </Backdrop>
       </Paper>

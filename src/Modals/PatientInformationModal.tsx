@@ -58,10 +58,10 @@ const PatientInformationModal = ({ open, handleClose, user }: IProps) => {
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <TabList onChange={handleChange} aria-label="lab API tabs example">
-              <Tab label="Patient Information" value="1" />
-              <Tab label="Medical History" value="2" />
-              <Tab label="ECG" value="3" />
-              <Tab label="Last Location" value="4" />
+              <Tab label="Patient Information" value="1" sx={{ fontSize: '24px' }} />
+              <Tab label="Medical History" value="2" sx={{ fontSize: '24px' }} />
+              <Tab label="ECG" value="3" sx={{ fontSize: '24px' }} />
+              <Tab label="Last Location" value="4" sx={{ fontSize: '24px' }} />
             </TabList>
           </Box>
           <TabPanel value="1">

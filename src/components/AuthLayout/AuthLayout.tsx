@@ -160,10 +160,12 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={() => {
-        navigate(userRoutes.home);
-        handleMenuClose();
-      }}>Home Page</MenuItem>
+      {
+        currentUserRole === 'patient' && <MenuItem onClick={() => {
+          navigate(userRoutes.home);
+          handleMenuClose();
+        }}>Home Page</MenuItem>
+      }
       <MenuItem onClick={() => {
         navigate(userRoutes.profile.main);
         handleMenuClose();
