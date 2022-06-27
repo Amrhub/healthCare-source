@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/consistent-function-scoping */
-import { AutoStories, ExpandMore, HistoryToggleOff } from '@mui/icons-material';
+import { AutoStories, CastConnected, ExpandMore, HistoryToggleOff, VideoLabel } from '@mui/icons-material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import ChatIcon from '@mui/icons-material/Chat';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -25,11 +25,12 @@ import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { BRAND_NAME } from '../../abstracts/common';
 import MyNavLink from '../../abstracts/NavLink';
+import logo from '../../assets/landingPage/Logo.png';
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
 import { logout } from '../../redux/users/users';
-import { userRoutes } from '../../Routes/Routes';
+import { adminRoutes, userRoutes } from '../../Routes/Routes';
+
 
 const drawerWidth = 240;
 const drawerWidthClosedDesktop = 100 / 8;
@@ -176,35 +177,50 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   );
 
   const getUserSideBar = () => {
-    if (currentUserRole === 'doctor') {
-      return (
-        [
-          { text: 'Patients', component: <GroupsIcon />, path: userRoutes.myPatients.index },
+    switch (currentUserRole) {
+      case 'doctor': {
+        return (
+          [
+            { text: 'Patients', component: <GroupsIcon />, path: userRoutes.myPatients.index },
+            { text: 'Profile', component: <PersonIcon />, path: userRoutes.profile.main },
+            { text: 'Community', component: <ConnectWithoutContactIcon />, path: userRoutes.community.index },
+            { text: 'Stories', component: <AutoStories />, path: userRoutes.stories.index },
+            { text: 'Chat', component: <ChatIcon />, path: userRoutes.chat },
+
+          ]
+        );
+      }
+      case 'patient': {
+        return [
+          { text: 'Home', component: <HomeSharpIcon />, path: userRoutes.home },
           { text: 'Profile', component: <PersonIcon />, path: userRoutes.profile.main },
+          { text: 'History', component: <HistoryToggleOff />, path: userRoutes.reportHistory },
           { text: 'Community', component: <ConnectWithoutContactIcon />, path: userRoutes.community.index },
           { text: 'Stories', component: <AutoStories />, path: userRoutes.stories.index },
           { text: 'Chat', component: <ChatIcon />, path: userRoutes.chat },
-
+          {
+            text: 'Membership',
+            component: <StoreIcon />,
+            path: userRoutes.store,
+          },
         ]
-      );
-    } else if (currentUserRole === 'patient') {
-      return [
-        { text: 'Home', component: <HomeSharpIcon />, path: userRoutes.home },
-        { text: 'Profile', component: <PersonIcon />, path: userRoutes.profile.main },
-        { text: 'History', component: <HistoryToggleOff />, path: userRoutes.reportHistory },
-        { text: 'Community', component: <ConnectWithoutContactIcon />, path: userRoutes.community.index },
-        { text: 'Stories', component: <AutoStories />, path: userRoutes.stories.index },
-        { text: 'Chat', component: <ChatIcon />, path: userRoutes.chat },
-        {
-          text: 'Membership',
-          component: <StoreIcon />,
-          path: userRoutes.store,
-        },
-      ]
-    } else {
-      return []
+      }
+      case 'admin': {
+        return (
+          [
+            { text: 'Devices', component: <CastConnected />, path: adminRoutes.devices },
+            { text: 'Device Categories', component: <VideoLabel />, path: adminRoutes.deviceCategory },
+            { text: 'Profile', component: <PersonIcon />, path: userRoutes.profile.main },
+            { text: 'Community', component: <ConnectWithoutContactIcon />, path: userRoutes.community.index },
+            { text: 'Stories', component: <AutoStories />, path: userRoutes.stories.index },
+            { text: 'Chat', component: <ChatIcon />, path: userRoutes.chat },
+          ]
+        )
+      }
+      default: {
+        return []
+      }
     }
-    ;
   }
 
   const userSideBar = getUserSideBar();
@@ -257,9 +273,16 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ display: 'block' }}>
-            {BRAND_NAME}
-          </Typography>
+          <Box
+            component="img"
+            sx={{
+              width: '317px',
+              maxHeight: { xs: 233, md: 167 },
+              maxWidth: { xs: 350, md: 250 },
+            }}
+            alt="logo"
+            src={logo}
+          />
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <Container sx={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>

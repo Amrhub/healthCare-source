@@ -15,7 +15,7 @@ import PaymentPlans from '../../components/PaymentPlans/PaymentPlans';
 import SignUpModal from '../../Modals/SignUpModal';
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore';
 import { login } from '../../redux/users/users';
-import { userRoutes } from '../../Routes/Routes';
+import { adminRoutes, userRoutes } from '../../Routes/Routes';
 import { plans } from '../Store/Memberships';
 
 const LandingPageTop = styled(Box)`
@@ -78,6 +78,8 @@ const getUserRoute = (role: string) => {
       return userRoutes.home;
     case 'doctor':
       return userRoutes.myPatients.index;
+    case 'admin':
+      return adminRoutes.devices
   }
 }
 
@@ -95,7 +97,6 @@ const LandingPage = () => {
 
   const navigate = useNavigate();
 
-  // eslint-disable-next-line unicorn/consistent-function-scoping
   const signInHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     dispatch(login({ email, password }));
