@@ -28,3 +28,8 @@ export const userRoutes = {
 export const guestRoutes = {
   home: '/',
 };
+
+export const adminRoutes = {
+  deviceCategory: '/admin/device-category',
+  devices: '/admin/devices',
+}

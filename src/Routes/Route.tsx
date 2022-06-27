@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import PrivateRoute from '../components/PrivateRoute/PrivateRoute';
+import DeviceCategory from '../pages/Admin/DeviceCategory';
 import Chat from '../pages/Chat/Chat';
 import Community from '../pages/Community/Community';
 import LandingPage from '../pages/Guest/LandingPage';
@@ -13,7 +14,7 @@ import Home from '../pages/User/Home/Home';
 import ReportHistory from '../pages/User/ReportHistory/ReportHistory';
 
 
-import { guestRoutes, userRoutes } from './Routes';
+import { adminRoutes, guestRoutes, userRoutes } from './Routes';
 
 const index = () => {
   return (
@@ -75,7 +76,11 @@ const index = () => {
           <MyPatients />
         </PrivateRoute>
       } />
-
+      {/* 3- ADMIN Routes */}
+      <Route path={adminRoutes.deviceCategory} element={
+        <PrivateRoute>
+          <DeviceCategory />
+        </PrivateRoute>} />
     </Routes>
   );
 };

@@ -3,6 +3,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 import { alertReducer } from './alert/alertSlice';
 import { commentReducer } from './comments/commentSlice';
+import { deviceReducer } from './device/deviceCategoriesSlice';
 import { postReducer } from './stories/storySlice';
 import { userReducer } from './users/users';
 
@@ -16,6 +17,7 @@ export const store = configureStore({
     alert: alertReducer,
     posts: postReducer,
     comments: commentReducer,
+    deviceCategories: deviceReducer
   },
 });
 
