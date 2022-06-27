@@ -177,10 +177,9 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     if (currentUserRole === 'doctor') {
       return (
         [
-          { text: 'Home', component: <HomeSharpIcon />, path: userRoutes.home },
+          { text: 'Patients', component: <GroupsIcon />, path: userRoutes.myPatients.index },
           { text: 'Profile', component: <PersonIcon />, path: userRoutes.profile.main },
           { text: 'Community', component: <ConnectWithoutContactIcon />, path: userRoutes.community.index },
-          { text: 'Patients', component: <GroupsIcon />, path: userRoutes.myPatients.index },
           { text: 'Stories', component: <AutoStories />, path: userRoutes.stories.index },
           { text: 'Chat', component: <ChatIcon />, path: userRoutes.chat },
 

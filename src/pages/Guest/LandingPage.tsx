@@ -72,6 +72,15 @@ const FormContainer = styled(Box)`
   }
 `;
 
+const getUserRoute = (role: string) => {
+  switch (role) {
+    case 'patient':
+      return userRoutes.home;
+    case 'doctor':
+      return userRoutes.myPatients.index;
+  }
+}
+
 const LandingPage = () => {
   const [signUpModal, setSignUpModal] = useState(false);
   const handleModalOpen = () => setSignUpModal(true);
@@ -79,10 +88,9 @@ const LandingPage = () => {
   const dispatch = useAppDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { auth: { isAuthenticated }, loading } = useAppSelector((state) => state.user);
+  const { auth: { isAuthenticated }, loading, userInfo: { role } } = useAppSelector((state) => state.user);
   const location = useLocation();
   const locationState = location?.state as any;
-  const from = locationState ? locationState?.from : userRoutes.home;
 
 
   const navigate = useNavigate();
@@ -94,10 +102,12 @@ const LandingPage = () => {
   };
 
   useEffect(() => {
+    const from = locationState ? locationState?.from : getUserRoute(role);
+
     if (isAuthenticated && !(loading === 'pending')) {
       navigate(from, { replace: true });
     }
-  }, [isAuthenticated, loading]);
+  }, [isAuthenticated, loading, role]);
 
 
   return (

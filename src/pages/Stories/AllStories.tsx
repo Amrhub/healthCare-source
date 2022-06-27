@@ -8,16 +8,19 @@ import { StoryType } from '../../redux/stories/storySlice';
 
 const AllStories = ({ posts, search = '' }: { posts?: StoryType[], search?: string }) => {
   const { stories } = useAppSelector((state) => state.posts);
-  const [filteredPosts, setFilteredPosts] = useState<StoryType[]>();
+  const [filteredPostsId, setFilteredPostsId] = useState<number[]>();
 
   useEffect(() => {
-    if (!search) return setFilteredPosts(stories || posts);
+    if (!search) return setFilteredPostsId(stories?.map(story => story.id) || posts?.map(story => story.id));
 
     if (stories.length > 0) {
-      setFilteredPosts(stories.filter(({ category }) => category && category.toLowerCase().includes(search.toLowerCase())));
+      const temp = stories.filter(({ category }) => category && category.toLowerCase().includes(search.toLowerCase()));
+      setFilteredPostsId(temp.map(story => story.id));
     }
     if (posts) {
-      setFilteredPosts(posts.filter(({ category }) => category && category.toLowerCase().includes(search.toLowerCase())));
+      const temp = stories.filter(({ category }) => category && category.toLowerCase().includes(search.toLowerCase()));
+
+      setFilteredPostsId(temp.map(story => story.id));
     }
   }, [search])
   return (
@@ -32,8 +35,8 @@ const AllStories = ({ posts, search = '' }: { posts?: StoryType[], search?: stri
                 No stories yet.
               </Typography>
             </Box>
-          )) : filteredPosts ? (
-            filteredPosts.map((story) => (
+          )) : filteredPostsId ? (
+            stories.filter(story => filteredPostsId.includes(story.id)).map((story: StoryType) => (
               <Story key={story.id} story={story} />
             ))
           ) : (

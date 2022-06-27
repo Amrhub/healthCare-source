@@ -12,6 +12,7 @@ const MyPatientsRenderer = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    if (!consultations) return;
     setMyPatients(
       consultations.filter(consultation => consultation.status === "accepted")
     )
